@@ -9,4 +9,5 @@
     <Project Path="src/BuildingBlocks/BuildingBlocks.ServiceDefaults/BuildingBlocks.ServiceDefaults.csproj" />
   </Folder>
   <Folder Name="/src/OroKanban.AppHost/" />
+  <Project Path="OroKanban.AppHost/OroKanban.AppHost.csproj" />
 </Solution>
