@@ -648,7 +648,7 @@ hash; the database stores metadata only. Documents at rest are protected per SPE
 
 # SPEC-006 — LLM and Document Intelligence
 
-**Bounded Context**: BC-06 AI Processing (Core) · **Depends on**: SPEC-005, SPEC-007 (search/index for RAG)
+**Bounded Context**: BC-06 AI Processing (Core) · **Depends on**: SPEC-005, SPEC-010 (search/index for RAG)
 
 ## Objective
 
