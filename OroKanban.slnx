@@ -70,6 +70,7 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Organization.Tests/Organization.Tests.csproj" />
+    <Project Path="tests/Projects.Tests/Projects.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/Architecture/">
     <Project Path="tests/Architecture/Architecture.csproj" />

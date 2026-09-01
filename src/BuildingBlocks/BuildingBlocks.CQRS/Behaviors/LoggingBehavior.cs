@@ -1,5 +1,7 @@
 using System.Diagnostics;
+
 using BuildingBlocks.CQRS.Abstractions;
+
 using Microsoft.Extensions.Logging;
 
 namespace BuildingBlocks.CQRS.Behaviors;

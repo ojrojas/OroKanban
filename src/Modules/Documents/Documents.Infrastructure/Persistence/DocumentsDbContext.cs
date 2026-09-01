@@ -1,4 +1,5 @@
 using BuildingBlocks.Kernel.Domain.Persistence;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace Documents.Infrastructure.Persistence;

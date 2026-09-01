@@ -1,11 +1,13 @@
 using BuildingBlocks.Logger.Options;
+
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Grafana.Loki;
 
 namespace BuildingBlocks.Logger;
 
-public static class SerilogConfigurator {
+public static class SerilogConfigurator
+{
     public static LoggerConfiguration Configure(LoggerConfiguration cfg, LoggerOptions options)
     {
         ArgumentNullException.ThrowIfNull(cfg);

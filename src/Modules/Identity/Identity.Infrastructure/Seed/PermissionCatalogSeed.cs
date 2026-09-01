@@ -31,14 +31,14 @@ public static class PermissionCatalogSeed
     public static readonly IReadOnlyDictionary<string, string[]> RolePermissions = new Dictionary<string, string[]>
     {
         ["RootManager"] = Permissions.Select(p => p.Code).ToArray(),
-        ["Manager"] = ["project.read","project.create","project.update","workitem.read","workitem.create","workitem.assign","workitem.update","workitem.complete","document.read","document.upload","organization.manage"],
-        ["Supervisor"] = ["project.read","workitem.read","workitem.create","workitem.update","document.read"],
-        ["Contributor"] = ["project.read","workitem.read","workitem.create","workitem.update","document.read","document.upload"],
-        ["Reviewer"] = ["project.read","workitem.read","document.read","document.approve","ai.review"],
-        ["Auditor"] = ["audit.read","project.read","workitem.read","document.read"],
-        ["DocumentManager"] = ["document.read","document.upload","document.classify","document.version","document.approve"],
-        ["ProjectManager"] = ["project.read","project.create","project.update","workitem.read","workitem.create","workitem.assign"],
-        ["AIReviewer"] = ["ai.execute","ai.review","ai.approve","document.read"],
+        ["Manager"] = ["project.read", "project.create", "project.update", "workitem.read", "workitem.create", "workitem.assign", "workitem.update", "workitem.complete", "document.read", "document.upload", "organization.manage"],
+        ["Supervisor"] = ["project.read", "workitem.read", "workitem.create", "workitem.update", "document.read"],
+        ["Contributor"] = ["project.read", "workitem.read", "workitem.create", "workitem.update", "document.read", "document.upload"],
+        ["Reviewer"] = ["project.read", "workitem.read", "document.read", "document.approve", "ai.review"],
+        ["Auditor"] = ["audit.read", "project.read", "workitem.read", "document.read"],
+        ["DocumentManager"] = ["document.read", "document.upload", "document.classify", "document.version", "document.approve"],
+        ["ProjectManager"] = ["project.read", "project.create", "project.update", "workitem.read", "workitem.create", "workitem.assign"],
+        ["AIReviewer"] = ["ai.execute", "ai.review", "ai.approve", "document.read"],
         ["Administrator"] = Permissions.Select(p => p.Code).ToArray(),
     };
 }

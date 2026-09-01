@@ -1,5 +1,6 @@
 using BuildingBlocks.Kernel.Domain.Entities;
 using BuildingBlocks.Kernel.Domain.ValueObjects;
+
 using Identity.Domain.ValueObjects;
 
 namespace Identity.Domain.Entities;

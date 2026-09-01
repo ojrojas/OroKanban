@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
 using Organization.Domain.Aggregates;
 using Organization.Domain.ValueObjects;
 

@@ -39,9 +39,101 @@ SignalStore generates deep signals (`DeepSignal`) for nested properties; trackin
 
 Declare private members inside `withProps`/`withMethods` to encapsulate internal logic. Keep the public API minimal.
 
-### Custom Store Features
+## Custom Store Features
 
-Create reusable features (combinations of `withX`) to encapsulate common behaviors and reduce repetition.
+Reusable logic via `signalStoreFeature(...features)`. Use standalone updater functions for tree-shaking.
+
+### Factory with standalone updaters — Request status
+
+```ts
+// with-request-status.ts
+export type RequestStatus = 'idle'|'pending'|'fulfilled'|{error:string};
+export function withRequestStatus(){
+  return signalStoreFeature(
+    withState<{requestStatus:RequestStatus}>({requestStatus:'idle'}),
+    withComputed(({requestStatus})=>({
+      isPending: computed(()=>requestStatus()==='pending'),
+      isFulfilled: computed(()=>requestStatus()==='fulfilled'),
+      error: computed(()=> typeof (requestStatus() as any)==='object' ? (requestStatus() as any).error : null),
+    }))
+  );
+}
+export const setPending = () => ({requestStatus:'pending' as RequestStatus});
+export const setFulfilled = () => ({requestStatus:'fulfilled' as RequestStatus});
+export const setError = (e:string) => ({requestStatus:{error:e} as RequestStatus});
+// usage
+export const BooksStore = signalStore(withEntities<Book>(), withRequestStatus(),
+  withMethods((s, svc=inject(BooksService))=>({ async loadAll(){
+    patchState(s,setPending()); patchState(s,setAllEntities(await svc.getAll()),setFulfilled());
+  }})));
+```
+
+### Logger — withHooks + getState
+
+```ts
+export function withLogger(name:string){
+  return signalStoreFeature(withHooks({ onInit(store){
+    effect(()=> console.log(`${name} state changed`, getState(store)));
+  }}));
+}
+// signalStore(withEntities<Book>(), withRequestStatus(), withLogger('books'))
+```
+
+### Input: state — Selected entity
+
+Feature declares required state via `type<T>()`; consumer must provide it (e.g. `withEntities`).
+
+```ts
+export function withSelectedEntity<Entity>(){
+  return signalStoreFeature({state:type<EntityState<Entity>>()},
+    withState<{selectedEntityId:EntityId|null}>({selectedEntityId:null}),
+    withComputed(({entityMap,selectedEntityId})=>({
+      selectedEntity: computed(()=> selectedEntityId() ? entityMap()[selectedEntityId()!] : null)
+    })));
+}
+// BooksStore = signalStore(withEntities<Book>(), withSelectedEntity<Book>())
+```
+
+### Input: props + methods
+
+```ts
+export function withBaz<Foo extends string|number>(){
+  return signalStoreFeature(
+    { props:type<{foo:Signal<Foo>}>() , methods:type<{bar(foo:number):void}>() },
+    withMethods(s=>({ baz(){ s.bar(typeof s.foo()==='number'? s.foo() as number : Number(s.foo())) } })));
+}
+```
+
+### Composing features — SignalStoreFeatureType & withFeature
+
+```ts
+// extract input type of a factory
+export type RequestStatusFeature = SignalStoreFeatureType<typeof withRequestStatus>;
+
+export function withStatusMessage(){
+  return signalStoreFeature(type<RequestStatusFeature>(),
+    withComputed(({isPending,error})=>({ statusMessage: ()=> isPending() ? 'Loading...': error() ?? 'Ready' })));
+}
+
+// external signal as input via withFeature (no coupling to internal state)
+export function withBooksFilter(books: Signal<Book[]>){
+  return signalStoreFeature(withState({query:''}),
+    withComputed(({query})=>({ filteredBooks: computed(()=> books().filter(b=>b.name.includes(query()))) })),
+    withMethods(s=>({setQuery(q:string){patchState(s,{query:q})} })));
+}
+export const BooksStore = signalStore(withEntities<Book>(),
+  withFeature(({entities})=> withBooksFilter(entities)));
+```
+
+### Known TypeScript pitfall
+
+Multiple input-features without generics can fail to compile. Add unused generic `<_>`:
+
+```ts
+function withZ<_>(){ return signalStoreFeature({state:type<{x:number}>()}, withState({z:10})) }
+function withW<_>(){ return signalStoreFeature({state:type<{y:number}>()}, withState({w:100})) }
+const Store = signalStore(withState({x:10,y:100}), withZ(), withW()); // ✅
+```
 
 ### Entity Management
 

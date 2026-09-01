@@ -1,5 +1,6 @@
 using BuildingBlocks.EventBus.Abstractions;
 using BuildingBlocks.EventBus.Subscriptions;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

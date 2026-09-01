@@ -1,5 +1,7 @@
 using Identity.Contracts;
+
 using Microsoft.EntityFrameworkCore;
+
 using Organization.Contracts;
 using Organization.Domain.Services;
 

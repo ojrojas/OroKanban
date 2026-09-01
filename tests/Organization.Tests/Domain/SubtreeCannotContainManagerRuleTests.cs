@@ -1,4 +1,5 @@
 using Organization.Domain.Rules;
+
 using Xunit;
 
 namespace Organization.Tests.Domain;

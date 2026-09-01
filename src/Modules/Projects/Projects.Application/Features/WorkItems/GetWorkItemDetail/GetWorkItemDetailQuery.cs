@@ -1,0 +1,27 @@
+using BuildingBlocks.CQRS.Abstractions;
+using BuildingBlocks.Kernel.Domain.Results;
+
+using Microsoft.EntityFrameworkCore;
+
+using Projects.Contracts.Dtos;
+using Projects.Infrastructure.Persistence;
+
+namespace ProjectsApp.Features.WorkItems.GetWorkItemDetail;
+
+public sealed record GetWorkItemDetailQuery(Guid WorkItemId, Guid TenantId) : IQuery<Result<WorkItemDetailResponse>>;
+
+public sealed class GetWorkItemDetailHandler(ProjectsDbContext db) : IQueryHandler<GetWorkItemDetailQuery, Result<WorkItemDetailResponse>>
+{
+    public async Task<Result<WorkItemDetailResponse>> HandleAsync(GetWorkItemDetailQuery q, CancellationToken ct)
+    {
+        var w = await db.WorkItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Value == q.WorkItemId && x.TenantId == q.TenantId, ct);
+        if (w is null) return Error.NotFound("WorkItem.NotFound", "Work item not found");
+        var dto = new WorkItemDetailResponse(w.Id.Value, w.ProjectId, w.ParentId, w.Title, w.Description,
+            Projects.Domain.Enumerations.WorkItemType.FromId(w.TypeId).Name,
+            Projects.Domain.Enumerations.WorkItemStatus.FromId(w.StatusId).Name,
+            Projects.Domain.Enumerations.WorkItemPriority.FromId(w.PriorityId).Name,
+            Projects.Domain.Enumerations.Criticality.FromId(w.CriticalityId).Name,
+            w.OwnerId, w.ResponsibleId, w.ReviewerId, w.DueDate, w.ProgressPercent, w.Tags, w.Version, w.UpdatedAt, w.TenantId, w.IsOverdue(DateTime.UtcNow), []);
+        return Result.Success(dto);
+    }
+}

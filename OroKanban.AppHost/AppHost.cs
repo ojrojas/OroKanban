@@ -85,8 +85,8 @@ if (builder.ExecutionContext.IsPublishMode)
     builder.AddDockerfile("web-kanban", ".", "src/Web/Dockerfile")
         .WithHttpEndpoint(targetPort: 80, name: "http")
         .WithExternalHttpEndpoints()
-        .WithEnvironment("NG_APP_API_URL",  $"{api.GetEndpoint("http")}")
-        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY",  $"{identityServer.GetEndpoint("https")}")
+        .WithEnvironment("NG_APP_API_URL", $"{api.GetEndpoint("http")}")
+        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY", $"{identityServer.GetEndpoint("https")}")
         .WithEnvironment("PORT", "80");
 }
 else
@@ -98,8 +98,8 @@ else
         .WithHttpEndpoint(port: 4200, targetPort: 4200, name: "http", env: "PORT", isProxied: false)
         .WithExternalHttpEndpoints()
         .WithEnvironment("CI", "true")
-        .WithEnvironment("NG_APP_API_URL",  $"{api.GetEndpoint("http")}")
-        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY",  $"{identityServer.GetEndpoint("https")}");
+        .WithEnvironment("NG_APP_API_URL", $"{api.GetEndpoint("http")}")
+        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY", $"{identityServer.GetEndpoint("https")}");
 }
 
 

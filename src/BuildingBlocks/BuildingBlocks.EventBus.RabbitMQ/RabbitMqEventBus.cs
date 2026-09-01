@@ -1,8 +1,11 @@
 using System.Text.Json;
+
 using BuildingBlocks.EventBus.Abstractions;
 using BuildingBlocks.EventBus.Subscriptions;
+
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+
 using RabbitMQ.Client;
 
 namespace BuildingBlocks.EventBus.RabbitMQ;

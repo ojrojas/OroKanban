@@ -1,9 +1,11 @@
+using System.Text.Json;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+
 using Organization.Contracts;
 using Organization.Infrastructure.Persistence;
-using System.Text.Json;
 
 namespace Organization.Infrastructure.Services;
 

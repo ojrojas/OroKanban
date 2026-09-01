@@ -1,7 +1,9 @@
 using BuildingBlocks.CQRS.Abstractions;
 using BuildingBlocks.Kernel.Domain.Results;
 using BuildingBlocks.ServiceDefaults.Endpoints;
+
 using Microsoft.AspNetCore.Routing;
+
 using Organization.Contracts;
 
 namespace Organization.Application.Features.GetSubtree;

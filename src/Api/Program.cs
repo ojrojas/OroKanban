@@ -1,10 +1,12 @@
 using Api.Authentication;
 using Api.Configuration;
 using Api.Tenant;
+
 using BuildingBlocks.CQRS.Behaviors;
 using BuildingBlocks.CQRS.DependencyInjection;
 using BuildingBlocks.ServiceDefaults;
 using BuildingBlocks.ServiceDefaults.Endpoints;
+
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 

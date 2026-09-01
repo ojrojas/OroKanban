@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
+
 using BuildingBlocks.CQRS.Abstractions;
 using BuildingBlocks.Kernel.Domain.Events;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

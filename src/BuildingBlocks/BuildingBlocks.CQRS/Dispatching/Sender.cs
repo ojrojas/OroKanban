@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
+
 using BuildingBlocks.CQRS.Abstractions;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildingBlocks.CQRS.Dispatching;

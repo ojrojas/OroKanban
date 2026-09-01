@@ -1,5 +1,6 @@
 using BuildingBlocks.CQRS.Validation;
 using BuildingBlocks.Kernel.Domain.Exceptions;
+
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

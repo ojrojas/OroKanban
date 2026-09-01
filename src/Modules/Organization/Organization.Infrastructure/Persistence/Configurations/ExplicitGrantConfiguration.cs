@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using Organization.Domain.Aggregates;
 
 namespace Organization.Infrastructure.Persistence.Configurations;

@@ -5,6 +5,7 @@ using Api.Features.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
 using OpenIddict.Validation;
 using OpenIddict.Validation.AspNetCore;
 
@@ -71,7 +72,7 @@ public static class OpenIddictValidationSetup
                 options.UseAspNetCore();
 
                 // Normaliza sub/role/tenant como EduCore JwtBearer OnTokenValidated
-                options.AddEventHandler<OpenIddictValidationEvents.ValidateTokenContext>(handler => 
+                options.AddEventHandler<OpenIddictValidationEvents.ValidateTokenContext>(handler =>
                     handler.UseInlineHandler(context =>
                         {
                             if (context.IsRejected)

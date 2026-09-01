@@ -1,4 +1,5 @@
 using Organization.Domain.Aggregates;
+
 using Xunit;
 
 namespace Organization.Tests.Domain;

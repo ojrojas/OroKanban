@@ -9,8 +9,18 @@
   <ItemGroup>
     <ProjectReference Include="..\Projects.Domain\Projects.Domain.csproj" />
     <ProjectReference Include="..\Projects.Contracts\Projects.Contracts.csproj" />
+    <ProjectReference Include="..\Projects.Infrastructure\Projects.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.CQRS\BuildingBlocks.CQRS.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.Kernel.Domain\BuildingBlocks.Kernel.Domain.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.EventBus\BuildingBlocks.EventBus.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>

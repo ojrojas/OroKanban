@@ -1,5 +1,7 @@
 using BuildingBlocks.Kernel.Domain.Persistence;
+
 using Microsoft.EntityFrameworkCore;
+
 using Organization.Domain.Aggregates;
 using Organization.Infrastructure.Persistence.Configurations;
 

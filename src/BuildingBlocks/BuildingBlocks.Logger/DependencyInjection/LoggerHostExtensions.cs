@@ -1,7 +1,9 @@
 using BuildingBlocks.Logger.Options;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using Serilog;
 
 namespace BuildingBlocks.Logger.DependencyInjection;

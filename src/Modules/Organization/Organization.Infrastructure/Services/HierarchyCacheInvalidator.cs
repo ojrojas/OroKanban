@@ -1,6 +1,8 @@
 using BuildingBlocks.EventBus.Abstractions;
+
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+
 using Organization.Contracts.Events;
 
 namespace Organization.Infrastructure.Services;

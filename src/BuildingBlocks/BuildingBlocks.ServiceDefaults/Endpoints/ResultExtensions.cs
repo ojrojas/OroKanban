@@ -1,4 +1,5 @@
 using BuildingBlocks.Kernel.Domain.Results;
+
 using Microsoft.AspNetCore.Http;
 
 namespace BuildingBlocks.ServiceDefaults.Endpoints;

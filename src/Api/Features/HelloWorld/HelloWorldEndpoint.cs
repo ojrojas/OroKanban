@@ -1,5 +1,6 @@
 using BuildingBlocks.CQRS.Abstractions;
 using BuildingBlocks.ServiceDefaults.Endpoints;
+
 using Microsoft.AspNetCore.Routing;
 
 namespace Api.Features.HelloWorld;

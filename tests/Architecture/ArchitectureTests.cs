@@ -1,5 +1,7 @@
 using System.Reflection;
+
 using BuildingBlocks.Kernel.Domain.Persistence;
+
 using Xunit;
 
 namespace Architecture;

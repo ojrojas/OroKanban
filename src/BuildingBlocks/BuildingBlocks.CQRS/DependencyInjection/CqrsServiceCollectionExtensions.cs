@@ -1,7 +1,9 @@
 using System.Reflection;
+
 using BuildingBlocks.CQRS.Abstractions;
 using BuildingBlocks.CQRS.Dispatching;
 using BuildingBlocks.CQRS.Validation;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
