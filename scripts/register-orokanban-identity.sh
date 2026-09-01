@@ -397,7 +397,8 @@ fi
 register_client "$ADMIN_CLIENT_ID" "$ADMIN_CLIENT_SECRET" "OroKanban Administration (BFF)" "confidential" "web" "$ADMIN_REDIRECT_URI" "$ADMIN_POST_LOGOUT_URI" "\"scp:openid\", \"scp:profile\", \"scp:email\", \"scp:roles\", \"scp:offline_access\", \"scp:admin\", \"scp:orokanban-api\"" ""
 
 # API client (confidential, for service-to-service via client_credentials + password for hello-world curl)
-register_client "$API_CLIENT_ID" "$API_CLIENT_SECRET" "OroKanban API client (service)" "confidential" "web" "http://localhost:5000/callback" "http://localhost:5000/logout-callback" "\"scp:orokanban-api\"" "\"gt:client_credentials\", \"gt:password\""
+# Solo orokanban-api lleva introspection (ept:introspection) — requerido para validar tokens opacos/reference via /connect/introspect (EduCore docs + OpenIddict)
+register_client "$API_CLIENT_ID" "$API_CLIENT_SECRET" "OroKanban API client (service)" "confidential" "web" "http://localhost:5000/callback" "http://localhost:5000/logout-callback" "\"scp:orokanban-api\", \"ept:introspection\"" "\"gt:client_credentials\", \"gt:password\""
 
 echo ""
 echo "-> Done."

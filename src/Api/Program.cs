@@ -67,14 +67,11 @@ builder.Services.AddHttpClient();
 // Usa Oidc:Authority/Audience/TenantClaim/ClientId/Secret con fallback a Identity:* y mapea claims tenant/role/sub
 builder.Services.AddOidcAuthentication(builder.Configuration);
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy => policy
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy
         .WithOrigins("http://localhost:4200", "https://localhost:4200", "http://localhost:5000", "https://localhost:5000")
         .AllowAnyHeader()
         .AllowAnyMethod()
-        .AllowCredentials());
-});
+        .AllowCredentials()));
 
 // En Development, permitir cert autofirmado de Aspire para discovery OIDC (https://localhost:5086)
 if (builder.Environment.IsDevelopment())

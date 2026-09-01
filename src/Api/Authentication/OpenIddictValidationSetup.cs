@@ -1,4 +1,7 @@
 using System.Security.Claims;
+
+using Api.Features.Authorization;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -39,14 +42,9 @@ public static class OpenIddictValidationSetup
 
         if (string.IsNullOrWhiteSpace(audience))
         {
-            if (isDesignTime)
-            {
-                audience = "orokanban-api";
-            }
-            else
-            {
-                throw new InvalidOperationException("'Oidc:Audience' (o 'Identity:Audience') es requerido. Configura Oidc__Audience.");
-            }
+            audience = isDesignTime
+                ? "orokanban-api"
+                : throw new InvalidOperationException("'Oidc:Audience' (o 'Identity:Audience') es requerido. Configura Oidc__Audience.");
         }
 
         // Normaliza issuer: doc recomienda string exacto sin Trim/URI wrapping innecesario, pero toleramos trailing slash
@@ -61,7 +59,7 @@ public static class OpenIddictValidationSetup
 
                 // Introspection solo opt-in para tokens opacos. Docs: para JWT usar discovery (UseSystemNetHttp).
                 // Evita ID2146 cuando el token es JWT y UseIntrospection está activo sin necesidad.
-                var useIntrospection = configuration["Oidc:UseIntrospection"] ?? configuration["Identity:UseIntrospection"];
+                var useIntrospection = configuration["Oidc:UseIntrospection"];
                 if (!string.IsNullOrEmpty(clientSecret) && string.Equals(useIntrospection, "true", StringComparison.OrdinalIgnoreCase))
                 {
                     options.UseIntrospection()
@@ -72,71 +70,22 @@ public static class OpenIddictValidationSetup
                 options.UseSystemNetHttp();
                 options.UseAspNetCore();
 
-                // Encryption key compartida server<->Api: docs usan Convert.FromBase64String.
-                // En dev con DisableAccessTokenEncryption, el access_token es JWT firmado (RS256) no cifrado, por lo que no se necesita AddEncryptionKey.
-                // Solo se añade si Oidc:UseEncryption=true (para JWE). Por defecto no se añade para evitar ID2004 con JWT.
-                var useEncryption = configuration["Oidc:UseEncryption"] ?? configuration["Identity:UseEncryption"];
-                if (!string.IsNullOrWhiteSpace(symmetricSecurityKey) && string.Equals(useEncryption, "true", StringComparison.OrdinalIgnoreCase))
-                {
-                    var keyBytes = DecodeSymmetricKey(symmetricSecurityKey);
-                    if (keyBytes.Length >= 32)
-                    {
-                        options.AddEncryptionKey(new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(keyBytes));
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[OpenIddict] WARN SymmetricSecurityKey decodificada <32 bytes ({keyBytes.Length}) — se ignora. Requiere >=32 bytes base64/utf8.");
-                    }
-                }
-
                 // Normaliza sub/role/tenant como EduCore JwtBearer OnTokenValidated
-                options.AddEventHandler<OpenIddictValidationEvents.ValidateTokenContext>(handler =>
-                {
+                options.AddEventHandler<OpenIddictValidationEvents.ValidateTokenContext>(handler => 
                     handler.UseInlineHandler(context =>
-                    {
-                        if (context.IsRejected)
                         {
-                            Console.WriteLine($"[OpenIddict] ValidateToken rejected: {context.Error} {context.ErrorDescription} ex={context.Exception?.GetType().Name}: {context.Exception?.Message}");
-                        }
-                        if (context.Principal?.Claims != null)
-                        {
-                            var mapped = ClaimsPrincipalMapper.MapClaims(context.Principal.Claims, tenantClaim);
-                            var authType = context.Principal.Identity?.AuthenticationType ?? OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
-                            context.Principal = new ClaimsPrincipal(new ClaimsIdentity(mapped, authType));
-                        }
-                        return ValueTask.CompletedTask;
-                    });
-                });
-
-                // Loguear errores de proceso para diagnosticar ID2004/IDX*
-                options.AddEventHandler<OpenIddictValidationEvents.ProcessAuthenticationContext>(handler =>
-                {
-                    handler.UseInlineHandler(context =>
-                    {
-                        if (context.IsRejected)
-                        {
-                            Console.WriteLine($"[OpenIddict] ProcessAuthentication rejected: {context.Error} {context.ErrorDescription} ex={context.Exception?.Message}");
-                            if (context.Exception != null) Console.WriteLine(context.Exception.ToString());
-                        }
-                        return ValueTask.CompletedTask;
-                    });
-                });
-
-                // Validación estricta como EduCore + docs: issuer, audience, lifetime, signing key. No deshabilitar en Development.
-                options.Configure(o =>
-                {
-                    o.TokenValidationParameters.RequireSignedTokens = true;
-                    o.TokenValidationParameters.ValidateIssuer = true;
-                    o.TokenValidationParameters.ValidateAudience = true;
-                    o.TokenValidationParameters.ValidateLifetime = true;
-                    o.TokenValidationParameters.ValidateIssuerSigningKey = true;
-                    o.TokenValidationParameters.ClockSkew = TimeSpan.FromMinutes(2);
-                    // Tolerar localhost <-> 127.0.0.1 y http<->https del proxy Aspire (issuer del discovery puede ser 127.0.0.1:port dinámico)
-                    if (validIssuers.Length > 1)
-                    {
-                        o.TokenValidationParameters.ValidIssuers = validIssuers;
-                    }
-                });
+                            if (context.IsRejected)
+                            {
+                                Console.WriteLine($"[OpenIddict] ValidateToken rejected: {context.Error} {context.ErrorDescription}");
+                            }
+                            if (context.Principal?.Claims != null)
+                            {
+                                var mapped = ClaimsPrincipalMapper.MapClaims(context.Principal.Claims, tenantClaim);
+                                var authType = context.Principal.Identity?.AuthenticationType ?? OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
+                                context.Principal = new ClaimsPrincipal(new ClaimsIdentity(mapped, authType));
+                            }
+                            return ValueTask.CompletedTask;
+                        }));
             });
 
         services.AddAuthentication(config =>
@@ -145,6 +94,8 @@ public static class OpenIddictValidationSetup
             config.DefaultAuthenticateScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
             config.DefaultChallengeScheme = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme;
         });
+
+        services.AddAuthorization(options => AuthPolicies.Configure(options));
 
         return services;
     }
@@ -188,21 +139,6 @@ public static class OpenIddictValidationSetup
             }
         }
         catch { }
-        return issuers.ToArray();
-    }
-
-    private static byte[] DecodeSymmetricKey(string key)
-    {
-        // Docs OpenIddict: Convert.FromBase64String para symmetric. Soporta base64 y fallback UTF8 (para secretos legacy)
-        var trimmed = key.Trim();
-        try
-        {
-            // Si es base64 válida y decodifica >=16 bytes, usarla
-            var decoded = Convert.FromBase64String(trimmed);
-            if (decoded.Length >= 16) return decoded;
-        }
-        catch { }
-        // Fallback: algunos despliegues usan secret plain (hex/utf8) — usar bytes UTF8 si no es base64
-        return System.Text.Encoding.UTF8.GetBytes(trimmed);
+        return [.. issuers];
     }
 }
