@@ -69,6 +69,7 @@
     <Project Path="OroKanban.AppHost/OroKanban.AppHost.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/AiProcessing.Tests/AiProcessing.Tests.csproj" />
     <Project Path="tests/Documents.Tests/Documents.Tests.csproj" />
     <Project Path="tests/Metrics.Tests/Metrics.Tests.csproj" />
     <Project Path="tests/Organization.Tests/Organization.Tests.csproj" />

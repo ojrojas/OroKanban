@@ -54,6 +54,11 @@ builder.Services.AddDbContext<Identity.Infrastructure.Persistence.IdentityDbCont
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
 builder.Services.AddDbContext<Documents.Infrastructure.Persistence.DocumentsDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+builder.Services.AddDbContext<AiProcessing.Infrastructure.Persistence.AiProcessingDbContext>(o =>
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+// AI options (MEAI provider-agnostic) — secrets via env/KeyVault, not source (Principle XIX)
+builder.Services.Configure<AiProcessing.Infrastructure.Configuration.AiOptions>(builder.Configuration.GetSection(AiProcessing.Infrastructure.Configuration.AiOptions.SectionName));
+builder.Services.Configure<AiProcessing.Infrastructure.Configuration.VectorStoreOptions>(builder.Configuration.GetSection(AiProcessing.Infrastructure.Configuration.VectorStoreOptions.SectionName));
 
 // CQRS — BuildingBlocks canon (no MediatR)
 builder.Services.AddCqrs(cqrs => cqrs
