@@ -12,6 +12,15 @@ var identityDb = postgres.AddDatabase("identitydb");
 var rabbitmq = builder.AddRabbitMQ("rabbitmq");
 var redis = builder.AddRedis("redis");
 
+// Object storage — S3-compatible (MinIO in dev, AWS S3 in prod via config) — BC-05 Documents (T001)
+var objectStorage = builder.AddContainer("objectstorage", "minio/minio", "latest")
+    .WithHttpEndpoint(port: 9000, targetPort: 9000, name: "s3")
+    .WithHttpEndpoint(port: 9001, targetPort: 9001, name: "console")
+    .WithEnvironment("MINIO_ROOT_USER", "minioadmin")
+    .WithEnvironment("MINIO_ROOT_PASSWORD", "minioadmin123")
+    .WithArgs("server", "/data", "--console-address", ":9001")
+    .WithVolume("orokanban-minio-data", "/data");
+
 
 // ---------------------------------------------------------------------------
 // Parámetros / secretos (solo local). En producción se inyectan vía
@@ -59,6 +68,7 @@ var api = builder.AddProject("api", "../src/Api/Api.csproj")
     .WithReference(postgres).WaitFor(postgres)
     .WithReference(rabbitmq).WaitFor(rabbitmq)
     .WithReference(redis).WaitFor(redis)
+    .WaitFor(objectStorage)
     .WaitFor(identityServer)
     .WithEnvironment("Identity__Authority", $"{identityServer.GetEndpoint("https")}")
     .WithEnvironment("Identity__Audience", "orokanban-api")
@@ -70,7 +80,11 @@ var api = builder.AddProject("api", "../src/Api/Api.csproj")
     .WithEnvironment("Identity__ClientId", "orokanban-api")
     .WithEnvironment("Identity__ClientSecret", orokanbanApiSecret)
     .WithEnvironment("SymmetricSecurityKey", symmetricKey)
-    .WithEnvironment("Oidc__SymmetricSecurityKey", symmetricKey);
+    .WithEnvironment("Oidc__SymmetricSecurityKey", symmetricKey)
+    .WithEnvironment("Documents__BucketName", "orokanban-documents-dev")
+    .WithEnvironment("Documents__PresignedUrlTtlMinutes", "60")
+    .WithEnvironment("AWS__ServiceURL", "http://objectstorage:9000")
+    .WithEnvironment("AWS__BucketName", "orokanban-documents-dev");
 
 
 // Angular frontend — scaffolded via `ng new` per FR-010

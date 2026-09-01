@@ -52,6 +52,8 @@ builder.Services.AddDbContext<Organization.Infrastructure.Persistence.Organizati
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
 builder.Services.AddDbContext<Identity.Infrastructure.Persistence.IdentityDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+builder.Services.AddDbContext<Documents.Infrastructure.Persistence.DocumentsDbContext>(o =>
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
 
 // CQRS — BuildingBlocks canon (no MediatR)
 builder.Services.AddCqrs(cqrs => cqrs
