@@ -1,12 +1,12 @@
 # Build stage — context debe ser la raíz del repo:
-# podman build -f src/Web/Dockerfile -t localhost/quizarena-player:latest .
+# podman build -f src/Web/Dockerfile -t localhost/orokanban-web:latest .
 FROM node:24 AS build
 
 WORKDIR /repo
 
 # Copiar solo lo necesario para instalar deps (aprovecha cache)
 COPY src/Web/package.json src/Web/pnpm-lock.yaml src/Web/pnpm-workspace.yaml src/Web/.npmrc* ./src/Web/
-COPY design-system ./design-system
+# COPY design-system ./design-system
 
 WORKDIR /repo/src/Web
 
@@ -20,7 +20,7 @@ COPY src/Web/tsconfig.spec.json ./tsconfig.spec.json
 COPY src/Web/proxy.conf.json ./proxy.conf.json
 COPY src/Web/src ./src
 
-# Build producción (genera dist/quizarena-player/browser)
+# Build producción (genera dist/orokanban-web/browser)
 RUN pnpm run build
 
 FROM docker.io/library/nginx:alpine
@@ -28,7 +28,7 @@ FROM docker.io/library/nginx:alpine
 # Template nginx: Aspire inyecta PORT y API_URL
 COPY src/Web/default.conf.template /etc/nginx/templates/default.conf.template
 
-COPY --from=build /repo/src/Web/dist/quizarena-player/browser /usr/share/nginx/html
+COPY --from=build /repo/src/Web/dist/orokanban-web/browser /usr/share/nginx/html
 
 EXPOSE 80
 

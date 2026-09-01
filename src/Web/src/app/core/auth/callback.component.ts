@@ -16,31 +16,32 @@ export class CallbackComponent implements OnInit {
   private router = inject(Router);
   ngOnInit() {
     console.log('[callback] ngOnInit, url', window.location.href);
-    // Solo un checkAuth; AppComponent ya hizo uno global, pero este asegura el ?code= de este navigation
-    // Si AppComponent ya consumió el code, este segundo checkAuth simplemente restaurará sesión
-    this.oidc.checkAuth().subscribe({
-      next: ({ isAuthenticated, userData }) => {
-        console.log('[callback] checkAuth result', isAuthenticated, userData);
-        // Dar tiempo a que isAuthenticated$ se propague
-        setTimeout(() => {
-          this.router.navigateByUrl(isAuthenticated ? '/lobby' : '/');
-        }, 300);
-      },
-      error: (err) => {
-        console.error('[callback] checkAuth error', err);
+    // AppComponent ya hizo checkAuth() global y consume el ?code= una sola vez.
+    // Este componente solo espera el resultado (evita doble canje → ID2010 "already been redeemed").
+    const sub = this.oidc.isAuthenticated$.pipe(take(1)).subscribe(({ isAuthenticated }) => {
+      console.log('[callback] isAuthenticated', isAuthenticated);
+      if (isAuthenticated) {
         this.router.navigateByUrl('/');
+        return;
       }
+      // Si aún no está autenticado, espera un tick por si checkAuth de AppComponent está en vuelo
+      setTimeout(() => {
+        this.oidc.isAuthenticated$.pipe(take(1)).subscribe(({ isAuthenticated: stillAuth }) => {
+          console.log('[callback] retry isAuthenticated', stillAuth);
+          // No llamamos de nuevo a checkAuth() aquí para no re-canjear el code.
+          // Si sigue sin autenticar, es un code ya canjeado (ID2010) o token inválido (ID2019) — volver a home y el guard re-disparará authorize si hace falta.
+          this.router.navigateByUrl(stillAuth ? '/' : '/');
+        });
+      }, 800);
     });
 
-    // Fallback por si checkAuth no emite (ej. storage bloqueado)
+    // Fallback por si isAuthenticated$ no emite (storage bloqueado)
     setTimeout(() => {
-      console.warn('[callback] fallback timeout, checking isAuthenticated$');
-      this.oidc.isAuthenticated$.pipe(take(1)).subscribe(({ isAuthenticated }) => {
-        console.log('[callback] fallback isAuthenticated', isAuthenticated);
-        if (window.location.pathname.includes('/auth/callback')) {
-          this.router.navigateByUrl(isAuthenticated ? '/lobby' : '/');
-        }
-      });
+      if (window.location.pathname.includes('/auth/callback')) {
+        console.warn('[callback] fallback timeout — navegando a home');
+        sub.unsubscribe();
+        this.router.navigateByUrl('/');
+      }
     }, 4000);
   }
 }

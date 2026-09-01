@@ -40,6 +40,7 @@
     <Project Path="src/Modules/Documents/Documents.Infrastructure/Documents.Infrastructure.csproj" />
     <Project Path="src/Modules/Documents/Documents.Contracts/Documents.Contracts.csproj" />
   </Folder>
+  <Folder Name="/src/Modules/" />
   <Folder Name="/src/Modules/AiProcessing/">
     <Project Path="src/Modules/AiProcessing/AiProcessing.Domain/AiProcessing.Domain.csproj" />
     <Project Path="src/Modules/AiProcessing/AiProcessing.Application/AiProcessing.Application.csproj" />
@@ -66,6 +67,9 @@
   </Folder>
   <Folder Name="/src/OroKanban.AppHost/">
     <Project Path="OroKanban.AppHost/OroKanban.AppHost.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Organization.Tests/Organization.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/Architecture/">
     <Project Path="tests/Architecture/Architecture.csproj" />

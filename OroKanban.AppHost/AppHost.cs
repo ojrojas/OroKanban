@@ -2,10 +2,11 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 // Infrastructure — declare Aspire resources (ADR-001)
 var postgres = builder.AddPostgres("postgres")
+ .WithDataVolume("orokanban-postgres-data")
     .WithPgAdmin();
 
-
 postgres.AddDatabase("orokanban");
+
 var identityDb = postgres.AddDatabase("identitydb");
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq");
@@ -33,7 +34,7 @@ IResourceBuilder<ContainerResource> identityServer = builder.AddContainer("ident
         ctx.Arguments.Add("--https-certificate-path");
         ctx.Arguments.Add(ctx.PfxPath);
         ctx.EnvironmentVariables.Add("ASPNETCORE_Kestrel__Certificates__Default__Path", ctx.PfxPath);
-        ctx.EnvironmentVariables.Add("ASPNETCORE_Kestrel__Certificates__Default__Password", ctx.Password);
+        ctx.EnvironmentVariables.Add("ASPNETCORE_Kestrel__Certificates__Default__Password", ctx.Password!);
         return Task.CompletedTask;
     })
     .WithHttpEndpoint(port: 5080, targetPort: 5080, name: "http")
@@ -58,7 +59,9 @@ var api = builder.AddProject("api", "../src/Api/Api.csproj")
     .WithReference(rabbitmq).WaitFor(rabbitmq)
     .WithReference(redis).WaitFor(redis)
     .WaitFor(identityServer)
-    .WithEnvironment("Identity__Authority", identityServer.GetEndpoint("http"));
+    .WithEnvironment("Identity__Authority", $"{identityServer.GetEndpoint("https")}")
+    .WithEnvironment("SymmetricSecurityKey", symmetricKey);
+
 
 // Angular frontend — scaffolded via `ng new` per FR-010
 // Web is an Angular SPA run via `npm start` (dev) or static hosting (prod).
@@ -67,27 +70,27 @@ var api = builder.AddProject("api", "../src/Api/Api.csproj")
 
 if (builder.ExecutionContext.IsPublishMode)
 {
-    // Producción / `aspire publish`: build via Dockerfile (nginx sirve dist/quizarena-player/browser)
-    // Equivalente Podman a identity-server: podman build -f src/Player/QuizArena.Player/Dockerfile -t localhost/quizarena-player:latest .
+    // Producción / `aspire publish`: build via Dockerfile (nginx sirve dist/web/browser)
+    // Equivalente Podman a identity-server: podman build -f src/Web/Dockerfile -t localhost/orokanban-web:latest .
     builder.AddDockerfile("web-kanban", ".", "src/Web/Dockerfile")
         .WithHttpEndpoint(targetPort: 80, name: "http")
         .WithExternalHttpEndpoints()
-        .WithEnvironment("API_URL", api.GetEndpoint("http"))
-        .WithEnvironment("IDENTITY_AUTHORITY", identityServer.GetEndpoint("https"))
+        .WithEnvironment("NG_APP_API_URL",  $"{api.GetEndpoint("http")}")
+        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY",  $"{identityServer.GetEndpoint("http")}")
         .WithEnvironment("PORT", "80");
 }
 else
 {
     // Dev / `aspire run`: host directo con pnpm + ng serve (más rápido, HMR).
-    // Fix del bug original: path debe ser "../src/Player/QuizArena.Player" (relativo a AppHost), no "src/...".
-    // Si tu entorno no tiene node/pnpm local, usa la alternativa Podman de abajo.
+    // Path es "../src/Web" (relativo a AppHost).
+    // Si tu entorno no tiene node/pnpm local, usa la alternativa Dockerfile de arriba.
     builder.AddJavaScriptApp("web-kanban", "../src/Web", "start")
         .WithPnpm(installArgs: ["--frozen-lockfile"])
         .WithHttpEndpoint(port: 4200, targetPort: 4200, name: "http", env: "PORT", isProxied: false)
         .WithExternalHttpEndpoints()
         .WithEnvironment("CI", "true")
-        .WithEnvironment("API_URL", api.GetEndpoint("http"))
-        .WithEnvironment("IDENTITY_AUTHORITY", identityServer.GetEndpoint("https"));
+        .WithEnvironment("NG_APP_API_URL",  $"{api.GetEndpoint("http")}")
+        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY",  $"{identityServer.GetEndpoint("http")}");
 }
 
 
