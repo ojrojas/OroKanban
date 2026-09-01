@@ -3,6 +3,7 @@ namespace Api.Tenant;
 public sealed class TenantContext
 {
     public string? TenantId { get; set; }
+    public Guid CorrelationId { get; set; } = Guid.NewGuid();
 }
 
 public sealed class TenantClaimsTransformation : Microsoft.AspNetCore.Authentication.IClaimsTransformation

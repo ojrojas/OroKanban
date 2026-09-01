@@ -56,9 +56,20 @@ builder.Services.AddDbContext<Documents.Infrastructure.Persistence.DocumentsDbCo
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
 builder.Services.AddDbContext<AiProcessing.Infrastructure.Persistence.AiProcessingDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+builder.Services.AddDbContext<Audit.Infrastructure.Persistence.AuditDbContext>(o =>
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
 // AI options (MEAI provider-agnostic) — secrets via env/KeyVault, not source (Principle XIX)
 builder.Services.Configure<AiProcessing.Infrastructure.Configuration.AiOptions>(builder.Configuration.GetSection(AiProcessing.Infrastructure.Configuration.AiOptions.SectionName));
 builder.Services.Configure<AiProcessing.Infrastructure.Configuration.VectorStoreOptions>(builder.Configuration.GetSection(AiProcessing.Infrastructure.Configuration.VectorStoreOptions.SectionName));
+builder.Services.Configure<Audit.Infrastructure.Configuration.AuditOptions>(builder.Configuration.GetSection(Audit.Infrastructure.Configuration.AuditOptions.SectionName));
+
+// Health checks per-dependency identifiable (Principle XVIII, SC-005)
+builder.Services.AddHealthChecks()
+    .AddCheck<Audit.Infrastructure.Health.NpgsqlHealthCheck>("postgres")
+    .AddCheck<Audit.Infrastructure.Health.RabbitMqHealthCheck>("rabbitmq")
+    .AddCheck<Audit.Infrastructure.Health.RedisHealthCheck>("redis")
+    .AddCheck<Audit.Infrastructure.Health.AiProviderHealthCheck>("ai_provider")
+    .AddCheck<Audit.Infrastructure.Health.VectorStoreHealthCheck>("vector_store");
 
 // CQRS — BuildingBlocks canon (no MediatR)
 builder.Services.AddCqrs(cqrs => cqrs
@@ -105,7 +116,9 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Middleware
+// Middleware — CorrelationId must be before authentication so TenantContext.CorrelationId is available in handlers
+app.UseMiddleware<Api.Middleware.CorrelationIdMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

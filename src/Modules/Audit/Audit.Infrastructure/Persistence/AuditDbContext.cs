@@ -14,5 +14,10 @@ public sealed class AuditDbContext : AppDbContextBase
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema("audit");
+        modelBuilder.ApplyConfiguration(new Configurations.AuditEntryConfiguration());
+        modelBuilder.ApplyConfiguration(new Configurations.AuditConsumedEventConfiguration());
     }
+
+    public DbSet<Audit.Domain.Aggregates.AuditEntry> AuditEntries => Set<Audit.Domain.Aggregates.AuditEntry>();
+    public DbSet<Configurations.AuditConsumedEvent> AuditConsumedEvents => Set<Configurations.AuditConsumedEvent>();
 }

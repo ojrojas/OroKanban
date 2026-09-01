@@ -17,6 +17,8 @@ public sealed class Provenance : ValueObject
     public string ProcessingStatus { get; }
     public QualityIndicator? QualityIndicator { get; }
 
+    private Provenance() {}
+
     public Provenance(Guid sourceDocumentId, Guid sourceDocumentVersionId, Guid operationId, string operationType, ModelDescriptor model, string promptVersion, DateTime createdAt, Guid createdBy, string processingStatus, QualityIndicator? qualityIndicator = null)
     {
         if (sourceDocumentId == Guid.Empty) throw new ArgumentException("SourceDocumentId required");

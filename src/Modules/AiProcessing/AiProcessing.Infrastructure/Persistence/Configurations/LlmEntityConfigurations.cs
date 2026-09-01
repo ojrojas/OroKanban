@@ -12,6 +12,7 @@ public sealed class LlmOperationConfiguration : IEntityTypeConfiguration<LlmOper
         b.ToTable("llm_operations", "ai_processing");
         b.HasKey(x => x.Id);
         b.Property(x => x.Id).HasConversion(id => id.Value, v => new LlmOperationId(v));
+        b.Property(x => x.PromptVersionId).HasConversion(id => id.Value, v => new LlmPromptVersionId(v));
         b.HasIndex(x => new { x.TenantId, x.DocumentId });
         b.HasIndex(x => new { x.TenantId, x.OperationStatusId });
         b.Property(x => x.RowVersion).IsRowVersion().IsConcurrencyToken();
@@ -41,6 +42,7 @@ public sealed class LlmResultConfiguration : IEntityTypeConfiguration<LlmResult>
         b.HasKey(x => x.Id);
         b.Property(x => x.Id).HasConversion(id => id.Value, v => new LlmResultId(v));
         b.Property(x => x.OperationId).HasConversion(id => id.Value, v => new LlmOperationId(v));
+        b.Ignore(x => x.Provenance);
         b.HasIndex(x => x.OperationId).IsUnique();
         b.HasIndex(x => new { x.TenantId, x.DocumentId });
         b.HasIndex(x => new { x.TenantId, x.ReviewStatusId });
