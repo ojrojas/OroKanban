@@ -53,7 +53,7 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
-            }
+            },
           },
           "defaultConfiguration": "production"
         },
@@ -67,7 +67,8 @@
               "buildTarget": "orokanban-web:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": { "proxyConfig": "proxy.conf.js" }
         },
         "test": {
           "builder": "@angular/build:unit-test"

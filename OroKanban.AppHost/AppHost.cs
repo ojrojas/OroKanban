@@ -65,4 +65,31 @@ var api = builder.AddProject("api", "../src/Api/Api.csproj")
 // Declared here as a reference for dashboard visibility; concrete hosting is via `src/Web` dev server.
 // (AddNpmApp requires Aspire.Hosting.JavaScript — omitted at foundation stage to keep AppHost minimal.)
 
+if (builder.ExecutionContext.IsPublishMode)
+{
+    // Producción / `aspire publish`: build via Dockerfile (nginx sirve dist/quizarena-player/browser)
+    // Equivalente Podman a identity-server: podman build -f src/Player/QuizArena.Player/Dockerfile -t localhost/quizarena-player:latest .
+    builder.AddDockerfile("web-kanban", ".", "src/Web/Dockerfile")
+        .WithHttpEndpoint(targetPort: 80, name: "http")
+        .WithExternalHttpEndpoints()
+        .WithEnvironment("API_URL", api.GetEndpoint("http"))
+        .WithEnvironment("IDENTITY_AUTHORITY", identityServer.GetEndpoint("https"))
+        .WithEnvironment("PORT", "80");
+}
+else
+{
+    // Dev / `aspire run`: host directo con pnpm + ng serve (más rápido, HMR).
+    // Fix del bug original: path debe ser "../src/Player/QuizArena.Player" (relativo a AppHost), no "src/...".
+    // Si tu entorno no tiene node/pnpm local, usa la alternativa Podman de abajo.
+    builder.AddJavaScriptApp("web-kanban", "../src/Web", "start")
+        .WithPnpm(installArgs: ["--frozen-lockfile"])
+        .WithHttpEndpoint(port: 4200, targetPort: 4200, name: "http", env: "PORT", isProxied: false)
+        .WithExternalHttpEndpoints()
+        .WithEnvironment("CI", "true")
+        .WithEnvironment("API_URL", api.GetEndpoint("http"))
+        .WithEnvironment("IDENTITY_AUTHORITY", identityServer.GetEndpoint("https"));
+}
+
+
+
 builder.Build().Run();
