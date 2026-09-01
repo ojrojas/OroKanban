@@ -71,7 +71,6 @@ public sealed class ArchitectureTests
     public void EveryModuleDbContextInheritsAppDbContextBaseAndAppliesOutbox()
     {
         // Force-load all module Infrastructure assemblies via known DbContext types (ensures AppDomain contains them)
-        _ = typeof(Identity.Infrastructure.Persistence.IdentityDbContext).Assembly;
         _ = typeof(Organization.Infrastructure.Persistence.OrganizationDbContext).Assembly;
         _ = typeof(Projects.Infrastructure.Persistence.ProjectsDbContext).Assembly;
         _ = typeof(Metrics.Infrastructure.Persistence.MetricsDbContext).Assembly;
@@ -86,7 +85,7 @@ public sealed class ArchitectureTests
             .Where(t => t.Name.EndsWith("DbContext") && !t.IsAbstract)
             .ToList();
 
-        Assert.True(dbContextTypes.Count >= 9, $"Expected at least 9 DbContexts, found {dbContextTypes.Count}");
+        Assert.True(dbContextTypes.Count >= 8, $"Expected at least 9 DbContexts, found {dbContextTypes.Count}");
 
         foreach (var type in dbContextTypes)
         {

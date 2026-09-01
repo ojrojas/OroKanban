@@ -45,12 +45,10 @@ builder.Services.AddScoped<Organization.Domain.Services.IProjectMembership, Orga
 builder.Services.AddScoped<Organization.Infrastructure.Services.HierarchyCacheInvalidator>();
 builder.Services.AddDistributedMemoryCache(); // fallback when Redis (Aspire redis) is not yet configured — real Redis via AddRedisClient("redis") when available
 
-// Persistence — each module DbContext inherits AppDbContextBase (schema per module, Npgsql via Aspire resource "orokanban")
-// At design-time (dotnet ef) the factories in Organization.Infrastructure/Identity.Infrastructure provide a fallback connection string.
-// At runtime Aspire injects ConnectionStrings__orokanban via WithReference(postgres) in AppHost.
+// Persistence — cada módulo DbContext hereda AppDbContextBase (schema por módulo, Npgsql via Aspire resource "orokanban")
+// At runtime Aspire injects ConnectionStrings__orokanban via WithReference(postgres) en AppHost.
+// Identity NO tiene DbContext local: oroidentityserver es externo y solo se consume vía OIDC/access_token (Principio II), nunca SQL directo a identitydb.
 builder.Services.AddDbContext<Organization.Infrastructure.Persistence.OrganizationDbContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
-builder.Services.AddDbContext<Identity.Infrastructure.Persistence.IdentityDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
 builder.Services.AddDbContext<Documents.Infrastructure.Persistence.DocumentsDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
@@ -58,10 +56,27 @@ builder.Services.AddDbContext<AiProcessing.Infrastructure.Persistence.AiProcessi
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
 builder.Services.AddDbContext<Audit.Infrastructure.Persistence.AuditDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+builder.Services.AddDbContext<Notifications.Infrastructure.Persistence.NotificationsDbContext>(o =>
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
 // AI options (MEAI provider-agnostic) — secrets via env/KeyVault, not source (Principle XIX)
 builder.Services.Configure<AiProcessing.Infrastructure.Configuration.AiOptions>(builder.Configuration.GetSection(AiProcessing.Infrastructure.Configuration.AiOptions.SectionName));
 builder.Services.Configure<AiProcessing.Infrastructure.Configuration.VectorStoreOptions>(builder.Configuration.GetSection(AiProcessing.Infrastructure.Configuration.VectorStoreOptions.SectionName));
 builder.Services.Configure<Audit.Infrastructure.Configuration.AuditOptions>(builder.Configuration.GetSection(Audit.Infrastructure.Configuration.AuditOptions.SectionName));
+builder.Services.Configure<Notifications.Infrastructure.Configuration.NotificationsOptions>(builder.Configuration.GetSection(Notifications.Infrastructure.Configuration.NotificationsOptions.SectionName));
+
+// Notifications — BC-09 supporting (R1-R5 decoupled, idempotent, policy merge, content safety)
+builder.Services.AddScoped<Notifications.Domain.Services.INotificationPolicy, Notifications.Infrastructure.Services.NotificationPolicy>();
+builder.Services.AddScoped<Notifications.Domain.Services.INotificationContentPolicy, Notifications.Infrastructure.Services.NotificationContentPolicy>();
+builder.Services.AddScoped<Notifications.Infrastructure.Channels.IChannel, Notifications.Infrastructure.Channels.InAppChannel>();
+builder.Services.AddScoped<Notifications.Infrastructure.Channels.IChannel, Notifications.Infrastructure.Channels.EmailChannel>();
+builder.Services.AddScoped<Notifications.Infrastructure.Channels.IChannelRouter, Notifications.Infrastructure.Channels.ChannelRouter>();
+builder.Services.AddScoped<Notifications.Infrastructure.Consumers.NotificationDispatcher>();
+builder.Services.AddScoped<BuildingBlocks.EventBus.Abstractions.IIntegrationEventHandler<Projects.Contracts.Events.WorkItemAssignedIntegrationEvent>, Notifications.Infrastructure.Consumers.WorkItemAssignedHandler>();
+builder.Services.AddScoped<BuildingBlocks.EventBus.Abstractions.IIntegrationEventHandler<Projects.Contracts.Events.WorkItemStatusChangedIntegrationEvent>, Notifications.Infrastructure.Consumers.WorkItemStatusChangedHandler>();
+builder.Services.AddScoped<BuildingBlocks.EventBus.Abstractions.IIntegrationEventHandler<Documents.Contracts.Events.DocumentUploadedIntegrationEvent>, Notifications.Infrastructure.Consumers.DocumentUploadedHandler>();
+builder.Services.AddScoped<BuildingBlocks.EventBus.Abstractions.IIntegrationEventHandler<Documents.Contracts.Events.DocumentApprovedIntegrationEvent>, Notifications.Infrastructure.Consumers.DocumentApprovedHandler>();
+builder.Services.AddScoped<BuildingBlocks.EventBus.Abstractions.IIntegrationEventHandler<Documents.Contracts.Events.DocumentClassifiedIntegrationEvent>, Notifications.Infrastructure.Consumers.DocumentClassifiedHandler>();
+builder.Services.AddScoped<BuildingBlocks.EventBus.Abstractions.IIntegrationEventHandler<AiProcessing.Contracts.Events.LlmResultGeneratedIntegrationEvent>, Notifications.Infrastructure.Consumers.LlmResultGeneratedHandler>();
 
 // Health checks per-dependency identifiable (Principle XVIII, SC-005)
 builder.Services.AddHealthChecks()
@@ -74,11 +89,13 @@ builder.Services.AddHealthChecks()
 // CQRS — BuildingBlocks canon (no MediatR)
 builder.Services.AddCqrs(cqrs => cqrs
     .RegisterHandlersFromAssemblyContaining<Program>()
+    .RegisterHandlersFromAssemblyContaining<Notifications.Application.Features.GetMyNotifications.GetMyNotificationsQuery>()
     .AddOpenBehavior(typeof(LoggingBehavior<,>))
     .AddOpenBehavior(typeof(ValidationBehavior<,>)));
 
 // Endpoints (vertical slices)
 builder.Services.AddEndpoints(typeof(Program).Assembly);
+builder.Services.AddEndpoints(typeof(Notifications.Application.Features.GetMyNotifications.GetMyNotificationsQuery).Assembly);
 
 // HttpClient for discovery fetch (GetPlatformHealth)
 builder.Services.AddHttpClient();

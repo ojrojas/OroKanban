@@ -22,6 +22,7 @@ public sealed class DocumentConfiguration : IEntityTypeConfiguration<Document>
         b.HasIndex(x => x.ContentHash);
         b.HasIndex(x => new { x.TenantId, x.ProjectId });
         b.HasIndex(x => new { x.TenantId, x.OwnerId });
+        b.Property(x => x.Status).HasConversion(s => s.Id, id => Documents.Domain.Enumerations.DocumentStatus.FromId(id));
         b.Property(x => x.RowVersion).IsRowVersion();
         b.Property(x => x.TenantId).IsRequired();
         b.Property(x => x.OrganizationId).IsRequired();

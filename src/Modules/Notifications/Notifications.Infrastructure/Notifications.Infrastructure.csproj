@@ -11,6 +11,9 @@
     <ProjectReference Include="..\Notifications.Contracts\Notifications.Contracts.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.Kernel.Domain\BuildingBlocks.Kernel.Domain.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.EventBus\BuildingBlocks.EventBus.csproj" />
+    <ProjectReference Include="..\..\Projects\Projects.Contracts\Projects.Contracts.csproj" />
+    <ProjectReference Include="..\..\Documents\Documents.Contracts\Documents.Contracts.csproj" />
+    <ProjectReference Include="..\..\AiProcessing\AiProcessing.Contracts\AiProcessing.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

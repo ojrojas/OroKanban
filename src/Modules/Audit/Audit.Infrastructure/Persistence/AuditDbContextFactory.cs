@@ -1,17 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Identity.Infrastructure.Persistence;
+namespace Audit.Infrastructure.Persistence;
 
-public sealed class IdentityDbContextFactory : IDesignTimeDbContextFactory<IdentityDbContext>
+public sealed class AuditDbContextFactory : IDesignTimeDbContextFactory<AuditDbContext>
 {
-    public IdentityDbContext CreateDbContext(string[] args)
+    public AuditDbContext CreateDbContext(string[] args)
     {
-        var options = new DbContextOptionsBuilder<IdentityDbContext>()
+        var options = new DbContextOptionsBuilder<AuditDbContext>()
             .UseNpgsql(GetConnectionString())
             .Options;
 
-        return new IdentityDbContext(options);
+        return new AuditDbContext(options);
     }
 
     private static string GetConnectionString()
