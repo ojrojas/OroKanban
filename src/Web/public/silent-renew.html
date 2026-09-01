@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Silent Renew</title>
+  <script src="https://cdn.jsdelivr.net/npm/oidc-client@1.11.5/dist/oidc-client.min.js"></script>
+</head>
+<body>
+  <script>
+    // angular-auth-oidc-client silent renew helper: just forward the hash to parent
+    // La librería espera este archivo para iframe renewal cuando useRefreshToken falla.
+    // Si no hay librería, simplemente cierra el iframe.
+    try {
+      const hash = window.location.hash || window.location.search;
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage(hash, window.location.origin);
+      }
+    } catch (e) { console.error(e); }
+  </script>
+</body>
+</html>

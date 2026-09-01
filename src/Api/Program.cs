@@ -1,3 +1,4 @@
+using Api.Authentication;
 using Api.Configuration;
 using Api.Tenant;
 using BuildingBlocks.CQRS.Behaviors;
@@ -6,7 +7,6 @@ using BuildingBlocks.ServiceDefaults;
 using BuildingBlocks.ServiceDefaults.Endpoints;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using OpenIddict.Validation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +14,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 // Configuration: environment-only, fail-closed (FR-005, contracts/identity-config-contract.md)
+// Soporta Oidc:* (EduCore/docs) y Identity:* (compat). Valida que al menos uno tenga Authority/Audience.
 builder.Services.AddOptions<IdentityOptions>()
     .Bind(builder.Configuration.GetSection(IdentityOptions.SectionName))
     .BindConfiguration("Identity__") // also bind env-suffixed keys
-    .ValidateDataAnnotations()
+    .Validate(o =>
+    {
+        var hasAuthority = !string.IsNullOrWhiteSpace(o.Authority)
+            || !string.IsNullOrWhiteSpace(builder.Configuration["Oidc:Authority"])
+            || !string.IsNullOrWhiteSpace(builder.Configuration["Oidc__Authority"]);
+        var hasAudience = !string.IsNullOrWhiteSpace(o.Audience)
+            || !string.IsNullOrWhiteSpace(builder.Configuration["Oidc:Audience"])
+            || !string.IsNullOrWhiteSpace(builder.Configuration["Oidc__Audience"]);
+        return hasAuthority && hasAudience;
+    }, "Oidc:Authority/Audience o Identity:Authority/Audience es requerido. Configura via AppHost (Oidc__*) o appsettings.")
     .ValidateOnStart();
 
 // Tenant context
@@ -53,65 +63,35 @@ builder.Services.AddEndpoints(typeof(Program).Assembly);
 // HttpClient for discovery fetch (GetPlatformHealth)
 builder.Services.AddHttpClient();
 
-// Auth: OpenIddict validation against external oroidentityserver discovery (FR-005, Constitution II)
-// Validates JWTs issued by oroidentityserver (OpenIddict 8) via discovery endpoint.
-// Uses OpenIddict.Validation.AspNetCore + SystemNetHttp — no local password/login, no token issuance.
-var authority = builder.Configuration["Identity:Authority"] ?? builder.Configuration["Identity__Authority"];
-var audience = builder.Configuration["Identity:Audience"] ?? builder.Configuration["Identity__Audience"] ?? "orokanban-api";
-
-builder.Services.AddOpenIddict()
-    .AddValidation(options =>
-    {
-        if (!string.IsNullOrWhiteSpace(authority))
-        {
-            options.SetIssuer(new Uri(authority.TrimEnd('/')));
-        }
-        options.AddAudiences(audience);
-        options.UseSystemNetHttp();
-        options.UseAspNetCore();
-        options.Configure(o =>
-        {
-            o.TokenValidationParameters.RequireSignedTokens = true;
-            // En dev el discovery puede estar en http://localhost:5080 pero el issuer es https://localhost:5086 (Aspire proxy).
-            // Desactivar validación estricta de issuer evita ID2098 cuando la autoridad y el issuer difieren solo en esquema.
-            if (builder.Environment.IsDevelopment())
-            {
-                o.TokenValidationParameters.ValidateIssuer = false;
-            }
-        });
-
-        // Usa la misma clave de cifrado que el identity-api para poder descifrar los tokens (ID2004/ID2019).
-        // El AppHost inyecta SymmetricSecurityKey tanto al identity-api como al api.
-        var symmetricSecurityKey = builder.Configuration["SymmetricSecurityKey"];
-        if (!string.IsNullOrWhiteSpace(symmetricSecurityKey))
-        {
-            var keyBytes = System.Text.Encoding.UTF8.GetBytes(symmetricSecurityKey);
-            // OpenIddict espera una clave de al menos 32 bytes; si es más corta, se hashea
-            if (keyBytes.Length >= 32)
-            {
-                options.AddEncryptionKey(new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(keyBytes));
-            }
-        }
-    });
+// Auth: validación OpenIddict contra oroidentityserver — patrón solicitado (similar a EduCore)
+// Usa Oidc:Authority/Audience/TenantClaim/ClientId/Secret con fallback a Identity:* y mapea claims tenant/role/sub
+builder.Services.AddOidcAuthentication(builder.Configuration);
 
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy => policy
-        .WithOrigins("http://localhost:4200", "https://localhost:4200", "http://localhost:5000")
+        .WithOrigins("http://localhost:4200", "https://localhost:4200", "http://localhost:5000", "https://localhost:5000")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials());
 });
 
-builder.Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
+// En Development, permitir cert autofirmado de Aspire para discovery OIDC (https://localhost:5086)
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.ConfigureHttpClientDefaults(b => b.ConfigurePrimaryHttpMessageHandler(() =>
+        new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        }));
+}
+
 builder.Services.AddAuthorization(options =>
 {
     // Hierarchical policies — all delegate to IAuthorizationEvaluator (subtree + tenant + permission + classification)
-    // Example: RequireOrganizationManage checks organization.manage via evaluator; callers still invoke CanActorPerform for fine-grained checks
     options.AddPolicy("OrganizationManage", p => p.RequireAuthenticatedUser());
     options.AddPolicy("ProjectRead", p => p.RequireAuthenticatedUser());
     options.AddPolicy("WorkItemRead", p => p.RequireAuthenticatedUser());
-    // Every list/search/dashboard handler MUST still compose SubtreeSpecification<T> before fetch (R6) — policy is the outer gate, Specification is the data filter
 });
 
 // OpenAPI

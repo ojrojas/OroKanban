@@ -6,10 +6,9 @@ public sealed class IdentityOptions
 {
     public const string SectionName = "Identity";
 
-    [Required(ErrorMessage = "Identity__Authority is required but was not configured")]
+    // Authority/Audience pueden venir de Identity:* o Oidc:* (patrón EduCore + docs). Validación cruzada en Program.cs.
     public string Authority { get; set; } = default!;
 
-    [Required(ErrorMessage = "Identity__Audience is required but was not configured")]
     public string Audience { get; set; } = default!;
 
     public string? ClientId { get; set; }

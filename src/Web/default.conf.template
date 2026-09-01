@@ -11,8 +11,8 @@ server {
         try_files $uri $uri/ /index.html;
     }
 
-    # Proxy API y SignalR al backend Aspire (oroclash-api)
-    # En Aspire se inyecta API_URL=http://oroclash-api:8080 via env
+    # Proxy API y SignalR al backend Aspire (api)
+    # En Aspire se inyecta API_URL=http://api:8080 y IDENTITY_URL=https://identity-api:5086
     location /api/ {
         proxy_pass ${API_URL}/api/;
         proxy_http_version 1.1;
@@ -29,5 +29,19 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # Proxy OIDC discovery y token endpoints para prod (evita CORS y resuelve issuer)
+    location /.well-known/ {
+        proxy_pass ${IDENTITY_URL}/.well-known/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    location /connect/ {
+        proxy_pass ${IDENTITY_URL}/connect/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }

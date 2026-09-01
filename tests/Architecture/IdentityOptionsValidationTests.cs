@@ -15,20 +15,29 @@ public sealed class IdentityOptionsValidationTests
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["Identity:Audience"] = "orokanban-api"
-                // Authority intentionally missing
+                // Authority intentionally missing — ni Identity ni Oidc
             })
             .Build();
 
         var services = new ServiceCollection();
         services.AddOptions<IdentityOptions>()
             .Bind(config.GetSection(IdentityOptions.SectionName))
-            .ValidateDataAnnotations()
+            .Validate(o =>
+            {
+                var hasAuthority = !string.IsNullOrWhiteSpace(o.Authority)
+                    || !string.IsNullOrWhiteSpace(config["Oidc:Authority"])
+                    || !string.IsNullOrWhiteSpace(config["Oidc__Authority"]);
+                var hasAudience = !string.IsNullOrWhiteSpace(o.Audience)
+                    || !string.IsNullOrWhiteSpace(config["Oidc:Audience"])
+                    || !string.IsNullOrWhiteSpace(config["Oidc__Audience"]);
+                return hasAuthority && hasAudience;
+            }, "Oidc:Authority/Audience o Identity:Authority/Audience es requerido.")
             .ValidateOnStart();
 
         var provider = services.BuildServiceProvider();
 
         var ex = Assert.Throws<OptionsValidationException>(() => provider.GetRequiredService<IOptions<IdentityOptions>>().Value);
-        Assert.Contains("Identity__Authority is required", ex.Message);
+        Assert.Contains("Oidc:Authority", ex.Message);
     }
 
     [Fact]
@@ -44,13 +53,20 @@ public sealed class IdentityOptionsValidationTests
         var services = new ServiceCollection();
         services.AddOptions<IdentityOptions>()
             .Bind(config.GetSection(IdentityOptions.SectionName))
-            .ValidateDataAnnotations()
+            .Validate(o =>
+            {
+                var hasAuthority = !string.IsNullOrWhiteSpace(o.Authority)
+                    || !string.IsNullOrWhiteSpace(config["Oidc:Authority"]);
+                var hasAudience = !string.IsNullOrWhiteSpace(o.Audience)
+                    || !string.IsNullOrWhiteSpace(config["Oidc:Audience"]);
+                return hasAuthority && hasAudience;
+            }, "Oidc:Authority/Audience o Identity:Authority/Audience es requerido.")
             .ValidateOnStart();
 
         var provider = services.BuildServiceProvider();
 
         var ex = Assert.Throws<OptionsValidationException>(() => provider.GetRequiredService<IOptions<IdentityOptions>>().Value);
-        Assert.Contains("Identity__Audience is required", ex.Message);
+        Assert.Contains("Oidc:Authority", ex.Message);
     }
 
     [Fact]

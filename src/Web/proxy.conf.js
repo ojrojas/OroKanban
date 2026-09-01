@@ -1,4 +1,4 @@
-const identityTarget = process.env.IDENTITY_URL || process.env.identity__url || process.env.NG_APP_IDENTITY_AUTHORITY || "http://localhost:5080"
+const identityTarget = process.env.IDENTITY_URL || process.env.identity__url || process.env.NG_APP_IDENTITY_AUTHORITY || "https://localhost:5086"
 const target = process.env.API_URL || process.env.api__url || process.env.NG_APP_API_URL || "http://localhost:5047"
 console.log(`[proxy] API target: ${target} (API_URL=${process.env.API_URL} api__url=${process.env.api__url})`);
 console.log(`[proxy] Identity target: ${identityTarget}`);

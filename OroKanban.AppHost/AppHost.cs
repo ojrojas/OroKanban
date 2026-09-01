@@ -21,6 +21,7 @@ var redis = builder.AddRedis("redis");
 
 var symmetricKey = builder.AddParameter("symmetric-security-key", secret: true);
 var seedAdminPassword = builder.AddParameter("seed-admin-password", secret: true);
+var orokanbanApiSecret = builder.AddParameter("orokanban-api-secret", secret: true);
 
 
 // External identity — consumed, not duplicated (Constitution II, FR-005)
@@ -60,7 +61,16 @@ var api = builder.AddProject("api", "../src/Api/Api.csproj")
     .WithReference(redis).WaitFor(redis)
     .WaitFor(identityServer)
     .WithEnvironment("Identity__Authority", $"{identityServer.GetEndpoint("https")}")
-    .WithEnvironment("SymmetricSecurityKey", symmetricKey);
+    .WithEnvironment("Identity__Audience", "orokanban-api")
+    .WithEnvironment("Oidc__Authority", $"{identityServer.GetEndpoint("https")}")
+    .WithEnvironment("Oidc__Audience", "orokanban-api")
+    .WithEnvironment("Oidc__ClientId", "orokanban-api")
+    .WithEnvironment("Oidc__ClientSecret", orokanbanApiSecret)
+    .WithEnvironment("Oidc__TenantClaim", "tenant_id")
+    .WithEnvironment("Identity__ClientId", "orokanban-api")
+    .WithEnvironment("Identity__ClientSecret", orokanbanApiSecret)
+    .WithEnvironment("SymmetricSecurityKey", symmetricKey)
+    .WithEnvironment("Oidc__SymmetricSecurityKey", symmetricKey);
 
 
 // Angular frontend — scaffolded via `ng new` per FR-010
@@ -71,26 +81,25 @@ var api = builder.AddProject("api", "../src/Api/Api.csproj")
 if (builder.ExecutionContext.IsPublishMode)
 {
     // Producción / `aspire publish`: build via Dockerfile (nginx sirve dist/web/browser)
-    // Equivalente Podman a identity-server: podman build -f src/Web/Dockerfile -t localhost/orokanban-web:latest .
+    // NG_APP_IDENTITY_AUTHORITY debe ser https externo (issuer del JWT) — docs OpenIddict usan https.
     builder.AddDockerfile("web-kanban", ".", "src/Web/Dockerfile")
         .WithHttpEndpoint(targetPort: 80, name: "http")
         .WithExternalHttpEndpoints()
         .WithEnvironment("NG_APP_API_URL",  $"{api.GetEndpoint("http")}")
-        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY",  $"{identityServer.GetEndpoint("http")}")
+        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY",  $"{identityServer.GetEndpoint("https")}")
         .WithEnvironment("PORT", "80");
 }
 else
 {
     // Dev / `aspire run`: host directo con pnpm + ng serve (más rápido, HMR).
-    // Path es "../src/Web" (relativo a AppHost).
-    // Si tu entorno no tiene node/pnpm local, usa la alternativa Dockerfile de arriba.
+    // Usa https para que el discovery no haga 307 y el issuer coincida con el Api (https://localhost:5086).
     builder.AddJavaScriptApp("web-kanban", "../src/Web", "start")
         .WithPnpm(installArgs: ["--frozen-lockfile"])
         .WithHttpEndpoint(port: 4200, targetPort: 4200, name: "http", env: "PORT", isProxied: false)
         .WithExternalHttpEndpoints()
         .WithEnvironment("CI", "true")
         .WithEnvironment("NG_APP_API_URL",  $"{api.GetEndpoint("http")}")
-        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY",  $"{identityServer.GetEndpoint("http")}");
+        .WithEnvironment("NG_APP_IDENTITY_AUTHORITY",  $"{identityServer.GetEndpoint("https")}");
 }
 
 

@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit {
     this.authService.isAuthenticated$.pipe(take(1)).subscribe(({ isAuthenticated }) => {
       if (!isAuthenticated) return;
       console.log('[Home] Autenticado — enviando GET /api/hello para validar autenticación');
-      this.http.get('/api/hello').subscribe({
+      this.http.get('/api/hello', { headers: { 'X-Skip-Auth-Redirect': 'true' } }).subscribe({
         next: (res) => {
           this.helloResponse = res;
           console.log('[Home] GET /api/hello ✓', res);
@@ -52,6 +52,7 @@ export class HomeComponent implements OnInit {
         error: (err) => {
           this.helloError = err?.error ?? err;
           console.error('[Home] GET /api/hello ✗', err);
+          // No disparamos otro authorize aquí — el errorInterceptor ya lo haría con throttle, y lo hemos excluido con X-Skip-Auth-Redirect
         },
       });
     });

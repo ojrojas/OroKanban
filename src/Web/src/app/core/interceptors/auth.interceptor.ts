@@ -6,7 +6,9 @@ import { environment } from '../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const oidc = inject(OidcSecurityService);
-  if (!req.url.startsWith(environment.apiUrl)) {
+  const apiUrl = environment.apiUrl;
+  const isApi = req.url.startsWith(apiUrl) || req.url.includes('/api/') || (apiUrl.startsWith('http') ? req.url.startsWith(apiUrl) : false) || req.url.startsWith(window.location.origin + apiUrl);
+  if (!isApi) {
     return next(req);
   }
   return oidc.getAccessToken().pipe(

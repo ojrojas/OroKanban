@@ -41,8 +41,8 @@ ADMIN_REDIRECT_URI="${ADMIN_REDIRECT_URI:-https://localhost:7172/signin-oidc}"
 ADMIN_POST_LOGOUT_URI="${ADMIN_POST_LOGOUT_URI:-https://localhost:7172/signout-callback-oidc}"
 ADMIN_CLIENT_SECRET="${ADMIN_CLIENT_SECRET:-$(openssl rand -hex 32 2>/dev/null || echo "dev-admin-secret-$(date +%s)")}"
 
-API_CLIENT_ID="${API_CLIENT_ID:-orokanban-api-client}"
-API_CLIENT_SECRET="${API_CLIENT_SECRET:-$(openssl rand -hex 32 2>/dev/null || echo "dev-api-secret-$(date +%s)")}"
+API_CLIENT_ID="${API_CLIENT_ID:-orokanban-api}"
+API_CLIENT_SECRET="${API_CLIENT_SECRET:-orokanban-api-secret-dev-123456}"
 
 # Scopes / Roles / Tenant
 API_SCOPE="${API_SCOPE:-orokanban-api}"
@@ -98,13 +98,11 @@ ensure_role() {
   fi
   echo "   creating role '$name'"
   local sc
-  # CreateRoleCommand expects PascalCase { Name, Description } — see Roles table NotNull constraint on "Name"
-  # Send both casings for compatibility, and include NormalizedName implicitly handled server-side
+  # CreateRoleRequest = record(string RoleName) — server expects RoleName/roleName (JsonSerializerDefaults.Web, case-insensitive)
+  # Previous payload {Name/name} resulted in RoleName=null → INSERT NULL into "Roles"."Name" → 23502 not-null violation (see podman logs)
   sc=$(api_code -X POST "$IDP_URL/api/roles" -H "Content-Type: application/json" -d "{
-    \"Name\": \"$name\",
-    \"name\": \"$name\",
-    \"Description\": \"$desc\",
-    \"description\": \"$desc\"
+    \"RoleName\": \"$name\",
+    \"roleName\": \"$name\"
   }")
   echo "   role $name: HTTP $sc"
   if [ "$sc" -ge 400 ] && $have_jq; then log_json "$(cat /tmp/resp.json)"; fi
@@ -325,6 +323,14 @@ echo "-> Checking existing OIDC clients"
 
 register_client() {
   local client_id="$1" secret="$2" display="$3" ctype="$4" atype="$5" redirect="$6" post_logout="$7" extra_perms="$8" extra_grants="$9"
+  # Idempotent check via list — GET /api/applications/{id} throws InvalidOperationException (logged as ERR) if missing → noisy 500
+  # Prefer list + grep; fall back to direct GET only for compatibility
+  local exists
+  exists=$(curl -Lsk -b "$cookies" "$IDP_URL/api/applications" 2>/dev/null | grep -o "\"[Cc]lient[Ii]d\":\"$client_id\"" | head -1 || true)
+  if [ -n "$exists" ]; then
+    echo "   client '$client_id' already exists — skip (borra el volumen para recrear limpio)"
+    return 0
+  fi
   local status
   status=$(curl -Lsk -b "$cookies" -o /dev/null -w "%{http_code}" "$IDP_URL/api/applications/$client_id" 2>/dev/null || echo "000")
   if [ "$status" = "200" ]; then
@@ -339,6 +345,11 @@ register_client() {
   local all_perms="$perms, $grants"
   local method="POST"
   local url="$IDP_URL/api/applications"
+  # Para orokanban-web incluir silent-renew si está definido
+  local redirect_json="\"$redirect\""
+  if [ "$client_id" = "$WEB_CLIENT_ID" ] && [ -n "${WEB_REDIRECTS_JSON:-}" ]; then
+    redirect_json="$WEB_REDIRECTS_JSON"
+  fi
   local body="{
     \"clientId\": \"$client_id\",
     \"displayName\": \"$display\",
@@ -347,7 +358,7 @@ register_client() {
     \"consentType\": \"implicit\",
     \"permissions\": [$all_perms],
     \"requirements\": [\"ft:pkce\"],
-    \"redirectUris\": [\"$redirect\"],
+    \"redirectUris\": [$redirect_json],
     \"postLogoutRedirectUris\": [\"$post_logout\"]"
   if [ -n "$secret" ]; then
     body="$body,
@@ -361,13 +372,25 @@ register_client() {
   if $have_jq; then log_json "$(cat /tmp/resp.json)"; else cat /tmp/resp.json 2>/dev/null | head -n 20; fi
 }
 
-# Web (public, PKCE) — angular-auth-oidc-client, silentRenew + useRefreshToken
-register_client "$WEB_CLIENT_ID" "$WEB_CLIENT_SECRET" "OroKanban Web (Angular)" "public" "web" "$WEB_REDIRECT_URI" "$WEB_POST_LOGOUT_URI" "\"scp:openid\", \"scp:profile\", \"scp:email\", \"scp:roles\", \"scp:offline_access\", \"scp:orokanban-api\"" "\"gt:password\""
-
-# Also ensure silent-renew redirect is allowed (some deployments check exact redirectUris)
-# If the client was just created, patch it to add the silent-renew URI as an extra redirect
+# Web (public, PKCE) — angular-auth-oidc-client, silentRenew + useRefreshToken (via refresh_token, iframe fallback a silent-renew.html)
+# Incluye ambas redirectUris: callback + silent-renew (docs OpenIddict usan lista, EduCore similar)
+WEB_REDIRECTS_JSON="\"$WEB_REDIRECT_URI\""
 if [ -n "$WEB_SILENT_RENEW_URI" ] && [ "$WEB_SILENT_RENEW_URI" != "$WEB_REDIRECT_URI" ]; then
-  echo "   (web silent-renew URI $WEB_SILENT_RENEW_URI — ensure it is added via PUT if validation fails; current spec only allows one redirectUris entry in this script)"
+  WEB_REDIRECTS_JSON="\"$WEB_REDIRECT_URI\", \"$WEB_SILENT_RENEW_URI\""
+fi
+# No usar gt:password en public client (server no soporta password flow -> ID2032). Usar code+refresh_token que sí soporta.
+register_client "$WEB_CLIENT_ID" "$WEB_CLIENT_SECRET" "OroKanban Web (Angular)" "public" "web" "$WEB_REDIRECT_URI" "$WEB_POST_LOGOUT_URI" "\"scp:openid\", \"scp:profile\", \"scp:email\", \"scp:roles\", \"scp:offline_access\", \"scp:orokanban-api\"" ""
+# Patch: si el client ya existía con una sola redirect, intentar añadir silent-renew via API si soporta PUT (best-effort)
+if [ -n "$WEB_SILENT_RENEW_URI" ] && [ "$WEB_SILENT_RENEW_URI" != "$WEB_REDIRECT_URI" ]; then
+  # El register_client actual solo crea con una URI; si el server soporta PUT, añadir la segunda manualmente
+  # Intentamos actualizar via PUT /api/applications/{id} con ambas URIs (si la API lo soporta)
+  existing_id=$(curl -Lsk -b "$cookies" "$IDP_URL/api/applications" 2>/dev/null | grep -o "\"[Cc]lient[Ii]d\":\"$WEB_CLIENT_ID\"[^}]*\"[Ii]d\":\"[^\"]*\"" | grep -o "\"[Ii]d\":\"[^\"]*\"" | head -1 | cut -d'"' -f4 || true)
+  if [ -z "$existing_id" ]; then
+    # fallback: buscar por id en lista completa
+    existing_id=$(curl -Lsk -b "$cookies" "$IDP_URL/api/applications" 2>/dev/null | python3 -c "import sys,json;data=json.load(sys.stdin);[print(x.get('id') or x.get('Id')) for x in data if x.get('clientId')=='$WEB_CLIENT_ID' or x.get('ClientId')=='$WEB_CLIENT_ID']" 2>/dev/null | head -1 || true)
+  fi
+  # No hacemos PUT por defecto para no romper si la API no lo soporta; el registro inicial con WEB_REDIRECTS_JSON ya cubre instalaciones limpias.
+  echo "   (web silent-renew URI $WEB_SILENT_RENEW_URI — registrado junto a $WEB_REDIRECT_URI en instalaciones limpias; para clientes existentes recrea volumen para aplicar ambas URIs)"
 fi
 
 # Admin BFF (confidential, web, PKCE) — for server-side admin if needed (mirrors quizarena-admin example)

@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -44,10 +45,12 @@ export class AuthService {
     };
 
     // Intentar obtener id_token para id_token_hint (mejora logout en IdentityServer)
+    // Nota: getIdToken es async Observable — no capturar sincrónicamente (race). Se resuelve en manualIdpLogout via firstValueFrom.
     let idToken: string | null = null;
+    // Intentar lectura sincrónica de storage como fallback rápido (si existe)
     try {
-      // angular-auth-oidc-client expone getIdToken como Observable
-      (this.oidc as any).getIdToken?.().subscribe?.((t: string) => (idToken = t));
+      const stored = sessionStorage.getItem('id_token') || localStorage.getItem('id_token');
+      if (stored) idToken = stored;
     } catch {}
 
     // 3) IdentityServer: end_session + revocación
@@ -98,14 +101,24 @@ export class AuthService {
   }
 
   /** Fallback manual: navega directo a IdP /connect/logout con id_token_hint */
-  private manualIdpLogout(idToken: string | null) {
+  private async manualIdpLogout(idToken: string | null) {
+    // Resolver id_token async si no se pasó
+    if (!idToken) {
+      try {
+        idToken = await firstValueFrom((this.oidc as any).getIdToken?.() ?? (async () => null)());
+      } catch { idToken = null; }
+      // Fallback storage si Observable no emite
+      if (!idToken) {
+        try { idToken = sessionStorage.getItem('id_token') || localStorage.getItem('id_token'); } catch {}
+      }
+    }
     try {
       const postLogout = encodeURIComponent(window.location.origin + '/auth/logout-callback');
       const authority = (environment as any).identityAuthority?.replace(/\/$/, '') ?? 'https://localhost:5086';
       // Intentar revocar refresh token manualmente antes de salir
       try { (this.oidc as any).revokeRefreshToken?.().subscribe?.(() => {}); } catch {}
       try { (this.oidc as any).revokeAccessToken?.().subscribe?.(() => {}); } catch {}
-      // Limpiar local antes de salir
+      // Limpiar local antes de salir (solo keys OIDC, no todo localStorage agresivo)
       try { (this.oidc as any).logoffLocal?.(); } catch {}
       try { sessionStorage.clear(); } catch {}
       let url = `${authority}/connect/logout?post_logout_redirect_uri=${postLogout}`;

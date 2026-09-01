@@ -1,0 +1,4 @@
+{
+  "aspire.enableSettingsFileCreationPromptOnStartup": false,
+  "dotnet.defaultSolution": "OroKanban.slnx",
+}

@@ -17,6 +17,10 @@ let last401 = 0;
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const oidc = inject(OidcSecurityService);
+  // No auto-authorize para el hello de validación ni para el discovery/token del OIDC
+  if (req.headers.has('X-Skip-Auth-Redirect') || req.url.includes('/.well-known') || req.url.includes('/connect/token')) {
+    return next(req);
+  }
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
       if (err.status === 401) {

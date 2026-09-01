@@ -9,8 +9,8 @@ export const authGuard: CanActivateFn = () => {
   const oidc = inject(OidcSecurityService);
   const router = inject(Router);
 
-  // Evitar bucle si ya estamos en callback/logout-callback
-  if (router.url.includes('/auth/callback') || router.url.includes('/auth/logout-callback')) {
+  // Evitar bucle si ya estamos en callback/logout-callback o si la URL trae ?code= (ya hay un canje en vuelo)
+  if (router.url.includes('/auth/callback') || router.url.includes('/auth/logout-callback') || window.location.search.includes('code=')) {
     return true;
   }
 
@@ -19,12 +19,16 @@ export const authGuard: CanActivateFn = () => {
     tap(({ isAuthenticated }) => {
       console.log('[authGuard] isAuthenticated', isAuthenticated, 'url', router.url, 'authorizeTriggered', authorizeTriggered);
       if (!isAuthenticated && !authorizeTriggered) {
+        // No disparar authorize si el discovery aún no ha cargado (status 0) — espera al próximo tick
+        // Si el Api está devolviendo 401 por token inválido (ID2004), el errorInterceptor ya hace authorize con throttle 2s, no duplicar aquí
+        if (window.location.search.includes('error=')) {
+          console.warn('[authGuard] URL contiene error, no se dispara authorize');
+          return;
+        }
         authorizeTriggered = true;
-        // Pequeño delay para evitar múltiples authorize en la misma navegación
         setTimeout(() => {
           console.log('[authGuard] calling authorize()');
           oidc.authorize();
-          // Resetear flag después de 5s por si el flujo falla y el usuario vuelve
           setTimeout(() => (authorizeTriggered = false), 5000);
         }, 100);
       }

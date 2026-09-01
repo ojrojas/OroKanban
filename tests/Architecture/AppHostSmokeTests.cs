@@ -86,7 +86,6 @@ public sealed class AppHostSmokeTests
         var content = File.ReadAllText(programPath!);
         Assert.Contains("AddServiceDefaults", content);
         Assert.Contains("MapDefaultEndpoints", content);
-        Assert.Contains("AddAuthentication", content);
-        Assert.Contains("AddJwtBearer", content);
+        Assert.Contains("AddOidcAuthentication", content);
     }
 }
