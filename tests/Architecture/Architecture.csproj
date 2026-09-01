@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="NetArchTest.Rules" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\BuildingBlocks\BuildingBlocks.Kernel.Domain\BuildingBlocks.Kernel.Domain.csproj" />
+    <ProjectReference Include="..\..\src\BuildingBlocks\BuildingBlocks.CQRS\BuildingBlocks.CQRS.csproj" />
+    <ProjectReference Include="..\..\src\BuildingBlocks\BuildingBlocks.EventBus\BuildingBlocks.EventBus.csproj" />
+    <ProjectReference Include="..\..\src\Api\Api.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Identity\Identity.Domain\Identity.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Identity\Identity.Application\Identity.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Identity\Identity.Infrastructure\Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Identity\Identity.Contracts\Identity.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Organization\Organization.Domain\Organization.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Organization\Organization.Application\Organization.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Organization\Organization.Infrastructure\Organization.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Organization\Organization.Contracts\Organization.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Projects\Projects.Domain\Projects.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Projects\Projects.Application\Projects.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Projects\Projects.Infrastructure\Projects.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Projects\Projects.Contracts\Projects.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Metrics\Metrics.Domain\Metrics.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Metrics\Metrics.Application\Metrics.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Metrics\Metrics.Infrastructure\Metrics.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Metrics\Metrics.Contracts\Metrics.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Documents\Documents.Domain\Documents.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Documents\Documents.Application\Documents.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Documents\Documents.Infrastructure\Documents.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Documents\Documents.Contracts\Documents.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\AiProcessing\AiProcessing.Domain\AiProcessing.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\AiProcessing\AiProcessing.Application\AiProcessing.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\AiProcessing\AiProcessing.Infrastructure\AiProcessing.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\AiProcessing\AiProcessing.Contracts\AiProcessing.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Search\Search.Domain\Search.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Search\Search.Application\Search.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Search\Search.Infrastructure\Search.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Search\Search.Contracts\Search.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Audit\Audit.Domain\Audit.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Audit\Audit.Application\Audit.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Audit\Audit.Infrastructure\Audit.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Audit\Audit.Contracts\Audit.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Notifications.Domain\Notifications.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Notifications.Application\Notifications.Application.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Notifications.Infrastructure\Notifications.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Modules\Notifications\Notifications.Contracts\Notifications.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

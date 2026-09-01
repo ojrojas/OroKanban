@@ -250,7 +250,7 @@ src/
     Audit/                   # BC-08
     Notifications/           # BC-09
   Api/                       # composition host exposing endpoints (or per-module hosts per ADR-001)
-  Web/                       # frontend
+  Web/                       # frontend Angular(latest)
 tests/
   Unit/ Integration/ Architecture/ EndToEnd/
 ```

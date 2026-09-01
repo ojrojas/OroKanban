@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.ServiceDefaults\BuildingBlocks.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.Logger\BuildingBlocks.Logger.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.CQRS\BuildingBlocks.CQRS.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.Kernel.Domain\BuildingBlocks.Kernel.Domain.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.EventBus\BuildingBlocks.EventBus.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\BuildingBlocks.EventBus.RabbitMQ\BuildingBlocks.EventBus.RabbitMQ.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Modules\Identity\Identity.Application\Identity.Application.csproj" />
+    <ProjectReference Include="..\Modules\Identity\Identity.Infrastructure\Identity.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Organization\Organization.Application\Organization.Application.csproj" />
+    <ProjectReference Include="..\Modules\Organization\Organization.Infrastructure\Organization.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Projects\Projects.Application\Projects.Application.csproj" />
+    <ProjectReference Include="..\Modules\Projects\Projects.Infrastructure\Projects.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Metrics\Metrics.Application\Metrics.Application.csproj" />
+    <ProjectReference Include="..\Modules\Metrics\Metrics.Infrastructure\Metrics.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Documents\Documents.Application\Documents.Application.csproj" />
+    <ProjectReference Include="..\Modules\Documents\Documents.Infrastructure\Documents.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\AiProcessing\AiProcessing.Application\AiProcessing.Application.csproj" />
+    <ProjectReference Include="..\Modules\AiProcessing\AiProcessing.Infrastructure\AiProcessing.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Search\Search.Application\Search.Application.csproj" />
+    <ProjectReference Include="..\Modules\Search\Search.Infrastructure\Search.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Audit\Audit.Application\Audit.Application.csproj" />
+    <ProjectReference Include="..\Modules\Audit\Audit.Infrastructure\Audit.Infrastructure.csproj" />
+    <ProjectReference Include="..\Modules\Notifications\Notifications.Application\Notifications.Application.csproj" />
+    <ProjectReference Include="..\Modules\Notifications\Notifications.Infrastructure\Notifications.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,7 @@
 <Solution>
-  <Folder Name="/src/" />
+  <Folder Name="/src/">
+    <Project Path="src/Api/Api.csproj" />
+  </Folder>
   <Folder Name="/src/BuildingBlocks/">
     <Project Path="src/BuildingBlocks/BuildingBlocks.CQRS/BuildingBlocks.CQRS.csproj" />
     <Project Path="src/BuildingBlocks/BuildingBlocks.EventBus.RabbitMQ/BuildingBlocks.EventBus.RabbitMQ.csproj" />
@@ -8,6 +10,64 @@
     <Project Path="src/BuildingBlocks/BuildingBlocks.Logger/BuildingBlocks.Logger.csproj" />
     <Project Path="src/BuildingBlocks/BuildingBlocks.ServiceDefaults/BuildingBlocks.ServiceDefaults.csproj" />
   </Folder>
-  <Folder Name="/src/OroKanban.AppHost/" />
-  <Project Path="OroKanban.AppHost/OroKanban.AppHost.csproj" />
+  <Folder Name="/src/Modules/Identity/">
+    <Project Path="src/Modules/Identity/Identity.Domain/Identity.Domain.csproj" />
+    <Project Path="src/Modules/Identity/Identity.Application/Identity.Application.csproj" />
+    <Project Path="src/Modules/Identity/Identity.Infrastructure/Identity.Infrastructure.csproj" />
+    <Project Path="src/Modules/Identity/Identity.Contracts/Identity.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Organization/">
+    <Project Path="src/Modules/Organization/Organization.Domain/Organization.Domain.csproj" />
+    <Project Path="src/Modules/Organization/Organization.Application/Organization.Application.csproj" />
+    <Project Path="src/Modules/Organization/Organization.Infrastructure/Organization.Infrastructure.csproj" />
+    <Project Path="src/Modules/Organization/Organization.Contracts/Organization.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Projects/">
+    <Project Path="src/Modules/Projects/Projects.Domain/Projects.Domain.csproj" />
+    <Project Path="src/Modules/Projects/Projects.Application/Projects.Application.csproj" />
+    <Project Path="src/Modules/Projects/Projects.Infrastructure/Projects.Infrastructure.csproj" />
+    <Project Path="src/Modules/Projects/Projects.Contracts/Projects.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Metrics/">
+    <Project Path="src/Modules/Metrics/Metrics.Domain/Metrics.Domain.csproj" />
+    <Project Path="src/Modules/Metrics/Metrics.Application/Metrics.Application.csproj" />
+    <Project Path="src/Modules/Metrics/Metrics.Infrastructure/Metrics.Infrastructure.csproj" />
+    <Project Path="src/Modules/Metrics/Metrics.Contracts/Metrics.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Documents/">
+    <Project Path="src/Modules/Documents/Documents.Domain/Documents.Domain.csproj" />
+    <Project Path="src/Modules/Documents/Documents.Application/Documents.Application.csproj" />
+    <Project Path="src/Modules/Documents/Documents.Infrastructure/Documents.Infrastructure.csproj" />
+    <Project Path="src/Modules/Documents/Documents.Contracts/Documents.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/AiProcessing/">
+    <Project Path="src/Modules/AiProcessing/AiProcessing.Domain/AiProcessing.Domain.csproj" />
+    <Project Path="src/Modules/AiProcessing/AiProcessing.Application/AiProcessing.Application.csproj" />
+    <Project Path="src/Modules/AiProcessing/AiProcessing.Infrastructure/AiProcessing.Infrastructure.csproj" />
+    <Project Path="src/Modules/AiProcessing/AiProcessing.Contracts/AiProcessing.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Search/">
+    <Project Path="src/Modules/Search/Search.Domain/Search.Domain.csproj" />
+    <Project Path="src/Modules/Search/Search.Application/Search.Application.csproj" />
+    <Project Path="src/Modules/Search/Search.Infrastructure/Search.Infrastructure.csproj" />
+    <Project Path="src/Modules/Search/Search.Contracts/Search.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Audit/">
+    <Project Path="src/Modules/Audit/Audit.Domain/Audit.Domain.csproj" />
+    <Project Path="src/Modules/Audit/Audit.Application/Audit.Application.csproj" />
+    <Project Path="src/Modules/Audit/Audit.Infrastructure/Audit.Infrastructure.csproj" />
+    <Project Path="src/Modules/Audit/Audit.Contracts/Audit.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Notifications/">
+    <Project Path="src/Modules/Notifications/Notifications.Domain/Notifications.Domain.csproj" />
+    <Project Path="src/Modules/Notifications/Notifications.Application/Notifications.Application.csproj" />
+    <Project Path="src/Modules/Notifications/Notifications.Infrastructure/Notifications.Infrastructure.csproj" />
+    <Project Path="src/Modules/Notifications/Notifications.Contracts/Notifications.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/src/OroKanban.AppHost/">
+    <Project Path="OroKanban.AppHost/OroKanban.AppHost.csproj" />
+  </Folder>
+  <Folder Name="/tests/Architecture/">
+    <Project Path="tests/Architecture/Architecture.csproj" />
+  </Folder>
 </Solution>

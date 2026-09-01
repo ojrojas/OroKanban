@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+# Node (Angular Web)
+node_modules
+dist
+.angular
+# .NET
+bin
+obj
+out
+# IDE
+.vs
+.idea
+.vscode
+# Logs
+*.log
+# Env
+.env

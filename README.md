@@ -20,7 +20,22 @@ Distributed application following CQRS and Domain-Driven Design principles.
 ## Getting Started
 
 ```bash
+# Clone and build (foundation: .NET 10 SDK 10.0.400 required)
+dotnet build OroKanban.slnx -warnaserror   # 0 warnings
+
+# Run distributed environment (AppHost declares Postgres, RabbitMQ, Redis + external oroidentityserver)
 aspire start
+# or: dotnet run --project OroKanban.AppHost/OroKanban.AppHost.csproj
+
+# Discover services in Aspire dashboard (URL printed in console)
+# Verify health
+curl http://localhost:5000/health   # /alive also available
+curl http://localhost:5000/api/platform/health  # composed health: modules + identity reachability
+
+# Verify external identity discovery (oroidentityserver must be running via Podman)
+curl http://localhost:5080/.well-known/openid-configuration | jq .issuer
+# discovery catalog: draft/discovery/000-repository-catalog.md
+# scaffolding log (FR-010): docs/scaffolding-log.md  — all `dotnet new` / `ng new` commands recorded
 ```
 
 ## Tech Stack
