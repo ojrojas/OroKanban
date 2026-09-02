@@ -9,6 +9,13 @@ module.exports = {
     changeOrigin: true,
     logLevel: "debug",
   },
+  "/hub": {
+    target: target,
+    secure: false,
+    changeOrigin: true,
+    ws: true,
+    logLevel: "debug",
+  },
   "/hubs": {
     target: target,
     secure: false,

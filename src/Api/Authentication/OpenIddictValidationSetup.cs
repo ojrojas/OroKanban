@@ -2,10 +2,6 @@ using System.Security.Claims;
 
 using Api.Features.Authorization;
 
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
 using OpenIddict.Validation;
 using OpenIddict.Validation.AspNetCore;
 

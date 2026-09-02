@@ -1,6 +1,4 @@
 using BuildingBlocks.Kernel.Domain.ValueObjects;
-using BuildingBlocks.Kernel.Domain.Rules;
-using BuildingBlocks.Kernel.Domain.Results;
 
 namespace AiProcessing.Domain.ValueObjects;
 

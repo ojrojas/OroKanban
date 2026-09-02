@@ -3,5 +3,5 @@ using Documents.Domain.Aggregates;
 namespace Documents.Infrastructure.Specifications;
 public sealed class RetentionExpiredSpec : Specification<Document>
 {
-    public RetentionExpiredSpec(System.DateTime now) { Where(d => d.RetentionRetainUntil != null && d.RetentionRetainUntil <= now && !d.RetentionLegalHold); }
+    public RetentionExpiredSpec(DateTime now) { Where(d => d.RetentionRetainUntil != null && d.RetentionRetainUntil <= now && !d.RetentionLegalHold); }
 }

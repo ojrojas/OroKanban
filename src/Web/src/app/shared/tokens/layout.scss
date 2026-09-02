@@ -1,0 +1,27 @@
+/* Layout — references/layout.md: 8px grid, 32px outer, 32px gap regions, 24px card gap */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+}
+.sidebar {
+  width: var(--nav-width);
+  background: var(--bg);
+  padding: var(--outer);
+  flex-shrink: 0;
+}
+.content {
+  flex: 1;
+  padding: var(--outer);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-region);
+  max-width: 1400px;
+}
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-widget); }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-widget); }
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .mobile-nav { display: flex; }
+}

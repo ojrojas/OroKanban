@@ -32,9 +32,9 @@ public sealed class AuthorizationEvaluator : IAuthorizationEvaluator
     private readonly IPermissionCatalog _permissions;
     private readonly IManagementHierarchy _hierarchy;
     private readonly IProjectMembership _membership;
-    private readonly Organization.Infrastructure.Persistence.OrganizationDbContext _db;
+    private readonly Persistence.OrganizationDbContext _db;
 
-    public AuthorizationEvaluator(IPermissionCatalog permissions, IManagementHierarchy hierarchy, IProjectMembership membership, Organization.Infrastructure.Persistence.OrganizationDbContext db)
+    public AuthorizationEvaluator(IPermissionCatalog permissions, IManagementHierarchy hierarchy, IProjectMembership membership, Persistence.OrganizationDbContext db)
     {
         _permissions = permissions;
         _hierarchy = hierarchy;

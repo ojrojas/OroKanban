@@ -11,5 +11,5 @@ public interface IAuditMaskingPolicy
 public interface IAuditQueryAuthorization
 {
     bool CanActorQuery(Guid actorId, Guid tenantId, object filters);
-    Expression<Func<Aggregates.AuditEntry, bool>> BuildAuthorizedFilter(Guid actorId, Guid tenantId);
+    Expression<Func<AuditEntry, bool>> BuildAuthorizedFilter(Guid actorId, Guid tenantId);
 }

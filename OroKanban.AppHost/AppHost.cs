@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 // Infrastructure — declare Aspire resources (ADR-001)
@@ -5,22 +7,25 @@ var postgres = builder.AddPostgres("postgres")
  .WithDataVolume("orokanban-postgres-data")
     .WithPgAdmin();
 
-postgres.AddDatabase("orokanban");
+var postgresIdentity = builder.AddPostgres("postgres-identity")
+ .WithDataVolume("orokanban-identity-data")
+    .WithPgAdmin();
 
 var identityDb = postgres.AddDatabase("identitydb");
+var orokanbanDb = postgres.AddDatabase("orokanban");
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq");
 var redis = builder.AddRedis("redis");
 
-// Object storage — S3-compatible (MinIO in dev, AWS S3 in prod via config) — BC-05 Documents (T001)
-var objectStorage = builder.AddContainer("objectstorage", "minio/minio", "latest")
-    .WithHttpEndpoint(port: 9000, targetPort: 9000, name: "s3")
-    .WithHttpEndpoint(port: 9001, targetPort: 9001, name: "console")
-    .WithEnvironment("MINIO_ROOT_USER", "minioadmin")
-    .WithEnvironment("MINIO_ROOT_PASSWORD", "minioadmin123")
-    .WithArgs("server", "/data", "--console-address", ":9001")
-    .WithVolume("orokanban-minio-data", "/data");
-
+// Object storage — S3-compatible via Floci (open source) — BC-05 Documents (T001)
+// Mount Podman socket so Floci can manage buckets/containers
+var podmanSocket = "/run/user/1000/podman/podman.sock";
+var dockerSocket = "/var/run/docker.sock";
+var objectStorage = builder.AddContainer("objectstorage", "docker.io/floci/floci", "latest")
+    .WithHttpEndpoint(port: 4566, targetPort: 4566, name: "s3")
+    .WithHttpEndpoint(port: 4567, targetPort: 4567, name: "ui")
+    .WithVolume("orokanban-floci-data", "/data")
+    .WithBindMount(podmanSocket, dockerSocket);
 
 // ---------------------------------------------------------------------------
 // Parámetros / secretos (solo local). En producción se inyectan vía
@@ -65,7 +70,7 @@ IResourceBuilder<ContainerResource> identityServer = builder.AddContainer("ident
 // Composition API — scaffolded via `dotnet new webapi` per FR-010
 // Uses path-based overload to avoid requiring a marker type from Api.
 var api = builder.AddProject("api", "../src/Api/Api.csproj")
-    .WithReference(postgres).WaitFor(postgres)
+    .WithReference(orokanbanDb).WaitFor(orokanbanDb)
     .WithReference(rabbitmq).WaitFor(rabbitmq)
     .WithReference(redis).WaitFor(redis)
     .WaitFor(objectStorage)
@@ -83,8 +88,10 @@ var api = builder.AddProject("api", "../src/Api/Api.csproj")
     .WithEnvironment("Oidc__SymmetricSecurityKey", symmetricKey)
     .WithEnvironment("Documents__BucketName", "orokanban-documents-dev")
     .WithEnvironment("Documents__PresignedUrlTtlMinutes", "60")
-    .WithEnvironment("AWS__ServiceURL", "http://objectstorage:9000")
-    .WithEnvironment("AWS__BucketName", "orokanban-documents-dev");
+    .WithEnvironment("AWS__ServiceURL", "http://objectstorage:4566")
+    .WithEnvironment("AWS__BucketName", "orokanban-documents-dev")
+    .WithEnvironment("AWS__ForcePathStyle", "true")
+    .WithEnvironment("AWS__UseHttp", "true");
 
 
 // Angular frontend — scaffolded via `ng new` per FR-010

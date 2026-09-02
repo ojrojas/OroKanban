@@ -48,10 +48,10 @@ public sealed class ChangeWorkItemStatusHandler(ProjectsDbContext db, IWorkItemT
         catch (DbUpdateConcurrencyException) { return Error.Conflict("WorkItem.Concurrency", "Concurrency conflict"); }
 
         var dto = new WorkItemDetailResponse(w.Id.Value, w.ProjectId, w.ParentId, w.Title, w.Description,
-            Projects.Domain.Enumerations.WorkItemType.FromId(w.TypeId).Name,
-            Projects.Domain.Enumerations.WorkItemStatus.FromId(w.StatusId).Name,
-            Projects.Domain.Enumerations.WorkItemPriority.FromId(w.PriorityId).Name,
-            Projects.Domain.Enumerations.Criticality.FromId(w.CriticalityId).Name,
+            WorkItemType.FromId(w.TypeId).Name,
+            WorkItemStatus.FromId(w.StatusId).Name,
+            WorkItemPriority.FromId(w.PriorityId).Name,
+            Criticality.FromId(w.CriticalityId).Name,
             w.OwnerId, w.ResponsibleId, w.ReviewerId, w.DueDate, w.ProgressPercent, w.Tags, w.Version, w.UpdatedAt, w.TenantId, w.IsOverdue(DateTime.UtcNow), []);
         return Result.Success(dto);
     }

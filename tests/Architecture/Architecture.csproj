@@ -47,10 +47,6 @@
     <ProjectReference Include="..\..\src\Modules\AiProcessing\AiProcessing.Application\AiProcessing.Application.csproj" />
     <ProjectReference Include="..\..\src\Modules\AiProcessing\AiProcessing.Infrastructure\AiProcessing.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\Modules\AiProcessing\AiProcessing.Contracts\AiProcessing.Contracts.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Search\Search.Domain\Search.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Search\Search.Application\Search.Application.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Search\Search.Infrastructure\Search.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\src\Modules\Search\Search.Contracts\Search.Contracts.csproj" />
     <ProjectReference Include="..\..\src\Modules\Audit\Audit.Domain\Audit.Domain.csproj" />
     <ProjectReference Include="..\..\src\Modules\Audit\Audit.Application\Audit.Application.csproj" />
     <ProjectReference Include="..\..\src\Modules\Audit\Audit.Infrastructure\Audit.Infrastructure.csproj" />

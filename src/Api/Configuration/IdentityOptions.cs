@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Api.Configuration;
 
 public sealed class IdentityOptions

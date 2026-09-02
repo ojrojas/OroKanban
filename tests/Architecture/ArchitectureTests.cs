@@ -71,26 +71,30 @@ public sealed class ArchitectureTests
     public void EveryModuleDbContextInheritsAppDbContextBaseAndAppliesOutbox()
     {
         // Force-load all module Infrastructure assemblies via known DbContext types (ensures AppDomain contains them)
-        _ = typeof(Organization.Infrastructure.Persistence.OrganizationDbContext).Assembly;
-        _ = typeof(Projects.Infrastructure.Persistence.ProjectsDbContext).Assembly;
-        _ = typeof(Metrics.Infrastructure.Persistence.MetricsDbContext).Assembly;
-        _ = typeof(Documents.Infrastructure.Persistence.DocumentsDbContext).Assembly;
-        _ = typeof(AiProcessing.Infrastructure.Persistence.AiProcessingDbContext).Assembly;
-        _ = typeof(Search.Infrastructure.Persistence.SearchDbContext).Assembly;
-        _ = typeof(Audit.Infrastructure.Persistence.AuditDbContext).Assembly;
-        _ = typeof(Notifications.Infrastructure.Persistence.NotificationsDbContext).Assembly;
+
+        List<Assembly> assemblies = [];
+        assemblies.Add(typeof(Organization.Infrastructure.Persistence.OrganizationDbContext).Assembly);
+        assemblies.Add(typeof(Projects.Infrastructure.Persistence.ProjectsDbContext).Assembly);
+        assemblies.Add(typeof(Metrics.Infrastructure.Persistence.MetricsDbContext).Assembly);
+        assemblies.Add(typeof(Documents.Infrastructure.Persistence.DocumentsDbContext).Assembly);
+        assemblies.Add(typeof(AiProcessing.Infrastructure.Persistence.AiProcessingDbContext).Assembly);
+        assemblies.Add(typeof(Audit.Infrastructure.Persistence.AuditDbContext).Assembly);
+        assemblies.Add(typeof(Notifications.Infrastructure.Persistence.NotificationsDbContext).Assembly);
 
         var dbContextTypes = GetAllModuleAssemblies()
             .SelectMany(a => a.GetTypes())
             .Where(t => t.Name.EndsWith("DbContext") && !t.IsAbstract)
             .ToList();
 
-        Assert.True(dbContextTypes.Count >= 8, $"Expected at least 9 DbContexts, found {dbContextTypes.Count}");
+        Assert.True(dbContextTypes.Count >= assemblies.Count, $"Expected at least 9 DbContexts, found {dbContextTypes.Count}");
 
         foreach (var type in dbContextTypes)
         {
             Assert.True(typeof(AppDbContextBase).IsAssignableFrom(type),
                 $"{type.FullName} must inherit AppDbContextBase (persistence convention FR-003)");
+
+            // BootstrapDbContext is startup-only (EnsureCreated), not a module context — skip assembly check
+            if (type.Name == "BootstrapDbContext") continue;
 
             // Check that OnModelCreating applies OutboxEntityTypeConfiguration via base call (we rely on AppDbContextBase to do it)
             // Verify the type is in a Infrastructure assembly

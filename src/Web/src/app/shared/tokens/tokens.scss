@@ -1,0 +1,63 @@
+/* Design Tokens — minimal-ui-design-system references/tokens.md */
+:root {
+  --bg: #F7F7F6; /* Tier 0 */
+  --card-bg: #FFFFFF;
+  --flat-bg: #FFFFFF; /* Tier 1 alternative #FDFDFD */
+  --border: #ECECEC;
+  --text-primary: #111111;
+  --text-secondary: #777777;
+  --text-muted: #A9A9A9;
+  --green-bg: #E8F9EC;
+  --green-text: #2FA84A;
+  --red-bg: #FCE8E8;
+  --red-text: #C0392B;
+  --black: #111111;
+  --radius-card: 24px;
+  --radius-pill: 14px;
+  --radius-button: 999px;
+  --radius-input: 18px;
+  --shadow-card: 0 8px 24px rgba(0,0,0,.04);
+  --shadow-hover: 0 12px 32px rgba(0,0,0,.06);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --grid: 8px;
+  --outer: 32px;
+  --gap-region: 32px;
+  --gap-widget: 24px;
+  --card-padding: 24px;
+  --nav-width: 250px;
+}
+
+/* Dark theme — minimal inversion, keeps Tier logic */
+:root[data-theme='dark'] {
+  --bg: #141414;
+  --card-bg: #1E1E1E;
+  --flat-bg: #262626;
+  --border: #2E2E2E;
+  --text-primary: #F2F2F2;
+  --text-secondary: #A9A9A9;
+  --text-muted: #777777;
+  --shadow-card: 0 8px 24px rgba(0,0,0,.35);
+  --shadow-hover: 0 12px 32px rgba(0,0,0,.45);
+}
+
+/* Elevation helpers */
+.tier-0 { background: var(--bg); }
+.tier-1 {
+  background: var(--flat-bg);
+  border: 1px solid var(--border);
+  /* no shadow */
+}
+.tier-2 {
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 200ms ease-in-out, transform 200ms ease-in-out;
+}
+.tier-2:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+.tier-n {
+  background: transparent;
+  color: var(--text-secondary);
+}

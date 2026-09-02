@@ -1,9 +1,11 @@
 using Api.Authentication;
 using Api.Configuration;
+using Api.Persistence;
 using Api.Tenant;
 
 using BuildingBlocks.CQRS.Behaviors;
 using BuildingBlocks.CQRS.DependencyInjection;
+using BuildingBlocks.Kernel.Domain.Repositories;
 using BuildingBlocks.ServiceDefaults;
 using BuildingBlocks.ServiceDefaults.Endpoints;
 
@@ -49,15 +51,28 @@ builder.Services.AddDistributedMemoryCache(); // fallback when Redis (Aspire red
 // At runtime Aspire injects ConnectionStrings__orokanban via WithReference(postgres) en AppHost.
 // Identity NO tiene DbContext local: oroidentityserver es externo y solo se consume vía OIDC/access_token (Principio II), nunca SQL directo a identitydb.
 builder.Services.AddDbContext<Organization.Infrastructure.Persistence.OrganizationDbContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
 builder.Services.AddDbContext<Documents.Infrastructure.Persistence.DocumentsDbContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
 builder.Services.AddDbContext<AiProcessing.Infrastructure.Persistence.AiProcessingDbContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
 builder.Services.AddDbContext<Audit.Infrastructure.Persistence.AuditDbContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
 builder.Services.AddDbContext<Notifications.Infrastructure.Persistence.NotificationsDbContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban") ?? "Host=localhost;Port=5432;Database=orokanban;Username=postgres;Password=postgres"));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
+builder.Services.AddDbContext<Projects.Infrastructure.Persistence.ProjectsDbContext>(o =>
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
+builder.Services.AddDbContext<Metrics.Infrastructure.Persistence.MetricsDbContext>(o =>
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
+// Bootstrap — single DbContext with ALL entities for EnsureCreated at startup
+builder.Services.AddDbContext<BootstrapDbContext>(o =>
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
+// IRepository / IUnitOfWork — BuildingBlocks.Kernel.Infrastructure was never implemented (EfRepository missing → AggregateException on NotificationDispatcher)
+builder.Services.AddScoped<IRepository<Notifications.Domain.Aggregates.Notification, Notifications.Domain.Ids.NotificationId>,
+    EfRepository<Notifications.Infrastructure.Persistence.NotificationsDbContext, Notifications.Domain.Aggregates.Notification, Notifications.Domain.Ids.NotificationId>>();
+builder.Services.AddScoped<IRepository<Notifications.Domain.Aggregates.NotificationPreference, Guid>,
+    EfRepository<Notifications.Infrastructure.Persistence.NotificationsDbContext, Notifications.Domain.Aggregates.NotificationPreference, Guid>>();
+builder.Services.AddScoped<IUnitOfWork, CompositeUnitOfWork>();
 // AI options (MEAI provider-agnostic) — secrets via env/KeyVault, not source (Principle XIX)
 builder.Services.Configure<AiProcessing.Infrastructure.Configuration.AiOptions>(builder.Configuration.GetSection(AiProcessing.Infrastructure.Configuration.AiOptions.SectionName));
 builder.Services.Configure<AiProcessing.Infrastructure.Configuration.VectorStoreOptions>(builder.Configuration.GetSection(AiProcessing.Infrastructure.Configuration.VectorStoreOptions.SectionName));
@@ -86,6 +101,9 @@ builder.Services.AddHealthChecks()
     .AddCheck<Audit.Infrastructure.Health.AiProviderHealthCheck>("ai_provider")
     .AddCheck<Audit.Infrastructure.Health.VectorStoreHealthCheck>("vector_store");
 
+// SignalR for real-time task notifications (T065)
+builder.Services.AddSignalR();
+
 // CQRS — BuildingBlocks canon (no MediatR)
 builder.Services.AddCqrs(cqrs => cqrs
     .RegisterHandlersFromAssemblyContaining<Program>()
@@ -96,6 +114,11 @@ builder.Services.AddCqrs(cqrs => cqrs
 // Endpoints (vertical slices)
 builder.Services.AddEndpoints(typeof(Program).Assembly);
 builder.Services.AddEndpoints(typeof(Notifications.Application.Features.GetMyNotifications.GetMyNotificationsQuery).Assembly);
+builder.Services.AddEndpoints(typeof(ProjectsApp.Features.ProjectsMgmt.AddProjectMember.AddProjectMemberCommand).Assembly);
+builder.Services.AddEndpoints(typeof(Documents.Application.Features.GetDocument.GetDocumentEndpoints).Assembly);
+builder.Services.AddEndpoints(typeof(Audit.Application.Features.Search.AuditSearchEndpoints).Assembly);
+builder.Services.AddEndpoints(typeof(Organization.Application.Features.GetSubtree.GetSubtreeQuery).Assembly);
+builder.Services.AddEndpoints(typeof(AiProcessing.Infrastructure.Persistence.AiProcessingDbContext).Assembly);
 
 // HttpClient for discovery fetch (GetPlatformHealth)
 builder.Services.AddHttpClient();
@@ -133,6 +156,31 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
+// Ensure databases for all modules — single BootstrapDbContext creates ALL schemas/tables in one pass
+// (EnsureCreated only creates tables on first call when DB doesn't exist; per-module contexts would get false)
+using (var scope = app.Services.CreateScope())
+{
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<BootstrapDbContext>();
+        var created = await db.Database.EnsureCreatedAsync();
+        logger.LogInformation("Bootstrap EnsureCreated: created={Created}", created);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Bootstrap EnsureCreated FAILED");
+    }
+}
+
+// SignalR JWT from query string ?access_token=... for /hub negotiate (browser WebSocket cannot set Authorization header)
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/hub") && context.Request.Query.TryGetValue("access_token", out var token))
+        context.Request.Headers.Authorization = "Bearer " + token.ToString();
+    await next();
+});
+
 // Middleware — CorrelationId must be before authentication so TenantContext.CorrelationId is available in handlers
 app.UseMiddleware<Api.Middleware.CorrelationIdMiddleware>();
 
@@ -146,6 +194,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapDefaultEndpoints(); // /health, /alive per ServiceDefaults
+app.MapHub<Api.Hubs.NotificationsHub>("/hub/notifications");
 app.MapEndpoints(); // vertical slices: GetPlatformHealth, SeedDevelopmentData, HelloWorld
 
 app.Run();

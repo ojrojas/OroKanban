@@ -1,5 +1,4 @@
 using BuildingBlocks.Kernel.Domain.Entities;
-using BuildingBlocks.Kernel.Domain.ValueObjects;
 
 using Organization.Domain.Events;
 using Organization.Domain.Rules;

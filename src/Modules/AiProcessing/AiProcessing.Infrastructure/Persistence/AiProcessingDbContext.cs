@@ -19,8 +19,8 @@ public sealed class AiProcessingDbContext : AppDbContextBase
         modelBuilder.ApplyConfiguration(new Configurations.ReviewPolicyConfiguration());
     }
 
-    public DbSet<AiProcessing.Domain.Aggregates.LlmOperation> LlmOperations => Set<AiProcessing.Domain.Aggregates.LlmOperation>();
-    public DbSet<AiProcessing.Domain.Aggregates.LlmPromptVersion> LlmPromptVersions => Set<AiProcessing.Domain.Aggregates.LlmPromptVersion>();
-    public DbSet<AiProcessing.Domain.Aggregates.LlmResult> LlmResults => Set<AiProcessing.Domain.Aggregates.LlmResult>();
-    public DbSet<AiProcessing.Domain.Aggregates.LlmReview> LlmReviews => Set<AiProcessing.Domain.Aggregates.LlmReview>();
+    public DbSet<Domain.Aggregates.LlmOperation> LlmOperations => Set<Domain.Aggregates.LlmOperation>();
+    public DbSet<Domain.Aggregates.LlmPromptVersion> LlmPromptVersions => Set<Domain.Aggregates.LlmPromptVersion>();
+    public DbSet<Domain.Aggregates.LlmResult> LlmResults => Set<Domain.Aggregates.LlmResult>();
+    public DbSet<Domain.Aggregates.LlmReview> LlmReviews => Set<Domain.Aggregates.LlmReview>();
 }

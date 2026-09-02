@@ -10,10 +10,10 @@ namespace Audit.Infrastructure.Consumers;
 
 public sealed class AuditEventConsumer : IIntegrationEventHandler<IntegrationEvent>
 {
-    private readonly Audit.Infrastructure.Persistence.AuditDbContext _auditContext;
-    private readonly Audit.Domain.Services.IAuditMaskingPolicy _maskingPolicy;
+    private readonly Persistence.AuditDbContext _auditContext;
+    private readonly Domain.Services.IAuditMaskingPolicy _maskingPolicy;
 
-    public AuditEventConsumer(Audit.Infrastructure.Persistence.AuditDbContext auditContext, Audit.Domain.Services.IAuditMaskingPolicy maskingPolicy)
+    public AuditEventConsumer(Persistence.AuditDbContext auditContext, Domain.Services.IAuditMaskingPolicy maskingPolicy)
     {
         _auditContext = auditContext;
         _maskingPolicy = maskingPolicy;

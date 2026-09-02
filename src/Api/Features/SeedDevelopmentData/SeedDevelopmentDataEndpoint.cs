@@ -1,8 +1,6 @@
 using BuildingBlocks.CQRS.Abstractions;
 using BuildingBlocks.ServiceDefaults.Endpoints;
 
-using Microsoft.AspNetCore.Authentication;
-
 namespace Api.Features.SeedDevelopmentData;
 
 public sealed class SeedDevelopmentDataEndpoint : IEndpoint

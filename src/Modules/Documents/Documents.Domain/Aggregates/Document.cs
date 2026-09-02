@@ -5,7 +5,6 @@ using Documents.Domain.Enumerations;
 using Documents.Domain.Events;
 using Documents.Domain.Ids;
 using Documents.Domain.Rules;
-using Documents.Domain.ValueObjects;
 
 namespace Documents.Domain.Aggregates;
 

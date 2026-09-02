@@ -1,5 +1,5 @@
 using BuildingBlocks.Kernel.Domain.Entities;
-using BuildingBlocks.Kernel.Domain.Enumerations;
+
 using Notifications.Domain.Ids;
 using Notifications.Domain.Enumerations;
 using Notifications.Domain.Events;

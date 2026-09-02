@@ -38,8 +38,6 @@
     <ProjectReference Include="..\Modules\Documents\Documents.Infrastructure\Documents.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\AiProcessing\AiProcessing.Application\AiProcessing.Application.csproj" />
     <ProjectReference Include="..\Modules\AiProcessing\AiProcessing.Infrastructure\AiProcessing.Infrastructure.csproj" />
-    <ProjectReference Include="..\Modules\Search\Search.Application\Search.Application.csproj" />
-    <ProjectReference Include="..\Modules\Search\Search.Infrastructure\Search.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Audit\Audit.Application\Audit.Application.csproj" />
     <ProjectReference Include="..\Modules\Audit\Audit.Infrastructure\Audit.Infrastructure.csproj" />
     <ProjectReference Include="..\Modules\Notifications\Notifications.Application\Notifications.Application.csproj" />

@@ -9,7 +9,7 @@ public sealed class NotificationConfiguration : IEntityTypeConfiguration<Notific
 {
     public void Configure(EntityTypeBuilder<Notification> builder)
     {
-        builder.ToTable("notifications");
+        builder.ToTable("notifications", "notifications");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).HasConversion(id => id.Value, v => new NotificationId(v)).ValueGeneratedNever();
         builder.Property(x => x.RecipientId).IsRequired();
@@ -26,17 +26,17 @@ public sealed class NotificationConfiguration : IEntityTypeConfiguration<Notific
 
         builder.Property(x => x.NotificationType).HasConversion(
             v => v.Id,
-            v => Notifications.Domain.Enumerations.NotificationType.FromId(v))
+            v => Domain.Enumerations.NotificationType.FromId(v))
             .HasColumnName("NotificationTypeId");
 
         builder.Property(x => x.Channel).HasConversion(
             v => v.Id,
-            v => Notifications.Domain.Enumerations.Channel.FromId(v))
+            v => Domain.Enumerations.Channel.FromId(v))
             .HasColumnName("ChannelId");
 
         builder.Property(x => x.DeliveryState).HasConversion(
             v => v.Id,
-            v => Notifications.Domain.Enumerations.DeliveryState.FromId(v))
+            v => Domain.Enumerations.DeliveryState.FromId(v))
             .HasColumnName("DeliveryStateId");
 
         builder.HasIndex(x => new { x.SourceEventId, x.RecipientId, x.Channel })
@@ -54,7 +54,7 @@ public sealed class NotificationPreferenceConfiguration : IEntityTypeConfigurati
 {
     public void Configure(EntityTypeBuilder<NotificationPreference> builder)
     {
-        builder.ToTable("notification_preferences");
+        builder.ToTable("notification_preferences", "notifications");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.TenantId).IsRequired();
         builder.Property(x => x.Preferences).HasColumnName("PreferencesJson").HasColumnType("jsonb")

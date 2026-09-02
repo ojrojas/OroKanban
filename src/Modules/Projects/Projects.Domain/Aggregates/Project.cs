@@ -1,7 +1,6 @@
 using BuildingBlocks.Kernel.Domain.Entities;
 using BuildingBlocks.Kernel.Domain.Rules;
 
-using Projects.Domain.Enumerations;
 using Projects.Domain.Events;
 using Projects.Domain.Ids;
 
@@ -67,7 +66,7 @@ public sealed class Project : AggregateRoot<ProjectId>
     {
         if (_members.Any(m => m.UserId == userId))
             throw new BusinessRuleValidationException(new DuplicateMemberRule());
-        var m = new ProjectMember(Guid.NewGuid(), Id.Value, userId, roleId);
+        var m = new ProjectMember(Guid.NewGuid(), userId, roleId);
         _members.Add(m);
         UpdatedAt = DateTime.UtcNow;
         RaiseDomainEvent(new ProjectMemberAddedDomainEvent(Id.Value, userId, roleId));
@@ -90,17 +89,17 @@ public sealed class Project : AggregateRoot<ProjectId>
         RaiseDomainEvent(new ProjectStatusChangedDomainEvent(Id.Value, old, newStatusId));
     }
 
-    private sealed class DueDateRule : BuildingBlocks.Kernel.Domain.Rules.IBusinessRule
+    private sealed class DueDateRule : IBusinessRule
     {
         public bool IsBroken() => true;
         public string Message => "StartDate must be <= DueDate";
     }
-    private sealed class DuplicateMemberRule : BuildingBlocks.Kernel.Domain.Rules.IBusinessRule
+    private sealed class DuplicateMemberRule : IBusinessRule
     {
         public bool IsBroken() => true;
         public string Message => "Member already exists";
     }
-    private sealed class MemberNotFoundRule : BuildingBlocks.Kernel.Domain.Rules.IBusinessRule
+    private sealed class MemberNotFoundRule : IBusinessRule
     {
         public bool IsBroken() => true;
         public string Message => "Member not found";
@@ -110,16 +109,14 @@ public sealed class Project : AggregateRoot<ProjectId>
 public sealed class ProjectMember
 {
     public Guid Id { get; private set; }
-    public Guid ProjectId { get; private set; }
     public Guid UserId { get; private set; }
     public int RoleId { get; private set; }
     public DateTime JoinedAt { get; private set; }
 
     private ProjectMember() { }
-    public ProjectMember(Guid id, Guid projectId, Guid userId, int roleId)
+    public ProjectMember(Guid id, Guid userId, int roleId)
     {
         Id = id;
-        ProjectId = projectId;
         UserId = userId;
         RoleId = roleId;
         JoinedAt = DateTime.UtcNow;
@@ -129,17 +126,15 @@ public sealed class ProjectMember
 public sealed class Milestone
 {
     public Guid Id { get; private set; }
-    public Guid ProjectId { get; private set; }
     public string Title { get; private set; } = default!;
     public DateTime? DueDate { get; private set; }
     public bool IsReached { get; private set; }
     public DateTime? ReachedAt { get; private set; }
 
     private Milestone() { }
-    public Milestone(Guid id, Guid projectId, string title, DateTime? dueDate)
+    public Milestone(Guid id, string title, DateTime? dueDate)
     {
         Id = id;
-        ProjectId = projectId;
         Title = title;
         DueDate = dueDate;
     }

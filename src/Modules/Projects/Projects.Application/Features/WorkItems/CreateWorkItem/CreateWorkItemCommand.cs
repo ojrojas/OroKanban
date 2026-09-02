@@ -72,7 +72,7 @@ public sealed class CreateWorkItemHandler(ProjectsDbContext db) : ICommandHandle
         db.WorkItems.Add(workItem);
         await db.SaveChangesAsync(ct);
 
-        var resp = new CreateWorkItemResponse(workItem.Id.Value, workItem.ProjectId, workItem.ParentId, workItem.Title, type.Name, Projects.Domain.Enumerations.WorkItemStatus.Backlog.Name, priority.Name, criticality.Name, workItem.ResponsibleId, workItem.DueDate, workItem.ProgressPercent, normalizedTags, workItem.Version);
+        var resp = new CreateWorkItemResponse(workItem.Id.Value, workItem.ProjectId, workItem.ParentId, workItem.Title, type.Name, WorkItemStatus.Backlog.Name, priority.Name, criticality.Name, workItem.ResponsibleId, workItem.DueDate, workItem.ProgressPercent, normalizedTags, workItem.Version);
         return Result.Success(resp);
     }
 }

@@ -19,7 +19,7 @@ public sealed class NotificationDispatcher(
     INotificationContentPolicy contentPolicy,
     IChannelRouter router,
     ILogger<NotificationDispatcher> logger,
-    Notifications.Infrastructure.Persistence.NotificationsDbContext dbContext)
+    Persistence.NotificationsDbContext dbContext)
 {
     public async Task HandleAsync(IntegrationEvent evt, NotificationType type, Guid? sourceResourceId, string? sourceResourceType, Guid? tenantId, Guid? correlationId, CancellationToken ct)
     {

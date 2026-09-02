@@ -14,7 +14,7 @@ public sealed class S3StorageGateway : IStorageGateway
         using var ms = new MemoryStream();
         bytes.CopyTo(ms);
         var data = ms.ToArray();
-        var computed = Documents.Domain.ValueObjects.ContentHash.FromBytes(data).Value;
+        var computed = Domain.ValueObjects.ContentHash.FromBytes(data).Value;
         if (!string.Equals(computed, contentHash, StringComparison.OrdinalIgnoreCase))
             return Task.FromResult(Result.Failure<BlobRef>(Error.Failure("Storage.HashMismatch", $"Hash mismatch: expected {contentHash}, computed {computed}")));
 

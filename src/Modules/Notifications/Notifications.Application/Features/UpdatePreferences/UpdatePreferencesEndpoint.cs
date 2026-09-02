@@ -37,11 +37,11 @@ public sealed class UpdatePreferencesEndpoint : IEndpoint
 
     private static int TryParseType(string name)
     {
-        try { return Notifications.Domain.Enumerations.NotificationType.FromName(name).Id; } catch { return -1; }
+        try { return Domain.Enumerations.NotificationType.FromName(name).Id; } catch { return -1; }
     }
     private static int TryParseChannel(string name)
     {
-        try { return Notifications.Domain.Enumerations.Channel.FromName(name).Id; } catch { return -1; }
+        try { return Domain.Enumerations.Channel.FromName(name).Id; } catch { return -1; }
     }
 }
 

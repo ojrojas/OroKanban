@@ -10,13 +10,13 @@ public sealed class AuditEntryConfiguration : IEntityTypeConfiguration<AuditEntr
     {
         b.ToTable("audit_entries", "audit");
         b.HasKey(x => x.Id);
-        b.Property(x => x.Id).HasConversion(id => id.Value, v => new Audit.Domain.Ids.AuditEntryId(v));
+        b.Property(x => x.Id).HasConversion(id => id.Value, v => new Domain.Ids.AuditEntryId(v));
         b.HasIndex(x => new { x.TenantId, x.Timestamp });
         b.HasIndex(x => new { x.ResourceType, x.ResourceId });
         b.HasIndex(x => x.CorrelationId);
         b.HasIndex(x => x.OrganizationId);
         b.HasIndex(x => x.ProjectId);
-        b.Property(x => x.Action).HasConversion(a => a.Id, id => Audit.Domain.Enumerations.AuditAction.FromId(id));
+        b.Property(x => x.Action).HasConversion(a => a.Id, id => Domain.Enumerations.AuditAction.FromId(id));
         b.Property(x => x.Timestamp).IsRequired();
         b.Property(x => x.ResourceType).IsRequired().HasMaxLength(100);
         b.Property(x => x.ResourceId).IsRequired().HasMaxLength(200);

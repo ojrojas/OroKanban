@@ -19,7 +19,7 @@ public sealed class AuditMaskingPolicy : IAuditMaskingPolicy
             try
             {
                 using var doc = JsonDocument.Parse(json);
-                using var stream = new System.IO.MemoryStream();
+                using var stream = new MemoryStream();
                 using var writer = new Utf8JsonWriter(stream);
                 MaskElement(doc.RootElement, writer);
                 writer.Flush();

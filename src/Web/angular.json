@@ -27,6 +27,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "silent-renew.html",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [

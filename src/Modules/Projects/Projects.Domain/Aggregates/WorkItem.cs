@@ -48,7 +48,7 @@ public sealed class WorkItem : AggregateRoot<WorkItemId>
         Title = title;
         Description = description;
         TypeId = typeId;
-        StatusId = Projects.Domain.Enumerations.WorkItemStatus.Backlog.Id;
+        StatusId = Enumerations.WorkItemStatus.Backlog.Id;
         PriorityId = priorityId;
         CriticalityId = criticalityId;
         OwnerId = ownerId;
@@ -87,17 +87,17 @@ public sealed class WorkItem : AggregateRoot<WorkItemId>
         StatusId = targetStatusId;
         Version++;
         UpdatedAt = DateTime.UtcNow;
-        if (targetStatusId == Projects.Domain.Enumerations.WorkItemStatus.Completed.Id)
+        if (targetStatusId == Enumerations.WorkItemStatus.Completed.Id)
             CompletedAt = DateTime.UtcNow;
         RaiseDomainEvent(new WorkItemStatusChangedDomainEvent(Id.Value, ProjectId, from, targetStatusId, actorId));
-        if (targetStatusId == Projects.Domain.Enumerations.WorkItemStatus.Completed.Id)
+        if (targetStatusId == Enumerations.WorkItemStatus.Completed.Id)
             RaiseDomainEvent(new WorkItemCompletedDomainEvent(Id.Value, ProjectId));
     }
 
     public void Assign(Guid assigneeId, Guid assignerId)
     {
         // not completed check is via WorkItemNotCompletedRule in handler/policy, but also enforce here
-        CheckRule(new WorkItemNotCompletedRule(StatusId, Projects.Domain.Enumerations.WorkItemStatus.Completed.Id));
+        CheckRule(new WorkItemNotCompletedRule(StatusId, Enumerations.WorkItemStatus.Completed.Id));
         var old = ResponsibleId;
         ResponsibleId = assigneeId;
         Version++;
@@ -127,7 +127,7 @@ public sealed class WorkItem : AggregateRoot<WorkItemId>
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public bool IsOverdue(DateTime now) => DueDate.HasValue && DueDate.Value < now && StatusId != Projects.Domain.Enumerations.WorkItemStatus.Completed.Id;
+    public bool IsOverdue(DateTime now) => DueDate.HasValue && DueDate.Value < now && StatusId != Enumerations.WorkItemStatus.Completed.Id;
 
     private sealed class TypeRequiredRule : IBusinessRule
     {

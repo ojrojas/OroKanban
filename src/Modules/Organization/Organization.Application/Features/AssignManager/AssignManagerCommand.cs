@@ -1,8 +1,6 @@
 using BuildingBlocks.CQRS.Abstractions;
 using BuildingBlocks.Kernel.Domain.Results;
 
-using Microsoft.EntityFrameworkCore;
-
 using Organization.Contracts;
 using Organization.Domain.Aggregates;
 using Organization.Domain.ValueObjects;

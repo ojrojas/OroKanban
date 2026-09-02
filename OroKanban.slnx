@@ -59,12 +59,6 @@
     <Project Path="src/Modules/Projects/Projects.Domain/Projects.Domain.csproj" />
     <Project Path="src/Modules/Projects/Projects.Infrastructure/Projects.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/src/Modules/Search/">
-    <Project Path="src/Modules/Search/Search.Application/Search.Application.csproj" />
-    <Project Path="src/Modules/Search/Search.Contracts/Search.Contracts.csproj" />
-    <Project Path="src/Modules/Search/Search.Domain/Search.Domain.csproj" />
-    <Project Path="src/Modules/Search/Search.Infrastructure/Search.Infrastructure.csproj" />
-  </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/AiProcessing.Tests/AiProcessing.Tests.csproj" />
     <Project Path="tests/Architecture/Architecture.csproj" />
@@ -74,4 +68,5 @@
     <Project Path="tests/Organization.Tests/Organization.Tests.csproj" />
     <Project Path="tests/Projects.Tests/Projects.Tests.csproj" />
   </Folder>
+  <Project Path="OroKanban.AppHost/OroKanban.AppHost.csproj" />
 </Solution>

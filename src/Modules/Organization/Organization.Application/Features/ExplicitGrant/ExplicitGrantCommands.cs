@@ -3,7 +3,6 @@ using BuildingBlocks.Kernel.Domain.Results;
 
 using Microsoft.EntityFrameworkCore;
 
-using Organization.Domain.Aggregates;
 using Organization.Infrastructure.Persistence;
 
 namespace Organization.Application.Features.ExplicitGrant;
@@ -17,7 +16,7 @@ public sealed class IssueExplicitGrantHandler : IRequestHandler<IssueExplicitGra
     public IssueExplicitGrantHandler(OrganizationDbContext db) => _db = db;
     public async Task<Result<Guid>> HandleAsync(IssueExplicitGrantCommand cmd, CancellationToken ct)
     {
-        var grant = Organization.Domain.Aggregates.ExplicitGrant.Issue(cmd.TenantId, cmd.GranteeUserId, cmd.GrantedBy, cmd.ResourceType, cmd.ResourceId, cmd.Permission, cmd.ExpiresAt);
+        var grant = Domain.Aggregates.ExplicitGrant.Issue(cmd.TenantId, cmd.GranteeUserId, cmd.GrantedBy, cmd.ResourceType, cmd.ResourceId, cmd.Permission, cmd.ExpiresAt);
         _db.ExplicitGrants.Add(grant);
         await _db.SaveChangesAsync(ct);
         return grant.Id.Value;
