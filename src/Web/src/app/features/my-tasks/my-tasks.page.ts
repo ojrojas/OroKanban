@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MyTasksStore } from './my-tasks.store';
+import { BreadcrumbsComponent } from '../../shared/ui/breadcrumbs/breadcrumbs.component';
 
 @Component({
   selector: 'app-my-tasks',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, BreadcrumbsComponent],
   providers: [MyTasksStore],
   template: `
+    <app-breadcrumbs [crumbs]="[{label:'Home',link:'/dashboard'},{label:'My Tasks'}]" />
     <div class="page-header">
       <h1 class="page-header__title">My Tasks</h1>
       <p class="page-header__subtitle">Tasks assigned to you — assignee==me</p>
@@ -24,7 +26,9 @@ import { MyTasksStore } from './my-tasks.store';
         <button class="pill" [class.active]="store.filter()==='all'" (click)="store.setFilter('all')">All</button>
         <button class="pill" [class.active]="store.filter()==='In Progress'" (click)="store.setFilter('In Progress')">In Progress</button>
         <button class="pill" [class.active]="store.filter()==='Blocked'" (click)="store.setFilter('Blocked')">Blocked</button>
+        <button class="pill" [class.active]="store.filter()==='Overdue'" (click)="store.setFilter('Overdue')">Overdue</button>
       </div>
+      <button class="pill" (click)="store.load()" title="Recargar desde servidor">Refresh</button>
     </div>
 
     @if (store.isPending()) {
@@ -57,11 +61,14 @@ import { MyTasksStore } from './my-tasks.store';
     }
   `,
   styles: [`
-    .toolbar { display:flex; gap:12px; flex-wrap:wrap; margin-bottom: var(--gap-widget); }
+    .toolbar { display:flex; gap:12px; flex-wrap:wrap; margin-bottom: var(--gap-widget); align-items:center; }
     .search-bar { display:flex; align-items:center; gap:10px; padding:10px 16px; border-radius:18px; background:var(--flat-bg); border:1px solid var(--border); flex:1; max-width:420px; }
-    .search-bar input { flex:1; border:none; outline:none; background:transparent; font-size:13px; }
-    .pill { padding:6px 12px; border-radius:999px; font-size:12px; background:var(--flat-bg); border:1px solid var(--border); cursor:pointer; }
-    .pill.active { background: var(--black); color:#fff; }
+    .search-bar input { flex:1; border:none; outline:none; background:transparent; font-size:13px; color:var(--text-primary); }
+    .search-bar input::placeholder { color:var(--text-muted); }
+    .filter-pills { display:inline-flex; background:var(--flat-bg); border:1px solid var(--border); border-radius:999px; padding:2px; gap:2px; }
+    .pill { padding:6px 14px; border-radius:999px; font-size:12px; background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-weight:500; transition:all 150ms ease; }
+    .pill:hover:not(.active) { background:var(--border); color:var(--text-primary); }
+    .pill.active { background: var(--black); color:var(--on-black); box-shadow:var(--shadow-card); }
     .row { display:flex; gap:12px; padding:12px 24px; border-top:1px solid var(--border); text-decoration:none; align-items:center; }
     .row:hover { background: var(--flat-bg); }
     .thumb { width:36px; height:36px; border-radius:12px; background:var(--border); }

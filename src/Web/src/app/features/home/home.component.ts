@@ -19,7 +19,7 @@ import { take } from 'rxjs';
             <pre style="background:#e8f5e9; padding:1rem; overflow:auto; font-size:0.85rem; margin-top:1rem;">GET /api/hello → {{ helloResponse | json }}</pre>
           }
           @if (helloError) {
-            <pre style="background:#ffebee; padding:1rem; overflow:auto; font-size:0.85rem; color:#c62828;">GET /api/hello error → {{ helloError | json }}</pre>
+            <pre style="background:var(--red-bg); padding:1rem; overflow:auto; font-size:0.85rem; color:var(--red-text);">GET /api/hello error → {{ helloError | json }}</pre>
           }
           <p><button (click)="authService.logout()">Cerrar sesión</button></p>
           <p><a href="/api/hello" target="_blank">Probar GET /api/hello (requiere Bearer)</a> — el interceptor ya adjunta el token.</p>

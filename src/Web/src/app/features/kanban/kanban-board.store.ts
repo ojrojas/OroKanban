@@ -1,7 +1,10 @@
 import { computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { setError, setFulfilled, setPending, withRequestStatus } from './with-request-status';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { pipe, switchMap } from 'rxjs';
+import { tapResponse } from '@ngrx/operators';
+import { setError, setFulfilled, setPending, withRequestStatus } from '../../shared/state/with-request-status';
 
 interface BoardItem { id: string; title: string; criticality: string; isOverdue: boolean; [k: string]: any; }
 interface BoardColumn { status: string; statusId: number; count: number; items: BoardItem[]; }
@@ -28,35 +31,39 @@ export const KanbanBoardStore = signalStore(
       setFilter(filters: Record<string, unknown>) {
         patchState(store, { filters });
       },
-      async loadBoard(projectId?: string) {
-        const pid = projectId ?? store.projectId();
-        if (!pid) return;
-        patchState(store, setPending());
-        try {
-          const board = await http
-            .get<{ columns: BoardColumn[] }>(`/api/projects/${pid}/board`)
-            .toPromise() as any;
-          patchState(store, { columns: board?.columns ?? [] }, setFulfilled());
-        } catch (e: any) {
-          patchState(store, setError(e?.message ?? 'load failed'));
-        }
-      },
-      async dragDrop(workItemId: string, targetStatus: string, expectedVersion: number) {
-        const pid = store.projectId();
-        if (!pid) return;
-        patchState(store, setPending());
-        try {
-          await http
-            .post(`/api/workitems/${workItemId}/status`, { targetStatus, expectedVersion })
-            .toPromise();
-          const board = await http
-            .get<{ columns: BoardColumn[] }>(`/api/projects/${pid}/board`)
-            .toPromise() as any;
-          patchState(store, { columns: board?.columns ?? [] }, setFulfilled());
-        } catch (e: any) {
-          patchState(store, setError(e?.message ?? 'update failed'));
-        }
-      },
+      loadBoard: rxMethod<string | void>(
+        pipe(
+          switchMap((projectId) => {
+            const pid = (projectId as string) ?? store.projectId();
+            if (!pid) return [] as any;
+            patchState(store, setPending());
+            return http.get<{ columns: BoardColumn[] }>(`/api/projects/${pid}/board`).pipe(
+              tapResponse({
+                next: (board: any) => patchState(store, { columns: board?.columns ?? [] }, setFulfilled()),
+                error: (e: any) => patchState(store, setError(e?.error?.detail ?? e?.message ?? 'load failed'))
+              })
+            );
+          })
+        )
+      ),
+      dragDrop: rxMethod<{ workItemId: string; targetStatus: string; expectedVersion: number }>(
+        pipe(
+          switchMap(({ workItemId, targetStatus, expectedVersion }) => {
+            const pid = store.projectId();
+            if (!pid) return [] as any;
+            patchState(store, setPending());
+            return http
+              .put(`/api/work-items/${workItemId}/status`, { targetStatus, expectedVersion }, { headers: { 'If-Match': `W/"${expectedVersion}"` } })
+              .pipe(
+                switchMap(() => http.get<{ columns: BoardColumn[] }>(`/api/projects/${pid}/board`)),
+                tapResponse({
+                  next: (board: any) => patchState(store, { columns: board?.columns ?? [] }, setFulfilled()),
+                  error: (e: any) => patchState(store, setError(e?.error?.detail ?? e?.message ?? 'update failed'))
+                })
+              );
+          })
+        )
+      ),
     };
   })
 );

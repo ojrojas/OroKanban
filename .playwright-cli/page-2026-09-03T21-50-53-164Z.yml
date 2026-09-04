@@ -1,0 +1,162 @@
+- generic [ref=f3e4]:
+  - complementary [ref=f3e5]:
+    - generic [ref=f3e6]:
+      - generic [ref=f3e7]: OK
+      - generic [ref=f3e8]: OroKanban
+    - navigation [ref=f3e9]:
+      - link "Dashboard" [ref=f3e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f3e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f3e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f3e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f3e31] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f3e35] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f3e40]:
+      - button "Dark mode" [ref=f3e41] [cursor=pointer]
+      - button "Settings" [ref=f3e44] [cursor=pointer]
+      - button "Logout" [ref=f3e48] [cursor=pointer]
+  - generic [ref=f3e53]:
+    - banner [ref=f3e54]:
+      - textbox "Search" [ref=f3e60]:
+        - /placeholder: Search anything...
+      - generic [ref=f3e61]:
+        - button "Create" [ref=f3e62] [cursor=pointer]
+        - button "Dark" [ref=f3e63] [cursor=pointer]
+        - button "Notifications" [ref=f3e67] [cursor=pointer]
+        - img "avatar" [ref=f3e71] [cursor=pointer]
+    - main [ref=f3e72]:
+      - generic [ref=f3e73]:
+        - navigation "Breadcrumb" [ref=f3e75]:
+          - link "Home" [ref=f3e76] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f3e77]: /
+          - generic [ref=f3e78]: Team Tasks
+        - generic [ref=f3e79]:
+          - generic [ref=f3e80]:
+            - heading "Team Tasks" [level=1] [ref=f3e81]
+            - paragraph [ref=f3e82]: Subtree tasks for your team — WorkItems (Feature/Plan/Issue) → Tasks en Kanban
+          - generic [ref=f3e83]:
+            - button "+ New WorkItem" [ref=f3e84] [cursor=pointer]
+            - button "+ New Task" [ref=f3e85] [cursor=pointer]
+        - generic [ref=f3e86]:
+          - generic [ref=f3e87]:
+            - button "All" [ref=f3e88] [cursor=pointer]
+            - button "Blocked" [ref=f3e89] [cursor=pointer]
+            - button "Overdue" [ref=f3e90] [cursor=pointer]
+          - combobox [ref=f3e91]:
+            - option "10"
+            - option "15" [selected]
+            - option "25"
+            - option "50"
+        - generic [ref=f3e115]:
+          - heading "New WorkItem Issue" [level=3] [ref=f3e116]
+          - generic [ref=f3e117]:
+            - generic [ref=f3e118]:
+              - text: Project
+              - combobox "Project" [ref=f3e119]:
+                - option "Select project"
+                - option "Project 001" [selected]
+                - option "E2E Test Project EDITED"
+                - option "project 002225"
+            - generic [ref=f3e120]:
+              - text: Tipo de WorkItem
+              - combobox "Tipo de WorkItem" [ref=f3e121]:
+                - option "Feature"
+                - option "Plan"
+                - option "Issue" [selected]
+                - option "Task"
+                - option "Subtask"
+            - generic [ref=f3e122]: WorkItem que se asigna al subordinado para que lo resuelva. El subordinado creará Tasks hijas para cerrarlo. Solo el creador puede editar el WorkItem.
+            - generic [ref=f3e124]:
+              - text: WorkItem padre (opcional)
+              - combobox "WorkItem padre (opcional)" [ref=f3e125]:
+                - option "— Sin padre (WorkItem raíz) —" [selected]
+                - option "Test Tag Invalid Fix (Task • Backlog)"
+                - option "Task Assigned to Operator1 (Task • Backlog)"
+                - option "Task E2E High Priority (Task • Backlog)"
+            - generic [ref=f3e126]:
+              - text: Title
+              - textbox "Title" [ref=f3e127]: "Issue: Proceso matricula con errores"
+            - generic [ref=f3e128]:
+              - text: Description
+              - textbox "Description" [ref=f3e129]
+            - generic [ref=f3e130]:
+              - generic [ref=f3e131]:
+                - text: Priority
+                - combobox "Priority" [ref=f3e132]:
+                  - option "Low"
+                  - option "Medium" [selected]
+                  - option "High"
+                  - option "Critical"
+                  - option "Urgent"
+              - generic [ref=f3e133]:
+                - text: Criticality
+                - combobox "Criticality" [ref=f3e134]:
+                  - option "Low"
+                  - option "Medium" [selected]
+                  - option "High"
+                  - option "Critical"
+            - generic [ref=f3e135]:
+              - text: Tiempo estimado (horas sugeridas por el asignador)
+              - spinbutton "Tiempo estimado (horas sugeridas por el asignador)" [ref=f3e136]: "4"
+            - generic [ref=f3e137]: El empleado registrará luego el tiempo real en el detalle de la Task; el sistema compara estimado vs real para productividad.
+            - generic [ref=f3e138]:
+              - text: Deliverables (comma)
+              - textbox "Deliverables (comma)" [active] [ref=f3e139]:
+                - /placeholder: Spec, Demo
+                - text: Spec.pdf, Demo
+            - generic [ref=f3e140]:
+              - text: Se guardarán como entregables; los tags se generan automáticamente en minúsculas
+              - code [ref=f3e141]: a-z0-9_-
+              - text: ". Evita puntos/espacios: se normalizan a guiones."
+            - generic [ref=f3e142]:
+              - text: Deliverable entity type
+              - combobox "Deliverable entity type" [ref=f3e143]:
+                - option "Document" [selected]
+                - option "Artifact"
+                - option "Review"
+                - option "QA"
+                - option "Deployment"
+                - option "Evidence"
+            - generic [ref=f3e144]:
+              - text: Assignee (subordinado)
+              - combobox "Assignee (subordinado)" [ref=f3e145]:
+                - option "Unassigned"
+                - option "Operator1 Operator1 (Contributor)" [selected]
+                - option "Operator2 Operator2 (Contributor)"
+                - option "Manager1 Manager1 (Manager)"
+                - option "Manager2 Manager2 (Manager)"
+            - generic [ref=f3e146]: Se asigna a un subordinado de tu subtree (Organization). El manager vela por el cumplimiento.
+            - generic [ref=f3e147]:
+              - text: Due date (fecha de entrega del WorkItem/Task)
+              - textbox "Due date (fecha de entrega del WorkItem/Task)" [ref=f3e148]
+          - generic [ref=f3e149]:
+            - button "Cancel" [ref=f3e150] [cursor=pointer]
+            - button "Create" [ref=f3e151] [cursor=pointer]
+        - generic [ref=f3e92]:
+          - generic [ref=f3e93]:
+            - heading "Team Tasks" [level=3] [ref=f3e94]
+            - generic [ref=f3e95]: 3 total
+          - link "Test Tag Invalid Fix Backlog Backlog" [ref=f3e96] [cursor=pointer]:
+            - /url: /work-items/e435ed04-b7c4-4894-8a3b-75fbf50a99a0
+            - generic [ref=f3e98]:
+              - generic [ref=f3e99]: Test Tag Invalid Fix
+              - generic [ref=f3e100]: Backlog
+            - generic [ref=f3e101]: Backlog
+          - link "Task Assigned to Operator1 Backlog Backlog" [ref=f3e102] [cursor=pointer]:
+            - /url: /work-items/84e17d34-be1f-4a6c-80dc-39416b56981e
+            - generic [ref=f3e104]:
+              - generic [ref=f3e105]: Task Assigned to Operator1
+              - generic [ref=f3e106]: Backlog
+            - generic [ref=f3e107]: Backlog
+          - link "Task E2E High Priority Backlog Backlog" [ref=f3e108] [cursor=pointer]:
+            - /url: /work-items/9a5b24fe-ffee-45b8-b674-31d3e8351ff7
+            - generic [ref=f3e110]:
+              - generic [ref=f3e111]: Task E2E High Priority
+              - generic [ref=f3e112]: Backlog
+            - generic [ref=f3e113]: Backlog

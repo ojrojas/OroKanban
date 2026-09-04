@@ -1,13 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PlanningStore } from './planning.store';
+import { BreadcrumbsComponent } from '../../shared/ui/breadcrumbs/breadcrumbs.component';
 
 @Component({
   selector: 'app-planning',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BreadcrumbsComponent],
   providers: [PlanningStore],
   template: `
+    <app-breadcrumbs [crumbs]="[{label:'Home',link:'/dashboard'},{label:'Planning'}]" />
     <div class="page-header">
       <h1 class="page-header__title">Planning</h1>
       <p class="page-header__subtitle">Milestones and planning horizons</p>

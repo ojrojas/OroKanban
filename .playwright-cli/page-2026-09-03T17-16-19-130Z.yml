@@ -1,0 +1,49 @@
+- generic [ref=f5e7]:
+  - complementary [ref=f5e8]:
+    - generic [ref=f5e9]:
+      - generic [ref=f5e10]: OK
+      - generic [ref=f5e11]: OroKanban
+    - navigation [ref=f5e12]:
+      - link "Dashboard" [ref=f5e13] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f5e20] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f5e24] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f5e29] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f5e34] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f5e38] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f5e43]:
+      - button "Dark mode" [ref=f5e44] [cursor=pointer]
+      - button "Settings" [ref=f5e47] [cursor=pointer]
+      - button "Logout" [ref=f5e51] [cursor=pointer]
+  - generic [ref=f5e56]:
+    - banner [ref=f5e57]:
+      - textbox "Search" [ref=f5e63]:
+        - /placeholder: Search anything...
+      - generic [ref=f5e64]:
+        - button "Create" [ref=f5e65] [cursor=pointer]
+        - button "Dark" [ref=f5e66] [cursor=pointer]
+        - button "Notifications" [ref=f5e70] [cursor=pointer]
+        - img "avatar" [ref=f5e74] [cursor=pointer]
+    - main [ref=f5e75]:
+      - generic [ref=f5e302]:
+        - navigation "Breadcrumb" [ref=f5e304]:
+          - link "Home" [ref=f5e305] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f5e306]: /
+          - generic [ref=f5e307]: Projects
+        - generic [ref=f5e308]:
+          - heading "Projects" [level=1] [ref=f5e309]
+          - paragraph [ref=f5e310]: Manage and browse all projects in your subtree
+        - generic [ref=f5e311]:
+          - textbox "Search projects..." [ref=f5e316]
+          - generic [ref=f5e317]:
+            - button "All" [ref=f5e318] [cursor=pointer]
+            - button "Active" [ref=f5e319] [cursor=pointer]
+            - button "Archived" [ref=f5e320] [cursor=pointer]
+          - button "+ New Project" [ref=f5e321] [cursor=pointer]
+          - button "Refresh" [ref=f5e322] [cursor=pointer]

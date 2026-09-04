@@ -7,7 +7,7 @@ public sealed class GetWorkItemDetailEndpoint : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/api/work-items/{id:guid}", async (Guid id, HttpContext ctx, ISender sender, CancellationToken ct) =>
+        app.MapGet("/api/work-items/{id:guid}/detail", async (Guid id, HttpContext ctx, ISender sender, CancellationToken ct) =>
         {
             var tenantId = ctx.User.FindFirst("tenant_id")?.Value is string tid && Guid.TryParse(tid, out var tg) ? tg : Guid.Empty;
             if (tenantId == Guid.Empty) return Results.Unauthorized();

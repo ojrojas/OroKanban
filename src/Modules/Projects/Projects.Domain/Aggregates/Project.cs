@@ -89,6 +89,18 @@ public sealed class Project : AggregateRoot<ProjectId>
         RaiseDomainEvent(new ProjectStatusChangedDomainEvent(Id.Value, old, newStatusId));
     }
 
+    public void UpdateDetails(string name, string? description, int statusId, int priorityId, int criticalityId, DateTime? dueDate)
+    {
+        CheckRule(new Rules.TitleRequiredRule(name));
+        Name = name.Trim();
+        Description = description;
+        StatusId = statusId;
+        PriorityId = priorityId;
+        CriticalityId = criticalityId;
+        DueDate = dueDate;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
     private sealed class DueDateRule : IBusinessRule
     {
         public bool IsBroken() => true;

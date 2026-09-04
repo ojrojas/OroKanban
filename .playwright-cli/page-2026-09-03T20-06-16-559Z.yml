@@ -1,0 +1,147 @@
+- generic [ref=f3e4]:
+  - complementary [ref=f3e5]:
+    - generic [ref=f3e6]:
+      - generic [ref=f3e7]: OK
+      - generic [ref=f3e8]: OroKanban
+    - navigation [ref=f3e9]:
+      - link "Dashboard" [ref=f3e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f3e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f3e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f3e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Team Tasks" [ref=f3e31] [cursor=pointer]:
+        - /url: /team-tasks
+      - link "Planning" [ref=f3e38] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f3e42] [cursor=pointer]:
+        - /url: /documents
+      - link "Organization" [ref=f3e47] [cursor=pointer]:
+        - /url: /organization
+      - link "AI Queue" [ref=f3e52] [cursor=pointer]:
+        - /url: /ai-queue
+      - link "Audit" [ref=f3e59] [cursor=pointer]:
+        - /url: /audit
+      - link "Administration" [ref=f3e64] [cursor=pointer]:
+        - /url: /admin
+    - generic [ref=f3e69]:
+      - button "Dark mode" [ref=f3e70] [cursor=pointer]
+      - button "Settings" [ref=f3e73] [cursor=pointer]
+      - button "Logout" [ref=f3e77] [cursor=pointer]
+  - generic [ref=f3e82]:
+    - banner [ref=f3e83]:
+      - textbox "Search" [ref=f3e89]:
+        - /placeholder: Search anything...
+      - generic [ref=f3e90]:
+        - button "Create" [ref=f3e91] [cursor=pointer]
+        - button "Dark" [ref=f3e92] [cursor=pointer]
+        - button "Notifications" [ref=f3e96] [cursor=pointer]
+        - img "avatar" [ref=f3e100] [cursor=pointer]
+    - main [ref=f3e101]:
+      - generic [ref=f3e102]:
+        - navigation "Breadcrumb" [ref=f3e104]:
+          - link "Home" [ref=f3e105] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f3e106]: /
+          - generic [ref=f3e107]: Team Tasks
+        - generic [ref=f3e108]:
+          - generic [ref=f3e109]:
+            - heading "Team Tasks" [level=1] [ref=f3e110]
+            - paragraph [ref=f3e111]: Subtree tasks for your team
+          - button "+ New Task" [active] [ref=f3e112] [cursor=pointer]
+        - generic [ref=f3e113]:
+          - generic [ref=f3e114]:
+            - button "All" [ref=f3e115] [cursor=pointer]
+            - button "Blocked" [ref=f3e116] [cursor=pointer]
+            - button "Overdue" [ref=f3e117] [cursor=pointer]
+          - combobox [ref=f3e118]:
+            - option "10"
+            - option "15" [selected]
+            - option "25"
+            - option "50"
+        - generic [ref=f3e136]:
+          - heading "New Task" [level=3] [ref=f3e137]
+          - generic [ref=f3e138]:
+            - generic [ref=f3e139]:
+              - text: Project
+              - combobox "Project" [ref=f3e140]:
+                - option "Select project" [selected]
+                - option "Project 001"
+                - option "E2E Test Project EDITED"
+                - option "project 002225"
+            - generic [ref=f3e141]:
+              - text: WorkItem padre (opcional) — si eliges uno, esta tarea será hija de ese WorkItem y ambos tendrán historial
+              - combobox "WorkItem padre (opcional) — si eliges uno, esta tarea será hija de ese WorkItem y ambos tendrán historial" [ref=f3e142]:
+                - option "— Sin padre (crear Task suelto) —" [selected]
+            - generic [ref=f3e143]: "Tip: crea primero un WorkItem tipo Epic/Feature (desde el detalle de un WorkItem) y luego sus Tasks hijas. Cada cambio (tags, deliverables, status) queda en el historial del WorkItem y de la Task."
+            - generic [ref=f3e144]:
+              - text: Title
+              - textbox "Title" [ref=f3e145]
+            - generic [ref=f3e146]:
+              - text: Description
+              - textbox "Description" [ref=f3e147]
+            - generic [ref=f3e148]:
+              - generic [ref=f3e149]:
+                - text: Priority
+                - combobox "Priority" [ref=f3e150]:
+                  - option "Low"
+                  - option "Medium" [selected]
+                  - option "High"
+                  - option "Critical"
+                  - option "Urgent"
+              - generic [ref=f3e151]:
+                - text: Criticality
+                - combobox "Criticality" [ref=f3e152]:
+                  - option "Low"
+                  - option "Medium" [selected]
+                  - option "High"
+                  - option "Critical"
+            - generic [ref=f3e153]:
+              - text: Deliverables (comma)
+              - textbox "Deliverables (comma)" [ref=f3e154]:
+                - /placeholder: Spec, Demo
+            - generic [ref=f3e155]:
+              - text: Se guardarán como entregables; los tags se generan automáticamente en minúsculas
+              - code [ref=f3e156]: a-z0-9_-
+              - text: ". Evita puntos/espacios: se normalizan a guiones."
+            - generic [ref=f3e157]:
+              - text: Deliverable entity type
+              - combobox "Deliverable entity type" [ref=f3e158]:
+                - option "Document" [selected]
+                - option "Artifact"
+                - option "Review"
+                - option "QA"
+                - option "Deployment"
+                - option "Evidence"
+            - generic [ref=f3e159]:
+              - text: Assignee (operator)
+              - combobox "Assignee (operator)" [ref=f3e160]:
+                - option "Unassigned" [selected]
+                - option "Operator1 Operator1 (Contributor)"
+                - option "Operator2 Operator2 (Contributor)"
+                - option "Manager1 Manager1 (Manager)"
+                - option "Manager2 Manager2 (Manager)"
+            - generic [ref=f3e161]:
+              - text: Due date
+              - textbox "Due date" [ref=f3e162]
+          - generic [ref=f3e163]:
+            - button "Cancel" [ref=f3e164] [cursor=pointer]
+            - button "Create" [ref=f3e165] [cursor=pointer]
+        - generic [ref=f3e119]:
+          - generic [ref=f3e120]:
+            - heading "Team Tasks" [level=3] [ref=f3e121]
+            - generic [ref=f3e122]: 2 total
+          - link "Task Assigned to Operator1 Backlog Backlog" [ref=f3e123] [cursor=pointer]:
+            - /url: /work-items/84e17d34-be1f-4a6c-80dc-39416b56981e
+            - generic [ref=f3e125]:
+              - generic [ref=f3e126]: Task Assigned to Operator1
+              - generic [ref=f3e127]: Backlog
+            - generic [ref=f3e128]: Backlog
+          - link "Task E2E High Priority Backlog Backlog" [ref=f3e129] [cursor=pointer]:
+            - /url: /work-items/9a5b24fe-ffee-45b8-b674-31d3e8351ff7
+            - generic [ref=f3e131]:
+              - generic [ref=f3e132]: Task E2E High Priority
+              - generic [ref=f3e133]: Backlog
+            - generic [ref=f3e134]: Backlog

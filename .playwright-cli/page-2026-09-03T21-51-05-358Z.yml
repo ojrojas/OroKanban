@@ -1,0 +1,55 @@
+- generic [ref=f4e4]:
+  - complementary [ref=f4e5]:
+    - generic [ref=f4e6]:
+      - generic [ref=f4e7]: OK
+      - generic [ref=f4e8]: OroKanban
+    - navigation [ref=f4e9]:
+      - link "Dashboard" [ref=f4e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f4e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f4e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f4e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f4e31] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f4e35] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f4e40]:
+      - button "Dark mode" [ref=f4e41] [cursor=pointer]
+      - button "Settings" [ref=f4e44] [cursor=pointer]
+      - button "Logout" [ref=f4e48] [cursor=pointer]
+  - generic [ref=f4e53]:
+    - banner [ref=f4e54]:
+      - textbox "Search" [ref=f4e60]:
+        - /placeholder: Search anything...
+      - generic [ref=f4e61]:
+        - button "Create" [ref=f4e62] [cursor=pointer]
+        - button "Dark" [ref=f4e63] [cursor=pointer]
+        - button "Notifications" [ref=f4e67] [cursor=pointer]
+        - img "avatar" [ref=f4e71] [cursor=pointer]
+    - main [ref=f4e72]:
+      - generic [ref=f4e73]:
+        - navigation "Breadcrumb" [ref=f4e75]:
+          - link "Home" [ref=f4e76] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f4e77]: /
+          - generic [ref=f4e78]: Team Tasks
+        - generic [ref=f4e79]:
+          - generic [ref=f4e80]:
+            - heading "Team Tasks" [level=1] [ref=f4e81]
+            - paragraph [ref=f4e82]: Subtree tasks for your team — WorkItems (Feature/Plan/Issue) → Tasks en Kanban
+          - generic [ref=f4e83]:
+            - button "+ New WorkItem" [ref=f4e84] [cursor=pointer]
+            - button "+ New Task" [ref=f4e85] [cursor=pointer]
+        - generic [ref=f4e86]:
+          - generic [ref=f4e87]:
+            - button "All" [ref=f4e88] [cursor=pointer]
+            - button "Blocked" [ref=f4e89] [cursor=pointer]
+            - button "Overdue" [ref=f4e90] [cursor=pointer]
+          - combobox [ref=f4e91]:
+            - option "10"
+            - option "15" [selected]
+            - option "25"
+            - option "50"

@@ -18,6 +18,23 @@ html, body {
 
 a { color: inherit; }
 
+input, select, textarea {
+  color: var(--text-primary);
+  background: var(--flat-bg);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+
+select {
+  color: var(--text-primary);
+}
+
+label {
+  color: var(--text-secondary);
+}
+
 /* Page title helper (layout.md) */
 .page-header {
   display: flex;

@@ -1,0 +1,48 @@
+- generic [ref=f6e4]:
+  - complementary [ref=f6e5]:
+    - generic [ref=f6e6]:
+      - generic [ref=f6e7]: OK
+      - generic [ref=f6e8]: OroKanban
+    - navigation [ref=f6e9]:
+      - link "Dashboard" [ref=f6e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f6e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f6e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f6e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f6e31] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f6e35] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f6e40]:
+      - button "Dark mode" [ref=f6e41] [cursor=pointer]
+      - button "Settings" [ref=f6e44] [cursor=pointer]
+      - button "Logout" [ref=f6e48] [cursor=pointer]
+  - generic [ref=f6e53]:
+    - banner [ref=f6e54]:
+      - textbox "Search" [ref=f6e60]:
+        - /placeholder: Search anything...
+      - generic [ref=f6e61]:
+        - button "Create" [ref=f6e62] [cursor=pointer]
+        - button "Dark" [ref=f6e63] [cursor=pointer]
+        - button "Notifications" [ref=f6e67] [cursor=pointer]
+        - img "avatar" [ref=f6e71] [cursor=pointer]
+    - main [ref=f6e72]:
+      - generic [ref=f6e73]:
+        - navigation "Breadcrumb" [ref=f6e75]:
+          - link "Home" [ref=f6e76] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f6e77]: /
+          - link "Work Items" [ref=f6e78] [cursor=pointer]:
+            - /url: /my-tasks
+          - generic [ref=f6e79]: /
+          - generic [ref=f6e80]: Detail
+        - generic [ref=f6e81]:
+          - generic [ref=f6e82]:
+            - heading "Work Item Detail" [level=1] [ref=f6e83]
+            - paragraph [ref=f6e84]: Progress with explanation link
+          - generic [ref=f6e85]:
+            - button "← Back" [ref=f6e86] [cursor=pointer]
+            - button "Edit" [ref=f6e87] [cursor=pointer]

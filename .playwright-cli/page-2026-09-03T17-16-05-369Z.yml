@@ -1,0 +1,69 @@
+- generic [ref=f5e7]:
+  - complementary [ref=f5e8]:
+    - generic [ref=f5e9]:
+      - generic [ref=f5e10]: OK
+      - generic [ref=f5e11]: OroKanban
+    - navigation [ref=f5e12]:
+      - link "Dashboard" [ref=f5e13] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f5e20] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f5e24] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f5e29] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f5e34] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f5e38] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f5e43]:
+      - button "Dark mode" [ref=f5e44] [cursor=pointer]
+      - button "Settings" [ref=f5e47] [cursor=pointer]
+      - button "Logout" [ref=f5e51] [cursor=pointer]
+  - generic [ref=f5e56]:
+    - banner [ref=f5e57]:
+      - textbox "Search" [ref=f5e63]:
+        - /placeholder: Search anything...
+      - generic [ref=f5e64]:
+        - button "Create" [ref=f5e65] [cursor=pointer]
+        - button "Dark" [ref=f5e66] [cursor=pointer]
+        - button "Notifications" [ref=f5e70] [cursor=pointer]
+        - img "avatar" [ref=f5e74] [cursor=pointer]
+    - main [ref=f5e75]:
+      - generic [ref=f5e221]:
+        - navigation "Breadcrumb" [ref=f5e223]:
+          - link "Home" [ref=f5e224] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f5e225]: /
+          - link "Projects" [ref=f5e226] [cursor=pointer]:
+            - /url: /projects
+          - generic [ref=f5e227]: /
+          - generic [ref=f5e280]: E2E Test Project EDITED
+        - generic [ref=f5e229]:
+          - generic [ref=f5e230]:
+            - heading "Project Detail" [level=1] [ref=f5e231]
+            - paragraph [ref=f5e232]: Members, timeline and history
+          - generic [ref=f5e233]:
+            - button "← Back to list" [ref=f5e234] [cursor=pointer]
+            - button "Edit" [ref=f5e235] [cursor=pointer]
+            - button "Archive" [ref=f5e236] [cursor=pointer]
+        - generic [ref=f5e281]:
+          - heading "E2E Test Project EDITED" [level=3] [ref=f5e282]
+          - generic [ref=f5e283]:
+            - generic [ref=f5e284]: Active
+            - generic [ref=f5e285]: High
+            - generic [ref=f5e286]: Critical
+          - generic [ref=f5e287]: Project created via E2E flow for testing deliverables and kanban
+          - generic [ref=f5e288]: Updated 9/3/26, 12:16 PM
+        - generic [ref=f5e289]:
+          - generic [ref=f5e290]:
+            - heading "Members (1)" [level=3] [ref=f5e291]
+            - button "Refresh" [ref=f5e292] [cursor=pointer]
+          - generic [ref=f5e293]:
+            - generic [ref=f5e295]:
+              - generic [ref=f5e296]: 00000000-0000-0000-0000-000000000001
+              - generic [ref=f5e297]: Owner
+            - generic [ref=f5e298]: Owner
+        - generic [ref=f5e299]:
+          - heading "Timeline / History" [level=3] [ref=f5e300]
+          - generic [ref=f5e301]: No history yet

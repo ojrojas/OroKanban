@@ -1,0 +1,61 @@
+- generic [ref=f22e4]:
+  - complementary [ref=f22e5]:
+    - generic [ref=f22e6]:
+      - generic [ref=f22e7]: OK
+      - generic [ref=f22e8]: OroKanban
+    - navigation [ref=f22e9]:
+      - link "Dashboard" [ref=f22e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f22e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f22e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f22e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Team Tasks" [ref=f22e31] [cursor=pointer]:
+        - /url: /team-tasks
+      - link "Planning" [ref=f22e38] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f22e42] [cursor=pointer]:
+        - /url: /documents
+      - link "Organization" [ref=f22e47] [cursor=pointer]:
+        - /url: /organization
+      - link "AI Queue" [ref=f22e52] [cursor=pointer]:
+        - /url: /ai-queue
+      - link "Audit" [ref=f22e59] [cursor=pointer]:
+        - /url: /audit
+      - link "Administration" [ref=f22e64] [cursor=pointer]:
+        - /url: /admin
+    - generic [ref=f22e69]:
+      - button "Dark mode" [ref=f22e70] [cursor=pointer]
+      - button "Settings" [ref=f22e73] [cursor=pointer]
+      - button "Logout" [ref=f22e77] [cursor=pointer]
+  - generic [ref=f22e82]:
+    - banner [ref=f22e83]:
+      - textbox "Search" [ref=f22e89]:
+        - /placeholder: Search anything...
+      - generic [ref=f22e90]:
+        - button "Create" [ref=f22e91] [cursor=pointer]
+        - button "Dark" [ref=f22e92] [cursor=pointer]
+        - button "Notifications" [ref=f22e96] [cursor=pointer]
+        - img "avatar" [ref=f22e100] [cursor=pointer]
+    - main [ref=f22e101]:
+      - generic [ref=f22e102]:
+        - generic [ref=f22e103]:
+          - heading "Dashboard" [level=1] [ref=f22e104]
+          - paragraph [ref=f22e105]: Overview — OroKanban workspace
+        - generic [ref=f22e115]:
+          - generic [ref=f22e116]:
+            - heading "Recent activity" [level=2] [ref=f22e117]
+            - generic [ref=f22e118]: Last 7 days
+          - generic [ref=f22e119]:
+            - generic [ref=f22e120]:
+              - generic [ref=f22e122]:
+                - generic [ref=f22e123]: Sprint 14 — Planning
+                - generic [ref=f22e124]: Updated 2h ago • by Alex
+              - generic [ref=f22e125]: Active
+            - generic [ref=f22e126]:
+              - generic [ref=f22e128]:
+                - generic [ref=f22e129]: Onboarding docs
+                - generic [ref=f22e130]: Comment added • by Mia
+              - generic [ref=f22e131]: Review

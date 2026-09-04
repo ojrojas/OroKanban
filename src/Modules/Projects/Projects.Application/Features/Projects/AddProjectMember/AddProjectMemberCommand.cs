@@ -27,7 +27,7 @@ public sealed class AddProjectMemberHandler(ProjectsDbContext db) : ICommandHand
 {
     public async Task<Result<Unit>> HandleAsync(AddProjectMemberCommand cmd, CancellationToken ct)
     {
-        var project = await db.Projects.Include(p => p.Members).FirstOrDefaultAsync(p => p.Id.Value == cmd.ProjectId && p.TenantId == cmd.TenantId, ct);
+        var project = await db.Projects.Include(p => p.Members).FirstOrDefaultAsync(p => p.Id == new Projects.Domain.Ids.ProjectId(cmd.ProjectId) && p.TenantId == cmd.TenantId, ct);
         if (project is null) return Error.NotFound("Project.NotFound", "Project not found");
         var role = ProjectRole.FromName(cmd.Role);
         try

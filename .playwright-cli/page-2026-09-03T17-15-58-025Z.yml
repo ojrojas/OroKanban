@@ -1,0 +1,109 @@
+- generic [ref=f5e7]:
+  - complementary [ref=f5e8]:
+    - generic [ref=f5e9]:
+      - generic [ref=f5e10]: OK
+      - generic [ref=f5e11]: OroKanban
+    - navigation [ref=f5e12]:
+      - link "Dashboard" [ref=f5e13] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f5e20] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f5e24] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f5e29] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f5e34] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f5e38] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f5e43]:
+      - button "Dark mode" [ref=f5e44] [cursor=pointer]
+      - button "Settings" [ref=f5e47] [cursor=pointer]
+      - button "Logout" [ref=f5e51] [cursor=pointer]
+  - generic [ref=f5e56]:
+    - banner [ref=f5e57]:
+      - textbox "Search" [ref=f5e63]:
+        - /placeholder: Search anything...
+      - generic [ref=f5e64]:
+        - button "Create" [ref=f5e65] [cursor=pointer]
+        - button "Dark" [ref=f5e66] [cursor=pointer]
+        - button "Notifications" [ref=f5e70] [cursor=pointer]
+        - img "avatar" [ref=f5e74] [cursor=pointer]
+    - main [ref=f5e75]:
+      - generic [ref=f5e221]:
+        - navigation "Breadcrumb" [ref=f5e223]:
+          - link "Home" [ref=f5e224] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f5e225]: /
+          - link "Projects" [ref=f5e226] [cursor=pointer]:
+            - /url: /projects
+          - generic [ref=f5e227]: /
+          - generic [ref=f5e228]: E2E Test Project 1788455189
+        - generic [ref=f5e229]:
+          - generic [ref=f5e230]:
+            - heading "Project Detail" [level=1] [ref=f5e231]
+            - paragraph [ref=f5e232]: Members, timeline and history
+          - generic [ref=f5e233]:
+            - button "← Back to list" [ref=f5e234] [cursor=pointer]
+            - button "Edit" [active] [ref=f5e235] [cursor=pointer]
+            - button "Archive" [ref=f5e236] [cursor=pointer]
+        - generic [ref=f5e237]:
+          - heading "E2E Test Project 1788455189" [level=3] [ref=f5e238]
+          - generic [ref=f5e239]:
+            - generic [ref=f5e240]: Active
+            - generic [ref=f5e241]: High
+            - generic [ref=f5e242]: Critical
+          - generic [ref=f5e243]: Project created via E2E flow for testing deliverables and kanban
+          - generic [ref=f5e244]: Updated 9/3/26, 12:06 PM
+        - generic [ref=f5e245]:
+          - generic [ref=f5e246]:
+            - heading "Members (1)" [level=3] [ref=f5e247]
+            - button "Refresh" [ref=f5e248] [cursor=pointer]
+          - generic [ref=f5e249]:
+            - generic [ref=f5e251]:
+              - generic [ref=f5e252]: 00000000-0000-0000-0000-000000000001
+              - generic [ref=f5e253]: Owner
+            - generic [ref=f5e254]: Owner
+        - generic [ref=f5e255]:
+          - heading "Timeline / History" [level=3] [ref=f5e256]
+          - generic [ref=f5e257]: No history yet
+        - generic [ref=f5e259]:
+          - generic [ref=f5e260]:
+            - heading "Edit Project" [level=3] [ref=f5e261]
+            - button "✕" [ref=f5e262] [cursor=pointer]
+          - generic [ref=f5e263]:
+            - generic [ref=f5e264]:
+              - text: Name
+              - textbox "Name" [ref=f5e265]: E2E Test Project 1788455189
+            - generic [ref=f5e266]:
+              - generic [ref=f5e267]:
+                - text: Status
+                - combobox "Status" [ref=f5e268]:
+                  - option "Draft"
+                  - option "Active" [selected]
+                  - option "OnHold"
+                  - option "Completed"
+                  - option "Archived"
+              - generic [ref=f5e269]:
+                - text: Priority
+                - combobox "Priority" [ref=f5e270]:
+                  - option "Low"
+                  - option "Medium"
+                  - option "High" [selected]
+                  - option "Critical"
+              - generic [ref=f5e271]:
+                - text: Criticality
+                - combobox "Criticality" [ref=f5e272]:
+                  - option "Low"
+                  - option "Medium"
+                  - option "High"
+                  - option "Critical" [selected]
+            - generic [ref=f5e273]:
+              - text: Due date
+              - textbox "Due date" [ref=f5e274]
+            - generic [ref=f5e275]:
+              - text: Description
+              - textbox "Description" [ref=f5e276]: Project created via E2E flow for testing deliverables and kanban
+          - generic [ref=f5e277]:
+            - button "Cancel" [ref=f5e278] [cursor=pointer]
+            - button "Save" [ref=f5e279] [cursor=pointer]

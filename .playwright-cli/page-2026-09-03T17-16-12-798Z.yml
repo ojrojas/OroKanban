@@ -1,0 +1,97 @@
+- generic [ref=f5e7]:
+  - complementary [ref=f5e8]:
+    - generic [ref=f5e9]:
+      - generic [ref=f5e10]: OK
+      - generic [ref=f5e11]: OroKanban
+    - navigation [ref=f5e12]:
+      - link "Dashboard" [ref=f5e13] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f5e20] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f5e24] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f5e29] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f5e34] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f5e38] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f5e43]:
+      - button "Dark mode" [ref=f5e44] [cursor=pointer]
+      - button "Settings" [ref=f5e47] [cursor=pointer]
+      - button "Logout" [ref=f5e51] [cursor=pointer]
+  - generic [ref=f5e56]:
+    - banner [ref=f5e57]:
+      - textbox "Search" [ref=f5e63]:
+        - /placeholder: Search anything...
+      - generic [ref=f5e64]:
+        - button "Create" [ref=f5e65] [cursor=pointer]
+        - button "Dark" [ref=f5e66] [cursor=pointer]
+        - button "Notifications" [ref=f5e70] [cursor=pointer]
+        - img "avatar" [ref=f5e74] [cursor=pointer]
+    - main [ref=f5e75]:
+      - generic [ref=f5e302]:
+        - navigation "Breadcrumb" [ref=f5e304]:
+          - link "Home" [ref=f5e305] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f5e306]: /
+          - generic [ref=f5e307]: Projects
+        - generic [ref=f5e308]:
+          - heading "Projects" [level=1] [ref=f5e309]
+          - paragraph [ref=f5e310]: Manage and browse all projects in your subtree
+        - generic [ref=f5e311]:
+          - textbox "Search projects..." [ref=f5e316]
+          - generic [ref=f5e317]:
+            - button "All" [ref=f5e318] [cursor=pointer]
+            - button "Active" [ref=f5e319] [cursor=pointer]
+            - button "Archived" [ref=f5e320] [cursor=pointer]
+          - button "+ New Project" [ref=f5e321] [cursor=pointer]
+          - button "Refresh" [ref=f5e322] [cursor=pointer]
+        - generic [ref=f5e323]:
+          - generic [ref=f5e324]:
+            - heading "Projects" [level=3] [ref=f5e325]
+            - generic [ref=f5e326]:
+              - generic [ref=f5e327]:
+                - text: Show
+                - combobox "Show" [ref=f5e328]:
+                  - option "10"
+                  - option "15" [selected]
+                  - option "25"
+                  - option "50"
+                  - option "100"
+              - generic [ref=f5e329]: 3 total
+          - generic [ref=f5e330]:
+            - link "E2E Test Project EDITED Active • High Active" [ref=f5e331] [cursor=pointer]:
+              - /url: /projects/4b9b9041-de1d-40f5-b147-868c95c4d1d4
+              - generic [ref=f5e333]:
+                - generic [ref=f5e334]: E2E Test Project EDITED
+                - generic [ref=f5e335]: Active • High
+              - generic [ref=f5e336]: Active
+            - generic [ref=f5e337]:
+              - button "Edit" [ref=f5e338] [cursor=pointer]
+              - button "Archive" [ref=f5e339] [cursor=pointer]
+          - generic [ref=f5e340]:
+            - link "project 002225 Active • Medium Active" [ref=f5e341] [cursor=pointer]:
+              - /url: /projects/6baa243b-0a0c-43bd-a8c0-e50e31bfb137
+              - generic [ref=f5e343]:
+                - generic [ref=f5e344]: project 002225
+                - generic [ref=f5e345]: Active • Medium
+              - generic [ref=f5e346]: Active
+            - generic [ref=f5e347]:
+              - button "Edit" [ref=f5e348] [cursor=pointer]
+              - button "Archive" [ref=f5e349] [cursor=pointer]
+          - generic [ref=f5e350]:
+            - link "Project 001 Active • Medium Active" [ref=f5e351] [cursor=pointer]:
+              - /url: /projects/f8490a4d-8416-4c7b-a75b-4017f92ed144
+              - generic [ref=f5e353]:
+                - generic [ref=f5e354]: Project 001
+                - generic [ref=f5e355]: Active • Medium
+              - generic [ref=f5e356]: Active
+            - generic [ref=f5e357]:
+              - button "Edit" [ref=f5e358] [cursor=pointer]
+              - button "Archive" [ref=f5e359] [cursor=pointer]
+          - generic [ref=f5e360]:
+            - generic [ref=f5e361]: Page 1 / 1 • 3 total
+            - generic [ref=f5e362]:
+              - button "← Prev" [disabled] [ref=f5e363]
+              - button "Next →" [disabled] [ref=f5e364]

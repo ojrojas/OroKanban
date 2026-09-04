@@ -1,0 +1,58 @@
+- generic [ref=f8e4]:
+  - complementary [ref=f8e5]:
+    - generic [ref=f8e6]:
+      - generic [ref=f8e7]: OK
+      - generic [ref=f8e8]: OroKanban
+    - navigation [ref=f8e9]:
+      - link "Dashboard" [ref=f8e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f8e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f8e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f8e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Team Tasks" [ref=f8e31] [cursor=pointer]:
+        - /url: /team-tasks
+      - link "Planning" [ref=f8e38] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f8e42] [cursor=pointer]:
+        - /url: /documents
+      - link "Organization" [ref=f8e47] [cursor=pointer]:
+        - /url: /organization
+      - link "AI Queue" [ref=f8e52] [cursor=pointer]:
+        - /url: /ai-queue
+      - link "Audit" [ref=f8e59] [cursor=pointer]:
+        - /url: /audit
+      - link "Administration" [ref=f8e64] [cursor=pointer]:
+        - /url: /admin
+    - generic [ref=f8e69]:
+      - button "Dark mode" [ref=f8e70] [cursor=pointer]
+      - button "Settings" [ref=f8e73] [cursor=pointer]
+      - button "Logout" [ref=f8e77] [cursor=pointer]
+  - generic [ref=f8e82]:
+    - banner [ref=f8e83]:
+      - textbox "Search" [ref=f8e89]:
+        - /placeholder: Search anything...
+      - generic [ref=f8e90]:
+        - button "Create" [ref=f8e91] [cursor=pointer]
+        - button "Dark" [ref=f8e92] [cursor=pointer]
+        - button "Notifications" [ref=f8e96] [cursor=pointer]
+        - img "avatar" [ref=f8e100] [cursor=pointer]
+    - main [ref=f8e101]:
+      - generic [ref=f8e102]:
+        - navigation "Breadcrumb" [ref=f8e104]:
+          - link "Home" [ref=f8e105] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f8e106]: /
+          - link "Work Items" [ref=f8e107] [cursor=pointer]:
+            - /url: /my-tasks
+          - generic [ref=f8e108]: /
+          - generic [ref=f8e109]: Detail
+        - generic [ref=f8e110]:
+          - generic [ref=f8e111]:
+            - heading "Work Item Detail" [level=1] [ref=f8e112]
+            - paragraph [ref=f8e113]: Progress with explanation link
+          - generic [ref=f8e114]:
+            - button "← Back" [ref=f8e115] [cursor=pointer]
+            - button "Edit" [ref=f8e116] [cursor=pointer]

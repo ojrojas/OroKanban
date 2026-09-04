@@ -1,0 +1,145 @@
+- generic [ref=f29e4]:
+  - complementary [ref=f29e5]:
+    - generic [ref=f29e6]:
+      - generic [ref=f29e7]: OK
+      - generic [ref=f29e8]: OroKanban
+    - navigation [ref=f29e9]:
+      - link "Dashboard" [ref=f29e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f29e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f29e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f29e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Team Tasks" [ref=f29e31] [cursor=pointer]:
+        - /url: /team-tasks
+      - link "Planning" [ref=f29e38] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f29e42] [cursor=pointer]:
+        - /url: /documents
+      - link "Organization" [ref=f29e47] [cursor=pointer]:
+        - /url: /organization
+      - link "AI Queue" [ref=f29e52] [cursor=pointer]:
+        - /url: /ai-queue
+      - link "Audit" [ref=f29e59] [cursor=pointer]:
+        - /url: /audit
+      - link "Administration" [ref=f29e64] [cursor=pointer]:
+        - /url: /admin
+    - generic [ref=f29e69]:
+      - button "Dark mode" [ref=f29e70] [cursor=pointer]
+      - button "Settings" [ref=f29e73] [cursor=pointer]
+      - button "Logout" [ref=f29e77] [cursor=pointer]
+  - generic [ref=f29e82]:
+    - banner [ref=f29e83]:
+      - textbox "Search" [ref=f29e89]:
+        - /placeholder: Search anything...
+      - generic [ref=f29e90]:
+        - button "Create" [ref=f29e91] [cursor=pointer]
+        - button "Dark" [ref=f29e92] [cursor=pointer]
+        - button "Notifications" [ref=f29e96] [cursor=pointer]
+        - img "avatar" [ref=f29e100] [cursor=pointer]
+    - main [ref=f29e101]:
+      - generic [ref=f29e102]:
+        - navigation "Breadcrumb" [ref=f29e104]:
+          - link "Home" [ref=f29e105] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f29e106]: /
+          - generic [ref=f29e107]: Kanban
+        - generic [ref=f29e108]:
+          - generic [ref=f29e109]:
+            - heading "Kanban" [level=1] [ref=f29e110]
+            - paragraph [ref=f29e111]: Backlog → Planned → In Progress → Blocked → In Review → Completed
+          - generic [ref=f29e112]:
+            - combobox [ref=f29e113]:
+              - option "Select project"
+              - option "E2E Test Project EDITED"
+              - option "project 002225"
+              - option "Project 001" [selected]
+            - button "Refresh" [ref=f29e114] [cursor=pointer]
+        - generic [ref=f29e117]:
+          - generic [ref=f29e118]:
+            - heading "Backlog 2" [level=4] [ref=f29e148]:
+              - text: Backlog
+              - generic [ref=f29e120]: "2"
+            - generic [ref=f29e121]:
+              - generic "Double click to edit" [ref=f29e149] [cursor=pointer]:
+                - generic [ref=f29e150]: Task Assigned to Operator1
+                - generic [ref=f29e151]: Critical • High
+                - generic [ref=f29e152]: spec, demo
+              - generic "Double click to edit" [ref=f29e153] [cursor=pointer]:
+                - generic [ref=f29e154]: Task E2E High Priority
+                - generic [ref=f29e155]: Critical • High
+                - generic [ref=f29e156]: spec, demo
+          - generic [ref=f29e123]:
+            - heading "Planned 0" [level=4] [ref=f29e124]:
+              - text: Planned
+              - generic [ref=f29e125]: "0"
+            - generic [ref=f29e126]: Drop here
+          - generic [ref=f29e128]:
+            - heading "InProgress 0" [level=4] [ref=f29e129]:
+              - text: InProgress
+              - generic [ref=f29e130]: "0"
+            - generic [ref=f29e131]: Drop here
+          - generic [ref=f29e133]:
+            - heading "Blocked 0" [level=4] [ref=f29e134]:
+              - text: Blocked
+              - generic [ref=f29e135]: "0"
+            - generic [ref=f29e136]: Drop here
+          - generic [ref=f29e138]:
+            - heading "InReview 0" [level=4] [ref=f29e139]:
+              - text: InReview
+              - generic [ref=f29e140]: "0"
+            - generic [ref=f29e141]: Drop here
+          - generic [ref=f29e143]:
+            - heading "Completed 0" [level=4] [ref=f29e144]:
+              - text: Completed
+              - generic [ref=f29e145]: "0"
+            - generic [ref=f29e146]: Drop here
+        - generic [ref=f29e158]:
+          - generic [ref=f29e159]:
+            - heading "Edit Card" [level=3] [ref=f29e160]
+            - button "✕" [ref=f29e161] [cursor=pointer]
+          - generic [ref=f29e162]:
+            - generic [ref=f29e163]:
+              - text: Title
+              - textbox "Title" [ref=f29e164]: Task Assigned to Operator1
+            - generic [ref=f29e165]:
+              - text: Description
+              - textbox "Description" [ref=f29e166]
+            - generic [ref=f29e167]:
+              - generic [ref=f29e168]:
+                - text: Priority
+                - combobox "Priority" [ref=f29e169]:
+                  - option "Low"
+                  - option "Medium"
+                  - option "High" [selected]
+                  - option "Critical"
+                  - option "Urgent"
+              - generic [ref=f29e170]:
+                - text: Criticality
+                - combobox "Criticality" [ref=f29e171]:
+                  - option "Low"
+                  - option "Medium"
+                  - option "High"
+                  - option "Critical" [selected]
+            - generic [ref=f29e172]:
+              - text: Due date
+              - textbox "Due date" [ref=f29e173]
+            - generic [ref=f29e174]:
+              - text: Deliverables (comma separated)
+              - textbox "Deliverables (comma separated)" [ref=f29e175]:
+                - /placeholder: Spec.pdf, Demo
+                - text: spec, demo
+            - generic [ref=f29e176]:
+              - text: Deliverable entities (fixed enum)
+              - button "+ Add deliverable" [ref=f29e177] [cursor=pointer]
+            - generic [ref=f29e178]:
+              - text: Observations
+              - textbox "Observations" [ref=f29e179]
+            - generic [ref=f29e180]:
+              - text: Progress
+              - spinbutton "Progress" [ref=f29e181]: "0"
+          - generic [ref=f29e182]:
+            - button "Cancel" [ref=f29e183] [cursor=pointer]
+            - button "Save" [ref=f29e184] [cursor=pointer]

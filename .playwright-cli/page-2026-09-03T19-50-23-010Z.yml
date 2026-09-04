@@ -1,0 +1,51 @@
+- generic [ref=f50e4]:
+  - complementary [ref=f50e5]:
+    - generic [ref=f50e6]:
+      - generic [ref=f50e7]: OK
+      - generic [ref=f50e8]: OroKanban
+    - navigation [ref=f50e9]:
+      - link "Dashboard" [ref=f50e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f50e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f50e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f50e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Team Tasks" [ref=f50e31] [cursor=pointer]:
+        - /url: /team-tasks
+      - link "Planning" [ref=f50e38] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f50e42] [cursor=pointer]:
+        - /url: /documents
+      - link "Organization" [ref=f50e47] [cursor=pointer]:
+        - /url: /organization
+      - link "AI Queue" [ref=f50e52] [cursor=pointer]:
+        - /url: /ai-queue
+      - link "Audit" [ref=f50e59] [cursor=pointer]:
+        - /url: /audit
+      - link "Administration" [ref=f50e64] [cursor=pointer]:
+        - /url: /admin
+    - generic [ref=f50e69]:
+      - button "Dark mode" [ref=f50e70] [cursor=pointer]
+      - button "Settings" [ref=f50e73] [cursor=pointer]
+      - button "Logout" [ref=f50e77] [cursor=pointer]
+  - generic [ref=f50e82]:
+    - banner [ref=f50e83]:
+      - textbox "Search" [ref=f50e89]:
+        - /placeholder: Search anything...
+      - generic [ref=f50e90]:
+        - button "Create" [ref=f50e91] [cursor=pointer]
+        - button "Dark" [ref=f50e92] [cursor=pointer]
+        - button "Notifications" [ref=f50e96] [cursor=pointer]
+        - img "avatar" [ref=f50e100] [cursor=pointer]
+    - main [ref=f50e101]:
+      - generic [ref=f50e102]:
+        - navigation "Breadcrumb" [ref=f50e104]:
+          - link "Home" [ref=f50e105] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f50e106]: /
+          - generic [ref=f50e107]: Organization
+        - generic [ref=f50e108]:
+          - heading "Organization" [level=1] [ref=f50e109]
+          - paragraph [ref=f50e110]: Hierarchy — tree unbounded depth (from Identity Server)

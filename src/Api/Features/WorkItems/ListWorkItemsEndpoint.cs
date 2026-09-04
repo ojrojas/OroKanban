@@ -28,7 +28,7 @@ public sealed class ListWorkItemsEndpoint : IEndpoint
 public sealed record ListWorkItemsQuery(Guid TenantId, Guid? ProjectId, int Page, int PageSize, string? Search, string? StatusFilter, Guid? AssigneeFilter, string? SortBy, string? SortDir) : IQuery<Result<PagedWorkItemsResponse>>;
 
 public sealed record PagedWorkItemsResponse(IReadOnlyList<WorkItemListItem> Items, int Total, int Page, int PageSize);
-public sealed record WorkItemListItem(Guid Id, Guid ProjectId, string Title, string Type, string Status, string Priority, string Criticality, Guid? ResponsibleId, DateTime? DueDate, int ProgressPercent, DateTime UpdatedAt);
+public sealed record WorkItemListItem(Guid Id, Guid ProjectId, Guid? ParentId, string Title, string Type, string Status, string Priority, string Criticality, Guid? ResponsibleId, DateTime? DueDate, int ProgressPercent, DateTime UpdatedAt);
 
 public sealed class ListWorkItemsHandler(ProjectsDbContext db) : IQueryHandler<ListWorkItemsQuery, Result<PagedWorkItemsResponse>>
 {
@@ -54,7 +54,7 @@ public sealed class ListWorkItemsHandler(ProjectsDbContext db) : IQueryHandler<L
             _ => query.OrderByDescending(w => w.UpdatedAt)
         };
         var items = await query.Skip((page - 1) * pageSize).Take(pageSize)
-            .Select(w => new WorkItemListItem(w.Id.Value, w.ProjectId, w.Title,
+            .Select(w => new WorkItemListItem(w.Id.Value, w.ProjectId, w.ParentId, w.Title,
                 WorkItemType.FromId(w.TypeId).Name,
                 WorkItemStatus.FromId(w.StatusId).Name,
                 WorkItemPriority.FromId(w.PriorityId).Name,

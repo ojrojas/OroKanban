@@ -1,0 +1,51 @@
+- generic [ref=f40e4]:
+  - complementary [ref=f40e5]:
+    - generic [ref=f40e6]:
+      - generic [ref=f40e7]: OK
+      - generic [ref=f40e8]: OroKanban
+    - navigation [ref=f40e9]:
+      - link "Dashboard" [ref=f40e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f40e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f40e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f40e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f40e31] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f40e35] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f40e40]:
+      - button "Dark mode" [ref=f40e41] [cursor=pointer]
+      - button "Settings" [ref=f40e44] [cursor=pointer]
+      - button "Logout" [ref=f40e48] [cursor=pointer]
+  - generic [ref=f40e53]:
+    - banner [ref=f40e54]:
+      - textbox "Search" [ref=f40e60]:
+        - /placeholder: Search anything...
+      - generic [ref=f40e61]:
+        - button "Create" [ref=f40e62] [cursor=pointer]
+        - button "Dark" [ref=f40e63] [cursor=pointer]
+        - button "Notifications" [ref=f40e67] [cursor=pointer]
+        - img "avatar" [ref=f40e71] [cursor=pointer]
+    - main [ref=f40e72]:
+      - generic [ref=f40e102]:
+        - navigation "Breadcrumb" [ref=f40e104]:
+          - link "Home" [ref=f40e105] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f40e106]: /
+          - link "Work Items" [ref=f40e107] [cursor=pointer]:
+            - /url: /my-tasks
+          - generic [ref=f40e108]: /
+          - generic [ref=f40e109]: Detail
+        - generic [ref=f40e110]:
+          - generic [ref=f40e111]:
+            - heading "Work Item Detail" [level=1] [ref=f40e112]
+            - paragraph [ref=f40e113]: Progress with explanation link
+          - generic [ref=f40e114]:
+            - button "← Back" [ref=f40e115] [cursor=pointer]
+            - button "Edit" [ref=f40e116] [cursor=pointer]
+        - generic [ref=f40e117]:
+          - generic [ref=f40e118]: load failed
+          - button "Retry" [ref=f40e119] [cursor=pointer]

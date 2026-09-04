@@ -15,7 +15,7 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         b.Property(x => x.Name).IsRequired().HasMaxLength(200);
         b.HasIndex(x => new { x.TenantId, x.Name }).IsUnique();
         b.Property(x => x.Description).HasMaxLength(4000);
-        b.Property(x => x.RowVersion).IsRowVersion().IsConcurrencyToken();
+        b.Property(x => x.RowVersion).IsConcurrencyToken().HasDefaultValue(new byte[0]);
         b.OwnsMany(x => x.Members, mb =>
         {
             mb.ToTable("project_members", "projects");
@@ -49,12 +49,17 @@ public sealed class WorkItemConfiguration : IEntityTypeConfiguration<WorkItem>
         b.Property(x => x.Title).IsRequired().HasMaxLength(200);
         b.Property(x => x.Description).HasMaxLength(10000);
         b.Property(x => x.TagsJson).HasColumnName("tags_json").HasColumnType("jsonb");
+        b.Property(x => x.DeliverablesJson).HasColumnName("deliverables_json").HasColumnType("jsonb");
+        b.Property(x => x.Observations).HasMaxLength(4000);
+        b.Property(x => x.StartedAt).HasColumnName("started_at");
+        b.Property(x => x.ReopenedCount).HasColumnName("reopened_count").HasDefaultValue(0);
         b.HasIndex(x => new { x.ProjectId, x.ParentId });
         b.HasIndex(x => new { x.TenantId, x.ProjectId });
         b.HasIndex(x => x.ResponsibleId);
-        b.Property(x => x.RowVersion).IsRowVersion().IsConcurrencyToken();
+        b.Property(x => x.RowVersion).IsConcurrencyToken().HasDefaultValue(new byte[0]);
         b.Property(x => x.Version).IsRequired().IsConcurrencyToken(false);
         b.Ignore(x => x.Tags);
+        b.Ignore(x => x.Deliverables);
         b.Ignore(x => x.DomainEvents);
     }
 }
@@ -70,5 +75,30 @@ public sealed class WorkItemDependencyConfiguration : IEntityTypeConfiguration<W
         b.HasIndex(x => x.DependentId);
         b.HasIndex(x => x.PrincipalId);
         b.Ignore(x => x.DomainEvents);
+    }
+}
+
+public sealed class WorkItemDeliverableConfiguration : IEntityTypeConfiguration<WorkItemDeliverable>
+{
+    public void Configure(EntityTypeBuilder<WorkItemDeliverable> b)
+    {
+        b.ToTable("work_item_deliverables", "projects");
+        b.HasKey(x => x.Id);
+        b.Property(x => x.Title).IsRequired().HasMaxLength(200);
+        b.HasIndex(x => x.WorkItemId);
+    }
+}
+
+public sealed class WorkItemHistoryConfiguration : IEntityTypeConfiguration<WorkItemHistory>
+{
+    public void Configure(EntityTypeBuilder<WorkItemHistory> b)
+    {
+        b.ToTable("work_item_histories", "projects");
+        b.HasKey(x => x.Id);
+        b.Property(x => x.Field).IsRequired().HasMaxLength(100);
+        b.Property(x => x.FromJson).HasColumnType("jsonb");
+        b.Property(x => x.ToJson).HasColumnType("jsonb");
+        b.HasIndex(x => new { x.WorkItemId, x.CreatedAt });
+        b.HasIndex(x => x.TenantId);
     }
 }

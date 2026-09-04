@@ -73,7 +73,7 @@ public sealed class GetKanbanBoardHandler(ProjectsDbContext db) : IQueryHandler<
         var columns = new List<BoardColumnDto>();
         foreach (var s in statusesOrdered)
         {
-            var colItems = items.Where(w => w.StatusId == s.Id).Select(w => new BoardItemDto(w.Id.Value, w.Title, WorkItemType.FromId(w.TypeId).Name, s.Name, WorkItemPriority.FromId(w.PriorityId).Name, Criticality.FromId(w.CriticalityId).Name, w.ResponsibleId, w.DueDate, w.IsOverdue(now), w.ProgressPercent, w.Tags, w.ParentId, null, false, w.Version, w.UpdatedAt)).ToList();
+            var colItems = items.Where(w => w.StatusId == s.Id).Select(w => new BoardItemDto(w.Id.Value, w.Title, WorkItemType.FromId(w.TypeId).Name, s.Name, WorkItemPriority.FromId(w.PriorityId).Name, Criticality.FromId(w.CriticalityId).Name, w.ResponsibleId, w.DueDate, w.IsOverdue(now), w.ProgressPercent, w.Tags, w.ParentId, null, false, w.Version, w.UpdatedAt, w.EstimatedHours, w.ActualHours)).ToList();
             var count = await countsQuery.CountAsync(w => w.StatusId == s.Id, ct);
             columns.Add(new BoardColumnDto(s.Name, s.Id, count, colItems));
         }

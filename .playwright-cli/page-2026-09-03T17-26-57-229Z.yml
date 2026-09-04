@@ -1,0 +1,26 @@
+- generic [ref=f32e4]:
+  - complementary [ref=f32e5]:
+    - generic [ref=f32e6]:
+      - generic [ref=f32e7]: OK
+      - generic [ref=f32e8]: OroKanban
+    - navigation [ref=f32e9]:
+      - generic [ref=f32e10]: Dashboard
+      - generic [ref=f32e17]: Projects
+      - generic [ref=f32e21]: Kanban
+      - generic [ref=f32e26]: My Tasks
+      - generic [ref=f32e31]: Planning
+      - generic [ref=f32e35]: Documents
+    - generic [ref=f32e40]:
+      - button [ref=f32e41] [cursor=pointer]
+      - button "Settings" [ref=f32e42] [cursor=pointer]
+      - button "Logout" [ref=f32e46] [cursor=pointer]
+  - generic [ref=f32e51]:
+    - banner [ref=f32e52]:
+      - textbox "Search" [ref=f32e58]:
+        - /placeholder: Search anything...
+      - generic [ref=f32e59]:
+        - button "Create" [ref=f32e60] [cursor=pointer]
+        - button "Change theme" [ref=f32e61] [cursor=pointer]
+        - button "Notifications" [ref=f32e63] [cursor=pointer]
+        - img "avatar" [ref=f32e67] [cursor=pointer]
+    - main [ref=f32e68]

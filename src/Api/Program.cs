@@ -64,6 +64,13 @@ builder.Services.AddDbContext<Projects.Infrastructure.Persistence.ProjectsDbCont
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
 builder.Services.AddDbContext<Metrics.Infrastructure.Persistence.MetricsDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
+// Projects domain services — required after AddCqrs scans Projects.Application (ReparentWorkItem etc.)
+builder.Services.AddScoped<Projects.Domain.Services.IDependencyCycleDetector, Projects.Infrastructure.Services.DependencyCycleDetector>();
+builder.Services.AddScoped<Projects.Domain.Services.IWorkItemTransitionPolicy, Projects.Infrastructure.Services.WorkItemTransitionPolicy>();
+builder.Services.AddScoped<Projects.Domain.Services.IHierarchyInspector, Projects.Infrastructure.Services.HierarchyInspector>();
+builder.Services.AddScoped<Projects.Domain.Services.IAssignmentPolicy, Projects.Infrastructure.Services.AssignmentPolicy>();
+builder.Services.AddScoped<Projects.Domain.Services.IProjectMembership, Projects.Infrastructure.Services.ProjectMembershipService>();
+builder.Services.AddScoped<Projects.Domain.Services.IUserStateChecker, Projects.Infrastructure.Services.DefaultUserStateChecker>();
 // Bootstrap — single DbContext with ALL entities for EnsureCreated at startup
 builder.Services.AddDbContext<BootstrapDbContext>(o =>
     o.UseNpgsql(builder.Configuration.GetConnectionString("orokanban")));
@@ -108,6 +115,10 @@ builder.Services.AddSignalR();
 builder.Services.AddCqrs(cqrs => cqrs
     .RegisterHandlersFromAssemblyContaining<Program>()
     .RegisterHandlersFromAssemblyContaining<Notifications.Application.Features.GetMyNotifications.GetMyNotificationsQuery>()
+    .RegisterHandlersFromAssemblyContaining<ProjectsApp.Features.ProjectsMgmt.CreateProject.CreateProjectCommand>()
+    .RegisterHandlersFromAssemblyContaining<Documents.Application.Features.GetDocument.GetDocumentQuery>()
+    .RegisterHandlersFromAssemblyContaining<Audit.Application.Features.Search.SearchAuditEntriesQuery>()
+    .RegisterHandlersFromAssemblyContaining<Organization.Application.Features.GetSubtree.GetSubtreeQuery>()
     .AddOpenBehavior(typeof(LoggingBehavior<,>))
     .AddOpenBehavior(typeof(ValidationBehavior<,>)));
 
@@ -166,6 +177,25 @@ using (var scope = app.Services.CreateScope())
         var db = scope.ServiceProvider.GetRequiredService<BootstrapDbContext>();
         var created = await db.Database.EnsureCreatedAsync();
         logger.LogInformation("Bootstrap EnsureCreated: created={Created}", created);
+        // Back-fill new columns/tables for existing DB (EnsureCreated doesn't migrate)
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync(@"
+                CREATE SCHEMA IF NOT EXISTS projects;
+                CREATE TABLE IF NOT EXISTS projects.work_item_histories (""Id"" uuid PRIMARY KEY, ""WorkItemId"" uuid NOT NULL, ""TenantId"" uuid NOT NULL, ""ActorId"" uuid, ""Field"" varchar(100) NOT NULL, ""FromJson"" jsonb, ""ToJson"" jsonb, ""Comment"" text, ""CreatedAt"" timestamp with time zone NOT NULL);
+                CREATE TABLE IF NOT EXISTS projects.work_item_deliverables (""Id"" uuid PRIMARY KEY, ""WorkItemId"" uuid NOT NULL, ""Title"" varchar(200) NOT NULL, ""TypeId"" integer NOT NULL, ""StatusId"" integer NOT NULL, ""Url"" text, ""CreatedAt"" timestamp with time zone NOT NULL, ""UpdatedAt"" timestamp with time zone NOT NULL);
+                ALTER TABLE projects.work_items ADD COLUMN IF NOT EXISTS deliverables_json jsonb;
+                ALTER TABLE projects.work_items ADD COLUMN IF NOT EXISTS ""Observations"" varchar(4000);
+                ALTER TABLE projects.work_items ADD COLUMN IF NOT EXISTS started_at timestamp with time zone;
+                ALTER TABLE projects.work_items ADD COLUMN IF NOT EXISTS reopened_count integer NOT NULL DEFAULT 0;
+                CREATE INDEX IF NOT EXISTS ""IX_work_item_histories_WorkItemId_CreatedAt"" ON projects.work_item_histories(""WorkItemId"",""CreatedAt"");
+                CREATE INDEX IF NOT EXISTS ""IX_work_item_deliverables_WorkItemId"" ON projects.work_item_deliverables(""WorkItemId"");
+                ALTER TABLE organization.organization_units ALTER COLUMN ""RowVersion"" SET DEFAULT '\x'::bytea;
+                ALTER TABLE organization.management_relationships ALTER COLUMN ""RowVersion"" SET DEFAULT '\x'::bytea;
+                ALTER TABLE organization.explicit_grants ALTER COLUMN ""RowVersion"" SET DEFAULT '\x'::bytea;
+            ");
+            logger.LogInformation("Back-fill schema for histories/deliverables ensured");
+        } catch(Exception ex2){ logger.LogWarning(ex2, "Back-fill failed"); }
     }
     catch (Exception ex)
     {

@@ -28,6 +28,8 @@ public sealed class BootstrapDbContext : AppDbContextBase
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<WorkItem> WorkItems => Set<WorkItem>();
     public DbSet<WorkItemDependency> WorkItemDependencies => Set<WorkItemDependency>();
+    public DbSet<WorkItemDeliverable> WorkItemDeliverables => Set<WorkItemDeliverable>();
+    public DbSet<WorkItemHistory> WorkItemHistories => Set<WorkItemHistory>();
 
     // Metrics
     public DbSet<MetricDefinition> MetricDefinitions => Set<MetricDefinition>();

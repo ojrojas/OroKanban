@@ -18,9 +18,30 @@ export class AuthService {
    * incluso si el IdP no tiene post_logout_redirect_uri registrado.
    */
   logout(): void {
-    // 1) App: limpiar storage de juego/idempotencia + desconectar SignalR si existe
-    try { sessionStorage.clear(); } catch {}
+    // 1) Intentar obtener id_token ANTES de limpiar storage (necesario para id_token_hint)
+    let idToken: string | null = null;
+    try {
+      const stored = sessionStorage.getItem('id_token') || localStorage.getItem('id_token');
+      if (stored) idToken = stored;
+    } catch {}
+    // Fallback: intentar leer del storage del OIDC client (clave con prefijo)
+    if (!idToken) {
+      try {
+        for (let i = 0; i < sessionStorage.length; i++) {
+          const k = sessionStorage.key(i) || '';
+          if (k.includes('orokanban') || k.includes('authnResult') || k.includes('id_token')) {
+            const v = sessionStorage.getItem(k);
+            if (v && v.includes('id_token')) {
+              try { const p = JSON.parse(v); if (p?.id_token) idToken = p.id_token; } catch {}
+            }
+          }
+        }
+      } catch {}
+    }
+    // Ahora limpiar solo lo no esencial (no la sesión OIDC aún, la necesita logoffAndRevokeTokens)
     try { localStorage.removeItem('game-cache'); } catch {}
+    try { sessionStorage.removeItem('game-cache'); } catch {}
+    try { sessionStorage.removeItem('idemp-withdraw'); } catch {}
     // Intentar desconectar SignalR global si está activo (evita reconexión tras logout)
     try {
       const anyWindow = window as any;
@@ -44,15 +65,7 @@ export class AuthService {
       }
     };
 
-    // Intentar obtener id_token para id_token_hint (mejora logout en IdentityServer)
-    // Nota: getIdToken es async Observable — no capturar sincrónicamente (race). Se resuelve en manualIdpLogout via firstValueFrom.
-    let idToken: string | null = null;
-    // Intentar lectura sincrónica de storage como fallback rápido (si existe)
-    try {
-      const stored = sessionStorage.getItem('id_token') || localStorage.getItem('id_token');
-      if (stored) idToken = stored;
-    } catch {}
-
+    // idToken ya obtenido arriba antes de limpiar storage
     // 3) IdentityServer: end_session + revocación
     // Primero intentar el flujo de la librería (revoca y hace redirect a end_session)
     try {
@@ -70,13 +83,11 @@ export class AuthService {
             this.manualIdpLogout(idToken);
           },
         });
-        // Si en 1.8s no hubo navegación, forzar manual
+        // Si en 1.8s no hubo navegación, forzar manual (para OroKanban: si sigue en app y no en logout)
         setTimeout(() => {
-          if (window.location.pathname.startsWith('/player') || window.location.pathname === '/') {
-            if (window.location.href.includes(window.location.origin) && !window.location.href.includes('connect/logout')) {
-              console.warn('[Auth] logoffAndRevokeTokens no navegó -> manual');
-              this.manualIdpLogout(idToken);
-            }
+          if (!window.location.href.includes('connect/logout') && !window.location.pathname.includes('/auth/logout-callback') && !window.location.href.includes('/Account/Logout')) {
+            console.warn('[Auth] logoffAndRevokeTokens no navegó -> manual');
+            this.manualIdpLogout(idToken);
           }
         }, 1800);
         return;
@@ -89,7 +100,7 @@ export class AuthService {
       console.log('[Auth] logoff() -> IdP end_session');
       this.oidc.logoff();
       setTimeout(() => {
-        if (!window.location.href.includes('connect/logout') && !window.location.pathname.includes('/auth/logout-callback')) {
+        if (!window.location.href.includes('connect/logout') && !window.location.pathname.includes('/auth/logout-callback') && !window.location.href.includes('/Account/Logout')) {
           this.manualIdpLogout(idToken);
         }
       }, 1500);

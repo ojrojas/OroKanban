@@ -1,0 +1,98 @@
+- generic [ref=f6e4]:
+  - complementary [ref=f6e5]:
+    - generic [ref=f6e6]:
+      - generic [ref=f6e7]: OK
+      - generic [ref=f6e8]: OroKanban
+    - navigation [ref=f6e9]:
+      - link "Dashboard" [ref=f6e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f6e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f6e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f6e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f6e31] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f6e35] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f6e40]:
+      - button "Dark mode" [ref=f6e41] [cursor=pointer]
+      - button "Settings" [ref=f6e44] [cursor=pointer]
+      - button "Logout" [ref=f6e48] [cursor=pointer]
+  - generic [ref=f6e53]:
+    - banner [ref=f6e54]:
+      - textbox "Search" [ref=f6e60]:
+        - /placeholder: Search anything...
+      - generic [ref=f6e61]:
+        - button "Create" [ref=f6e62] [cursor=pointer]
+        - button "Dark" [ref=f6e63] [cursor=pointer]
+        - button "Notifications" [ref=f6e67] [cursor=pointer]
+        - img "avatar" [ref=f6e71] [cursor=pointer]
+    - main [ref=f6e72]:
+      - generic [ref=f6e73]:
+        - navigation "Breadcrumb" [ref=f6e75]:
+          - link "Home" [ref=f6e76] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f6e77]: /
+          - link "Work Items" [ref=f6e78] [cursor=pointer]:
+            - /url: /my-tasks
+          - generic [ref=f6e79]: /
+          - generic [ref=f6e90]: "Issue: Proceso matricula con errores"
+        - generic [ref=f6e81]:
+          - generic [ref=f6e82]:
+            - heading "Work Item Detail" [level=1] [ref=f6e83]
+            - paragraph [ref=f6e84]: Progress with explanation link
+          - generic [ref=f6e85]:
+            - button "← Back" [ref=f6e86] [cursor=pointer]
+            - button "Edit" [ref=f6e87] [cursor=pointer]
+        - generic [ref=f6e150]:
+          - generic [ref=f6e151]:
+            - 'heading "Issue: Proceso matricula con errores" [level=3] [ref=f6e152]'
+            - generic [ref=f6e153]: Backlog
+          - generic [ref=f6e154]:
+            - generic [ref=f6e155]: Issue
+            - generic [ref=f6e156]: Medium
+            - generic [ref=f6e157]: Medium
+            - generic [ref=f6e158]: Due 9/9/26
+            - generic [ref=f6e159]: Est 4h • Real 0h
+            - generic [ref=f6e160]: v2
+          - generic [ref=f6e161]: No description
+          - generic [ref=f6e162]:
+            - generic [ref=f6e163]: "Registrar tiempo real (horas laboradas):"
+            - 'spinbutton "Ej: 2.5" [ref=f6e164]'
+            - button "Guardar horas" [ref=f6e165] [cursor=pointer]
+            - generic [ref=f6e166]: Se compara vs estimado 4h para efectividad. El reloj del API acumula al cambiar estado (no manipulable).
+          - generic [ref=f6e167]:
+            - strong [ref=f6e168]: "Asignado a:"
+            - text: Operator1 Operator1Contributor01a06801-1345-7b00-a052-83b7be137228
+          - generic [ref=f6e169]:
+            - strong [ref=f6e170]: "Tags / Deliverables:"
+            - text: spec-pdf, demo • spec-pdf, demo
+          - generic [ref=f6e171]:
+            - heading "Deliverable entities" [level=4] [ref=f6e172]
+            - generic [ref=f6e173]: Spec.pdf — Document — Pending
+            - generic [ref=f6e174]: Demo — Document — Pending
+          - generic [ref=f6e176]:
+            - generic [ref=f6e177]: Progress 0%
+            - button "Why?" [ref=f6e178] [cursor=pointer]
+          - generic [ref=f6e179]:
+            - generic [ref=f6e180]:
+              - heading "Tareas hijas (0) — WorkItem → Tasks" [level=4] [ref=f6e181]
+              - button "+ Add Task" [ref=f6e182] [cursor=pointer]
+            - generic [ref=f6e183]: Este WorkItem aún no tiene Tasks hijas. Crea una con "Add Task".
+            - generic [ref=f6e184]: Cada Task hija también tiene su historial de cambios propio — entra a su detalle para verlo.
+          - generic [ref=f6e185]:
+            - 'heading "History — Issue: Proceso matri (3 cambios, incluye tags/deliverables granular)" [level=4] [ref=f6e186]'
+            - generic [ref=f6e187]:
+              - generic [ref=f6e188]: DeliverableEntity
+              - generic [ref=f6e189]: "→ {\"url\": null, \"type\": \"Document\", \"title\": \"Demo\"}"
+              - generic [ref=f6e190]: 9/3/26, 4:51 PM • Created deliverable entity
+            - generic [ref=f6e191]:
+              - generic [ref=f6e192]: DeliverableEntity
+              - generic [ref=f6e193]: "→ {\"url\": null, \"type\": \"Document\", \"title\": \"Spec.pdf\"}"
+              - generic [ref=f6e194]: 9/3/26, 4:51 PM • Created deliverable entity
+            - generic [ref=f6e195]:
+              - generic [ref=f6e196]: Created
+              - generic [ref=f6e197]: "→ {\"type\": \"Issue\", \"title\": \"Issue: Proceso matricula con errores\", \"parentId\": null}"
+              - generic [ref=f6e198]: 9/3/26, 4:51 PM • Operator1 Operator1 • WorkItem created

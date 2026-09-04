@@ -11,7 +11,7 @@ var postgresIdentity = builder.AddPostgres("postgres-identity")
  .WithDataVolume("orokanban-identity-data")
     .WithPgAdmin();
 
-var identityDb = postgres.AddDatabase("identitydb");
+var identityDb = postgresIdentity.AddDatabase("identitydb");
 var orokanbanDb = postgres.AddDatabase("orokanban");
 
 var rabbitmq = builder.AddRabbitMQ("rabbitmq");
@@ -65,7 +65,13 @@ IResourceBuilder<ContainerResource> identityServer = builder.AddContainer("ident
     .WithEnvironment("SEED_ADMIN_EMAIL", "admin@oroclash.local")
     // RabbitMQ opcional (para IntegrationEvents del identity, no para game-state)
     .WithEnvironment("EventBus__RabbitMQ__HostName", rabbitmq.Resource.Name)
-    .WithVolume("identity-dp-keys", "/app/data-protection-keys");
+    .WithVolume("identity-dp-keys", "/app/data-protection-keys")
+    .WithEnvironment("Branding__AppName", "OroKanban")
+    .WithEnvironment("Branding__FullName", "OroKanban")
+    .WithEnvironment("Branding__DisplayName", "Kanban Management")
+    // .WithEnvironment("Branding__LogoUrl", "https://huggingface.co/front/assets/huggingface_logo-noborder.svg")
+    // .WithEnvironment("Branding__FullLogoUrl", "null")
+    ;
 
 // Composition API — scaffolded via `dotnet new webapi` per FR-010
 // Uses path-based overload to avoid requiring a marker type from Api.

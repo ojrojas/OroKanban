@@ -1,0 +1,51 @@
+- generic [ref=f6e4]:
+  - complementary [ref=f6e5]:
+    - generic [ref=f6e6]:
+      - generic [ref=f6e7]: OK
+      - generic [ref=f6e8]: OroKanban
+    - navigation [ref=f6e9]:
+      - link "Dashboard" [ref=f6e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f6e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f6e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f6e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f6e31] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f6e35] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f6e40]:
+      - button "Dark mode" [ref=f6e41] [cursor=pointer]
+      - button "Settings" [ref=f6e44] [cursor=pointer]
+      - button "Logout" [ref=f6e48] [cursor=pointer]
+  - generic [ref=f6e53]:
+    - banner [ref=f6e54]:
+      - textbox "Search" [ref=f6e60]:
+        - /placeholder: Search anything...
+      - generic [ref=f6e61]:
+        - button "Create" [ref=f6e62] [cursor=pointer]
+        - button "Dark" [ref=f6e63] [cursor=pointer]
+        - button "Notifications" [ref=f6e67] [cursor=pointer]
+        - img "avatar" [ref=f6e71] [cursor=pointer]
+    - main [ref=f6e72]:
+      - generic [ref=f6e73]:
+        - generic [ref=f6e74]:
+          - heading "Dashboard" [level=1] [ref=f6e75]
+          - paragraph [ref=f6e76]: Overview — OroKanban workspace
+        - generic [ref=f6e86]:
+          - generic [ref=f6e87]:
+            - heading "Recent activity" [level=2] [ref=f6e88]
+            - generic [ref=f6e89]: Last 7 days
+          - generic [ref=f6e90]:
+            - generic [ref=f6e91]:
+              - generic [ref=f6e93]:
+                - generic [ref=f6e94]: Sprint 14 — Planning
+                - generic [ref=f6e95]: Updated 2h ago • by Alex
+              - generic [ref=f6e96]: Active
+            - generic [ref=f6e97]:
+              - generic [ref=f6e99]:
+                - generic [ref=f6e100]: Onboarding docs
+                - generic [ref=f6e101]: Comment added • by Mia
+              - generic [ref=f6e102]: Review

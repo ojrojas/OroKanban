@@ -30,8 +30,8 @@ public sealed class AddDependencyHandler(ProjectsDbContext db, IDependencyCycleD
     {
         var depType = DependencyType.FromName(cmd.Type);
 
-        var dependent = await db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id.Value == cmd.DependentId && w.TenantId == cmd.TenantId, ct);
-        var principal = await db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id.Value == cmd.PrincipalId && w.TenantId == cmd.TenantId, ct);
+        var dependent = await db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id == new Projects.Domain.Ids.WorkItemId(cmd.DependentId) && w.TenantId == cmd.TenantId, ct);
+        var principal = await db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id == new Projects.Domain.Ids.WorkItemId(cmd.PrincipalId) && w.TenantId == cmd.TenantId, ct);
         if (dependent is null || principal is null) return Error.NotFound("WorkItem.NotFound", "Work item not found");
         if (dependent.ProjectId != principal.ProjectId && depType.Id != DependencyType.RelatedTo.Id)
             return Error.Validation("Dependency.CrossProject", "Cross-project only allowed for RelatedTo");
@@ -42,7 +42,7 @@ public sealed class AddDependencyHandler(ProjectsDbContext db, IDependencyCycleD
         // load existing non-RelatedTo edges for project
         var existingEdges = await db.WorkItemDependencies.AsNoTracking()
             .Where(d => d.TenantId == cmd.TenantId)
-            .Where(d => db.WorkItems.Any(w => w.Id.Value == d.DependentId && w.ProjectId == dependent.ProjectId))
+            .Where(d => db.WorkItems.Any(w => w.Id == new Projects.Domain.Ids.WorkItemId(d.DependentId) && w.ProjectId == dependent.ProjectId))
             .Select(d => new { d.DependentId, d.PrincipalId, d.TypeId })
             .ToListAsync(ct);
 
@@ -64,7 +64,7 @@ public sealed class RemoveDependencyHandler(ProjectsDbContext db) : ICommandHand
 {
     public async Task<Result> HandleAsync(RemoveDependencyCommand cmd, CancellationToken ct)
     {
-        var dep = await db.WorkItemDependencies.FirstOrDefaultAsync(d => d.Id.Value == cmd.DependencyId && d.TenantId == cmd.TenantId, ct);
+        var dep = await db.WorkItemDependencies.FirstOrDefaultAsync(d => d.Id == new Projects.Domain.Ids.WorkItemDependencyId(cmd.DependencyId) && d.TenantId == cmd.TenantId, ct);
         if (dep is null) return Error.NotFound("Dependency.NotFound", "Dependency not found");
         db.WorkItemDependencies.Remove(dep);
         await db.SaveChangesAsync(ct);

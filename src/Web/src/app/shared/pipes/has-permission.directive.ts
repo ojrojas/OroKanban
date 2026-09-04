@@ -12,8 +12,24 @@ export class HasPermissionDirective {
   @Input('hasPermissionRoles') rolesInput: string[] | null = null;
 
   ngOnInit() {
-    const payload = this.oidc.getPayloadFromIdToken() as any;
-    const roles: string[] = payload?.role ? (Array.isArray(payload.role) ? payload.role : [payload.role]) : [];
+    let payload: any = null;
+    try {
+      const raw = sessionStorage.getItem('0-orokanban-web');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        payload = parsed?.userData ?? parsed?.authnResult?.userData ?? null;
+        if (!payload && parsed?.authnResult?.id_token) {
+          const parts = parsed.authnResult.id_token.split('.');
+          if (parts.length >= 2) payload = JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+        }
+      }
+      // also try direct userData storage key
+      if (!payload) {
+        try { const alt = sessionStorage.getItem('userData'); if (alt) payload = JSON.parse(alt); } catch {}
+      }
+    } catch {}
+    const rawRoles: any[] = payload?.role ? (Array.isArray(payload.role) ? payload.role : [payload.role]) : (payload?.roles ? (Array.isArray(payload.roles)? payload.roles : [payload.roles]) : []);
+    const roles: string[] = rawRoles.map((r:any)=> typeof r === 'string' ? r : r?.value ?? r?.Value ?? r?.name ?? r?.Name ?? '').filter(Boolean);
     const required = this.permission || (this.rolesInput ? this.rolesInput.join(',') : null);
     let visible = true;
     if (this.permission) {

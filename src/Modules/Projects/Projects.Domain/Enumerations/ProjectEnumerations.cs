@@ -8,6 +8,8 @@ public sealed class WorkItemType(int id, string name) : Enumeration<WorkItemType
     public static readonly WorkItemType Feature = new(2, "Feature");
     public static readonly WorkItemType Task = new(3, "Task");
     public static readonly WorkItemType Subtask = new(4, "Subtask");
+    public static readonly WorkItemType Plan = new(5, "Plan");
+    public static readonly WorkItemType Issue = new(6, "Issue");
 }
 
 public sealed class WorkItemStatus(int id, string name) : Enumeration<WorkItemStatus>(id, name)
@@ -68,4 +70,21 @@ public sealed class ProjectRole(int id, string name) : Enumeration<ProjectRole>(
     public static readonly ProjectRole Manager = new(2, "Manager");
     public static readonly ProjectRole Contributor = new(3, "Contributor");
     public static readonly ProjectRole Reviewer = new(4, "Reviewer");
+}
+
+public sealed class DeliverableType(int id, string name) : Enumeration<DeliverableType>(id, name)
+{
+    public static readonly DeliverableType Document = new(1, "Document");
+    public static readonly DeliverableType Artifact = new(2, "Artifact");
+    public static readonly DeliverableType Review = new(3, "Review");
+    public static readonly DeliverableType QA = new(4, "QA");
+    public static readonly DeliverableType Deployment = new(5, "Deployment");
+    public static readonly DeliverableType Evidence = new(6, "Evidence");
+}
+
+public sealed class DeliverableStatus(int id, string name) : Enumeration<DeliverableStatus>(id, name)
+{
+    public static readonly DeliverableStatus Pending = new(1, "Pending");
+    public static readonly DeliverableStatus Approved = new(2, "Approved");
+    public static readonly DeliverableStatus Rejected = new(3, "Rejected");
 }

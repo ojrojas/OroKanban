@@ -2,6 +2,9 @@ import { computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { withEntities, setAllEntities } from '@ngrx/signals/entities';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { pipe, switchMap } from 'rxjs';
+import { tapResponse } from '@ngrx/operators';
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../shared/state/with-request-status';
 
 export interface Notification { id: string; title: string; readAt: string | null; }
@@ -18,25 +21,35 @@ export const NotificationsStore = signalStore(
     const http = inject(HttpClient);
     return {
       setFilter(filter: string) { patchState(store, { filter }); },
-      async load() {
-        patchState(store, setPending());
-        try {
-          const res = await http.get<{ items: Notification[] }>('/api/notifications?page=1&pageSize=20').toPromise() as any;
-          patchState(store, setAllEntities(res?.items ?? res ?? []), setFulfilled());
-        } catch (e: any) {
-          patchState(store, setError(e?.message ?? 'load failed'));
-        }
-      },
-      async markRead(id: string) {
-        patchState(store, setPending());
-        try {
-          await http.post(`/api/notifications/${id}/read`, {}).toPromise();
-          const updated = store.entities().map(n => n.id === id ? { ...n, readAt: new Date().toISOString() } : n);
-          patchState(store, setAllEntities(updated as any), setFulfilled());
-        } catch (e: any) {
-          patchState(store, setError(e?.message ?? 'markRead failed'));
-        }
-      }
+      load: rxMethod<void>(
+        pipe(
+          switchMap(() => {
+            patchState(store, setPending());
+            return http.get<{ items: Notification[] }>('/api/notifications?page=1&pageSize=20').pipe(
+              tapResponse({
+                next: (res: any) => patchState(store, setAllEntities(res?.items ?? res ?? []), setFulfilled()),
+                error: (e: any) => patchState(store, setError(e?.error?.detail ?? e?.message ?? 'load failed'))
+              })
+            );
+          })
+        )
+      ),
+      markRead: rxMethod<string>(
+        pipe(
+          switchMap((id) => {
+            patchState(store, setPending());
+            return http.post(`/api/notifications/${id}/read`, {}).pipe(
+              tapResponse({
+                next: () => {
+                  const updated = store.entities().map(n => n.id === id ? { ...n, readAt: new Date().toISOString() } : n);
+                  patchState(store, setAllEntities(updated as any), setFulfilled());
+                },
+                error: (e: any) => patchState(store, setError(e?.error?.detail ?? e?.message ?? 'markRead failed'))
+              })
+            );
+          })
+        )
+      )
     };
   })
 );

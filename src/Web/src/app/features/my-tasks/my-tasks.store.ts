@@ -16,8 +16,18 @@ export const MyTasksStore = signalStore(
   withComputed(({ items, filter, q }) => ({
     filtered: computed(() => {
       let v = items();
-      if (filter() !== 'all') v = v.filter(i => i.status === filter());
-      if (q()) v = v.filter(i => i.title.toLowerCase().includes(q().toLowerCase()));
+      const f = filter();
+      if (f !== 'all') {
+        const norm = (s: string) => s.toLowerCase().replace(/\s+/g, '');
+        const nf = norm(f);
+        v = v.filter(i => {
+          const s = norm(i.status || '');
+          // Handle InProgress vs In Progress, Blocked exact, and isOverdue derived
+          if (nf === 'overdue') return (i as any).isOverdue || (i as any).dueDate && new Date((i as any).dueDate) < new Date() && s !== 'completed';
+          return s === nf;
+        });
+      }
+      if (q()) v = v.filter(i => i.title.toLowerCase().includes(q().toLowerCase()) || (i.projectId||'').toLowerCase().includes(q().toLowerCase()));
       return v;
     }),
     count: computed(() => items().length)

@@ -14,5 +14,7 @@ public sealed record WorkItemAssignedDomainEvent(Guid WorkItemId, Guid AssigneeI
 public sealed record WorkItemReassignedDomainEvent(Guid WorkItemId, Guid OldAssigneeId, Guid NewAssigneeId) : DomainEvent;
 public sealed record WorkItemReparentedDomainEvent(Guid WorkItemId, Guid? OldParentId, Guid? NewParentId) : DomainEvent;
 public sealed record WorkItemCompletedDomainEvent(Guid WorkItemId, Guid ProjectId) : DomainEvent;
+public sealed record WorkItemReopenedDomainEvent(Guid WorkItemId, Guid ProjectId, int FromId, int ToId, Guid ActorId) : DomainEvent;
+public sealed record WorkItemActualTimeRecordedDomainEvent(Guid WorkItemId, Guid ProjectId, decimal ActualHours, Guid ActorId) : DomainEvent;
 public sealed record DependencyAddedDomainEvent(Guid DependencyId, Guid DependentId, Guid PrincipalId, int TypeId) : DomainEvent;
 public sealed record DependencyRemovedDomainEvent(Guid DependencyId) : DomainEvent;

@@ -89,7 +89,7 @@ import { DashboardStore } from './dashboard.store';
     .pill-tier1 { background: var(--flat-bg); border: 1px solid var(--border); padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; color: var(--text-secondary); }
     .row-flat { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border); }
     .row-flat:first-child { border-top: none; }
-    .thumb { width: 36px; height: 36px; border-radius: 12px; background: #ECECEC; flex-shrink: 0; }
+    .thumb { width: 36px; height: 36px; border-radius: 12px; background: var(--border); flex-shrink: 0; }
     .button.secondary { background: var(--flat-bg); border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px; font-size: 12px; cursor: pointer; }
   `]
 })

@@ -1,0 +1,51 @@
+- generic [ref=f4e4]:
+  - complementary [ref=f4e5]:
+    - generic [ref=f4e6]:
+      - generic [ref=f4e7]: OK
+      - generic [ref=f4e8]: OroKanban
+    - navigation [ref=f4e9]:
+      - link "Dashboard" [ref=f4e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f4e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f4e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f4e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f4e31] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f4e35] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f4e40]:
+      - button "Dark mode" [ref=f4e41] [cursor=pointer]
+      - button "Settings" [ref=f4e44] [cursor=pointer]
+      - button "Logout" [ref=f4e48] [cursor=pointer]
+  - generic [ref=f4e53]:
+    - banner [ref=f4e54]:
+      - textbox "Search" [ref=f4e60]:
+        - /placeholder: Search anything...
+      - generic [ref=f4e61]:
+        - button "Create" [ref=f4e62] [cursor=pointer]
+        - button "Dark" [ref=f4e63] [cursor=pointer]
+        - button "Notifications" [ref=f4e67] [cursor=pointer]
+        - img "avatar" [ref=f4e71] [cursor=pointer]
+    - main [ref=f4e72]:
+      - generic [ref=f4e182]:
+        - navigation "Breadcrumb" [ref=f4e184]:
+          - link "Home" [ref=f4e185] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f4e186]: /
+          - link "Work Items" [ref=f4e187] [cursor=pointer]:
+            - /url: /my-tasks
+          - generic [ref=f4e188]: /
+          - generic [ref=f4e189]: Detail
+        - generic [ref=f4e190]:
+          - generic [ref=f4e191]:
+            - heading "Work Item Detail" [level=1] [ref=f4e192]
+            - paragraph [ref=f4e193]: Progress with explanation link
+          - generic [ref=f4e194]:
+            - button "← Back" [ref=f4e195] [cursor=pointer]
+            - button "Edit" [ref=f4e196] [cursor=pointer]
+        - generic [ref=f4e197]:
+          - generic [ref=f4e198]: load failed
+          - button "Retry" [ref=f4e199] [cursor=pointer]

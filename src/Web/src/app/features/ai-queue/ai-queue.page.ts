@@ -28,7 +28,7 @@ import { AiQueueStore } from './ai-queue.store';
       </div>
     }
   `,
-  styles: [`.badge{background:var(--flat-bg); border:1px solid var(--border); padding:4px 8px; border-radius:999px; font-size:11px;} .row{display:flex; gap:12px; padding:12px 24px; border-top:1px solid var(--border); align-items:center;} .thumb{width:36px; height:36px; border-radius:12px; background:var(--border);} .skeleton{height:14px; background:var(--border); border-radius:6px;} .btn-primary{background:var(--black); color:#fff; border:none; border-radius:999px; padding:6px 12px; font-size:12px; cursor:pointer;} .btn-secondary{background:var(--flat-bg); border:1px solid var(--border); border-radius:999px; padding:6px 12px; cursor:pointer;}`]
+  styles: [`.badge{background:var(--flat-bg); border:1px solid var(--border); padding:4px 8px; border-radius:999px; font-size:11px;} .row{display:flex; gap:12px; padding:12px 24px; border-top:1px solid var(--border); align-items:center;} .thumb{width:36px; height:36px; border-radius:12px; background:var(--border);} .skeleton{height:14px; background:var(--border); border-radius:6px;} .btn-primary{background:var(--black); color:var(--on-black); border:none; border-radius:999px; padding:6px 12px; font-size:12px; cursor:pointer;} .btn-secondary{background:var(--flat-bg); border:1px solid var(--border); border-radius:999px; padding:6px 12px; cursor:pointer;}`]
 })
 export class AiQueuePage implements OnInit {
   store = inject(AiQueueStore);

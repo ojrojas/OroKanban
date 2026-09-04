@@ -6,13 +6,26 @@ import { pipe, switchMap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../shared/state/with-request-status';
 
-interface TeamTasksState { items: any[]; filter: string; }
+interface TeamTasksState { items: any[]; filter: string; q: string; }
 
 export const TeamTasksStore = signalStore(
-  withState<TeamTasksState>({ items: [], filter: 'all' }),
+  withState<TeamTasksState>({ items: [], filter: 'all', q: '' }),
   withRequestStatus(),
-  withComputed(({ items, filter }) => ({
-    filtered: computed(() => filter()==='all' ? items() : items().filter((i:any)=> i.status===filter())),
+  withComputed(({ items, filter, q }) => ({
+    filtered: computed(() => {
+      let v = items();
+      const f = filter();
+      if (f !== 'all') {
+        const norm = (s: string) => s.toLowerCase().replace(/\s+/g,'');
+        if (norm(f) === 'overdue') {
+          v = v.filter((i:any)=> i.isOverdue || (i.dueDate && new Date(i.dueDate) < new Date() && (i.status||'').toLowerCase().replace(/\s+/g,'') !== 'completed'));
+        } else {
+          v = v.filter((i:any)=> (i.status||'').toLowerCase().replace(/\s+/g,'') === norm(f));
+        }
+      }
+      if (q()) v = v.filter((i:any)=> (i.title||i.name||'').toLowerCase().includes(q().toLowerCase()));
+      return v;
+    }),
     count: computed(()=> items().length)
   })),
   withMethods((store)=>{
@@ -28,7 +41,8 @@ export const TeamTasksStore = signalStore(
           error: (e:any)=> patchState(store, setError(e?.error?.detail ?? 'load failed'))
         }));
       }))),
-      setFilter: (f:string)=> patchState(store, { filter:f })
+      setFilter: (f:string)=> patchState(store, { filter:f }),
+      setQ: (q:string)=> patchState(store, { q })
     };
   })
 );

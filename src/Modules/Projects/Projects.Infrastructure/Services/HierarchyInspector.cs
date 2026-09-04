@@ -17,12 +17,12 @@ public sealed class HierarchyInspector : IHierarchyInspector
         var currentId = workItemId;
         for (int i = 0; i < 100; i++)
         {
-            var parent = await _db.WorkItems.Where(w => w.Id.Value == currentId).Select(w => w.ParentId).FirstOrDefaultAsync(ct);
+            var parent = await _db.WorkItems.Where(w => w.Id == new Projects.Domain.Ids.WorkItemId(currentId)).Select(w => w.ParentId).FirstOrDefaultAsync(ct);
             if (parent is null) break;
             // ParentId is WorkItemId? stored as Guid? in WorkItem.ParentId (nullable Guid?). Need conversion
             // WorkItem ParentId is Guid? but mapping is via Id.Value? For simplicity we store Guid? via ParentId property which EF maps as Guid? column.
             // So query above returns object? Let's handle via workaround: query entity.
-            var entity = await _db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id.Value == currentId, ct);
+            var entity = await _db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id == new Projects.Domain.Ids.WorkItemId(currentId), ct);
             if (entity?.ParentId is null) break;
             var pid = entity.ParentId.Value;
             if (!ancestors.Add(pid)) break;
@@ -54,7 +54,7 @@ public sealed class HierarchyInspector : IHierarchyInspector
     public async Task<Guid?> GetRootEpicIdAsync(Guid workItemId, CancellationToken ct)
     {
         // Walk ancestors until root, find Epic (TypeId==1)
-        var current = await _db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id.Value == workItemId, ct);
+        var current = await _db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id == new Projects.Domain.Ids.WorkItemId(workItemId), ct);
         if (current is null) return null;
         Guid? epic = null;
         // if self is epic, remember
@@ -62,7 +62,7 @@ public sealed class HierarchyInspector : IHierarchyInspector
         for (int i = 0; i < 100; i++)
         {
             if (current?.ParentId is null) break;
-            var parent = await _db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id.Value == current.ParentId.Value, ct);
+            var parent = await _db.WorkItems.AsNoTracking().FirstOrDefaultAsync(w => w.Id == new Projects.Domain.Ids.WorkItemId(current.ParentId.Value), ct);
             if (parent is null) break;
             if (parent.TypeId == 1) epic = parent.Id.Value;
             current = parent;

@@ -1,0 +1,51 @@
+- generic [ref=f28e4]:
+  - complementary [ref=f28e5]:
+    - generic [ref=f28e6]:
+      - generic [ref=f28e7]: OK
+      - generic [ref=f28e8]: OroKanban
+    - navigation [ref=f28e9]:
+      - link "Dashboard" [ref=f28e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f28e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f28e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f28e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Team Tasks" [ref=f28e31] [cursor=pointer]:
+        - /url: /team-tasks
+      - link "Planning" [ref=f28e38] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f28e42] [cursor=pointer]:
+        - /url: /documents
+      - link "Organization" [ref=f28e47] [cursor=pointer]:
+        - /url: /organization
+      - link "AI Queue" [ref=f28e52] [cursor=pointer]:
+        - /url: /ai-queue
+      - link "Audit" [ref=f28e59] [cursor=pointer]:
+        - /url: /audit
+      - link "Administration" [ref=f28e64] [cursor=pointer]:
+        - /url: /admin
+    - generic [ref=f28e69]:
+      - button "Dark mode" [ref=f28e70] [cursor=pointer]
+      - button "Settings" [ref=f28e73] [cursor=pointer]
+      - button "Logout" [ref=f28e77] [cursor=pointer]
+  - generic [ref=f28e82]:
+    - banner [ref=f28e83]:
+      - textbox "Search" [ref=f28e89]:
+        - /placeholder: Search anything...
+      - generic [ref=f28e90]:
+        - button "Create" [ref=f28e91] [cursor=pointer]
+        - button "Dark" [ref=f28e92] [cursor=pointer]
+        - button "Notifications" [ref=f28e96] [cursor=pointer]
+        - img "avatar" [ref=f28e100] [cursor=pointer]
+    - main [ref=f28e101]:
+      - generic [ref=f28e102]:
+        - navigation "Breadcrumb" [ref=f28e104]:
+          - link "Home" [ref=f28e105] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f28e106]: /
+          - generic [ref=f28e107]: Planning
+        - generic [ref=f28e108]:
+          - heading "Planning" [level=1] [ref=f28e109]
+          - paragraph [ref=f28e110]: Milestones and planning horizons

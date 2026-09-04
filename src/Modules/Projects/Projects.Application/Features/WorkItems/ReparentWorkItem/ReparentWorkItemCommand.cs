@@ -25,13 +25,13 @@ public sealed class ReparentWorkItemHandler(ProjectsDbContext db, IHierarchyInsp
 {
     public async Task<Result<WorkItemDetailResponse>> HandleAsync(ReparentWorkItemCommand cmd, CancellationToken ct)
     {
-        var w = await db.WorkItems.FirstOrDefaultAsync(x => x.Id.Value == cmd.WorkItemId && x.TenantId == cmd.TenantId, ct);
+        var w = await db.WorkItems.FirstOrDefaultAsync(x => x.Id == new Projects.Domain.Ids.WorkItemId(cmd.WorkItemId) && x.TenantId == cmd.TenantId, ct);
         if (w is null) return Error.NotFound("WorkItem.NotFound", "Work item not found");
         if (w.Version != cmd.ExpectedVersion) return Error.Conflict("WorkItem.Concurrency", "Concurrency conflict");
 
         if (cmd.NewParentId.HasValue)
         {
-            var parent = await db.WorkItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id.Value == cmd.NewParentId.Value, ct);
+            var parent = await db.WorkItems.AsNoTracking().FirstOrDefaultAsync(x => x.Id == new Projects.Domain.Ids.WorkItemId(cmd.NewParentId.Value), ct);
             if (parent is null) return Error.NotFound("WorkItem.ParentNotFound", "Parent not found");
             if (parent.ProjectId != w.ProjectId) return Error.Validation("WorkItem.CrossProjectParent", "Parent and child must be in same project");
             var descendants = await inspector.GetDescendantIdsAsync(cmd.WorkItemId, ct);
@@ -48,7 +48,7 @@ public sealed class ReparentWorkItemHandler(ProjectsDbContext db, IHierarchyInsp
             Projects.Domain.Enumerations.WorkItemStatus.FromId(w.StatusId).Name,
             Projects.Domain.Enumerations.WorkItemPriority.FromId(w.PriorityId).Name,
             Projects.Domain.Enumerations.Criticality.FromId(w.CriticalityId).Name,
-            w.OwnerId, w.ResponsibleId, w.ReviewerId, w.DueDate, w.ProgressPercent, w.Tags, w.Version, w.UpdatedAt, w.TenantId, w.IsOverdue(DateTime.UtcNow), []);
+            w.OwnerId, w.ResponsibleId, w.ReviewerId, w.DueDate, w.ProgressPercent, w.Tags, w.Deliverables, w.Observations, w.Version, w.UpdatedAt, w.TenantId, w.IsOverdue(DateTime.UtcNow), [] , w.EstimatedHours, w.ActualHours, w.StartedAt, w.ReopenedCount, false);
         return Result.Success(dto);
     }
 }

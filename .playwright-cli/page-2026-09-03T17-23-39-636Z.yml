@@ -1,0 +1,90 @@
+- generic [ref=f25e4]:
+  - complementary [ref=f25e5]:
+    - generic [ref=f25e6]:
+      - generic [ref=f25e7]: OK
+      - generic [ref=f25e8]: OroKanban
+    - navigation [ref=f25e9]:
+      - link "Dashboard" [ref=f25e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f25e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f25e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f25e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Team Tasks" [ref=f25e31] [cursor=pointer]:
+        - /url: /team-tasks
+      - link "Planning" [ref=f25e38] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f25e42] [cursor=pointer]:
+        - /url: /documents
+      - link "Organization" [ref=f25e47] [cursor=pointer]:
+        - /url: /organization
+      - link "AI Queue" [ref=f25e52] [cursor=pointer]:
+        - /url: /ai-queue
+      - link "Audit" [ref=f25e59] [cursor=pointer]:
+        - /url: /audit
+      - link "Administration" [ref=f25e64] [cursor=pointer]:
+        - /url: /admin
+    - generic [ref=f25e69]:
+      - button "Dark mode" [ref=f25e70] [cursor=pointer]
+      - button "Settings" [ref=f25e73] [cursor=pointer]
+      - button "Logout" [ref=f25e77] [cursor=pointer]
+  - generic [ref=f25e82]:
+    - banner [ref=f25e83]:
+      - textbox "Search" [ref=f25e89]:
+        - /placeholder: Search anything...
+      - generic [ref=f25e90]:
+        - button "Create" [ref=f25e91] [cursor=pointer]
+        - button "Dark" [ref=f25e92] [cursor=pointer]
+        - button "Notifications" [ref=f25e96] [cursor=pointer]
+        - img "avatar" [ref=f25e100] [cursor=pointer]
+    - main [ref=f25e101]:
+      - generic [ref=f25e102]:
+        - navigation "Breadcrumb" [ref=f25e104]:
+          - link "Home" [ref=f25e105] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f25e106]: /
+          - generic [ref=f25e107]: Kanban
+        - generic [ref=f25e108]:
+          - generic [ref=f25e109]:
+            - heading "Kanban" [level=1] [ref=f25e110]
+            - paragraph [ref=f25e111]: Backlog → Planned → In Progress → Blocked → In Review → Completed
+          - generic [ref=f25e112]:
+            - combobox [ref=f25e113]:
+              - option "Select project"
+              - option "E2E Test Project EDITED"
+              - option "project 002225"
+              - option "Project 001" [selected]
+            - button "Refresh" [ref=f25e114] [cursor=pointer]
+        - generic [ref=f25e117]:
+          - generic [ref=f25e118]:
+            - heading "Backlog 0" [level=4] [ref=f25e119]:
+              - text: Backlog
+              - generic [ref=f25e120]: "0"
+            - generic [ref=f25e121]: Drop here
+          - generic [ref=f25e123]:
+            - heading "Planned 0" [level=4] [ref=f25e124]:
+              - text: Planned
+              - generic [ref=f25e125]: "0"
+            - generic [ref=f25e126]: Drop here
+          - generic [ref=f25e128]:
+            - heading "InProgress 0" [level=4] [ref=f25e129]:
+              - text: InProgress
+              - generic [ref=f25e130]: "0"
+            - generic [ref=f25e131]: Drop here
+          - generic [ref=f25e133]:
+            - heading "Blocked 0" [level=4] [ref=f25e134]:
+              - text: Blocked
+              - generic [ref=f25e135]: "0"
+            - generic [ref=f25e136]: Drop here
+          - generic [ref=f25e138]:
+            - heading "InReview 0" [level=4] [ref=f25e139]:
+              - text: InReview
+              - generic [ref=f25e140]: "0"
+            - generic [ref=f25e141]: Drop here
+          - generic [ref=f25e143]:
+            - heading "Completed 0" [level=4] [ref=f25e144]:
+              - text: Completed
+              - generic [ref=f25e145]: "0"
+            - generic [ref=f25e146]: Drop here

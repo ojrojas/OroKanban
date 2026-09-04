@@ -1,0 +1,51 @@
+- generic [ref=f12e4]:
+  - complementary [ref=f12e5]:
+    - generic [ref=f12e6]:
+      - generic [ref=f12e7]: OK
+      - generic [ref=f12e8]: OroKanban
+    - navigation [ref=f12e9]:
+      - link "Dashboard" [ref=f12e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f12e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f12e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f12e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f12e31] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f12e35] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f12e40]:
+      - button "Dark mode" [ref=f12e41] [cursor=pointer]
+      - button "Settings" [ref=f12e44] [cursor=pointer]
+      - button "Logout" [ref=f12e48] [cursor=pointer]
+  - generic [ref=f12e53]:
+    - banner [ref=f12e54]:
+      - textbox "Search" [ref=f12e60]:
+        - /placeholder: Search anything...
+      - generic [ref=f12e61]:
+        - button "Create" [ref=f12e62] [cursor=pointer]
+        - button "Dark" [ref=f12e63] [cursor=pointer]
+        - button "Notifications" [ref=f12e67] [cursor=pointer]
+        - img "avatar" [ref=f12e71] [cursor=pointer]
+    - main [ref=f12e72]:
+      - generic [ref=f12e73]:
+        - generic [ref=f12e74]:
+          - heading "Dashboard" [level=1] [ref=f12e75]
+          - paragraph [ref=f12e76]: Overview — OroKanban workspace
+        - generic [ref=f12e86]:
+          - generic [ref=f12e87]:
+            - heading "Recent activity" [level=2] [ref=f12e88]
+            - generic [ref=f12e89]: Last 7 days
+          - generic [ref=f12e90]:
+            - generic [ref=f12e91]:
+              - generic [ref=f12e93]:
+                - generic [ref=f12e94]: Sprint 14 — Planning
+                - generic [ref=f12e95]: Updated 2h ago • by Alex
+              - generic [ref=f12e96]: Active
+            - generic [ref=f12e97]:
+              - generic [ref=f12e99]:
+                - generic [ref=f12e100]: Onboarding docs
+                - generic [ref=f12e101]: Comment added • by Mia
+              - generic [ref=f12e102]: Review

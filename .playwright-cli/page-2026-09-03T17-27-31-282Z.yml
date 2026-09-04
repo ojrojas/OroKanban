@@ -1,0 +1,137 @@
+- generic [ref=f34e7]:
+  - complementary [ref=f34e8]:
+    - generic [ref=f34e9]:
+      - generic [ref=f34e10]: OK
+      - generic [ref=f34e11]: OroKanban
+    - navigation [ref=f34e12]:
+      - link "Dashboard" [ref=f34e13] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f34e20] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f34e24] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f34e29] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Team Tasks" [ref=f34e34] [cursor=pointer]:
+        - /url: /team-tasks
+      - link "Planning" [ref=f34e41] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f34e45] [cursor=pointer]:
+        - /url: /documents
+      - link "Organization" [ref=f34e50] [cursor=pointer]:
+        - /url: /organization
+      - link "AI Queue" [ref=f34e55] [cursor=pointer]:
+        - /url: /ai-queue
+      - link "Audit" [ref=f34e62] [cursor=pointer]:
+        - /url: /audit
+      - link "Administration" [ref=f34e67] [cursor=pointer]:
+        - /url: /admin
+    - generic [ref=f34e72]:
+      - button "Dark mode" [ref=f34e73] [cursor=pointer]
+      - button "Settings" [ref=f34e76] [cursor=pointer]
+      - button "Logout" [active] [ref=f34e80] [cursor=pointer]
+  - generic [ref=f34e85]:
+    - banner [ref=f34e86]:
+      - textbox "Search" [ref=f34e92]:
+        - /placeholder: Search anything...
+      - generic [ref=f34e93]:
+        - button "Create" [ref=f34e94] [cursor=pointer]
+        - button "Dark" [ref=f34e95] [cursor=pointer]
+        - button "Notifications" [ref=f34e99] [cursor=pointer]
+        - img "avatar" [ref=f34e103] [cursor=pointer]
+    - main [ref=f34e104]:
+      - generic [ref=f34e105]:
+        - generic [ref=f34e106]:
+          - heading "Dashboard" [level=1] [ref=f34e107]
+          - paragraph [ref=f34e108]: Overview — OroKanban workspace
+        - generic [ref=f34e109]:
+          - generic [ref=f34e110]:
+            - generic [ref=f34e111]:
+              - generic [ref=f34e112]: My Projects
+              - generic [ref=f34e113]: +2.1%
+            - generic [ref=f34e114]: "3"
+            - link "View →" [ref=f34e115] [cursor=pointer]:
+              - /url: /projects
+          - generic [ref=f34e116]:
+            - generic [ref=f34e117]:
+              - generic [ref=f34e118]: My Team
+              - generic [ref=f34e119]: "%"
+            - generic [ref=f34e120]: "5"
+            - link "View →" [ref=f34e121] [cursor=pointer]:
+              - /url: /team-tasks
+          - generic [ref=f34e122]:
+            - generic [ref=f34e123]:
+              - generic [ref=f34e124]: My Sub-Managers
+              - generic [ref=f34e125]: "%"
+            - generic [ref=f34e126]: "1"
+            - link "View →" [ref=f34e127] [cursor=pointer]:
+              - /url: /organization
+          - generic [ref=f34e128]:
+            - generic [ref=f34e129]:
+              - generic [ref=f34e130]: Overdue
+              - generic [ref=f34e131]: "-1.2%"
+            - generic [ref=f34e132]: "2"
+            - link "View →" [ref=f34e133] [cursor=pointer]:
+              - /url: /kanban%3Ffilter%3Doverdue
+          - generic [ref=f34e134]:
+            - generic [ref=f34e135]:
+              - generic [ref=f34e136]: Blocked
+              - generic [ref=f34e137]: "%"
+            - generic [ref=f34e138]: "1"
+            - link "View →" [ref=f34e139] [cursor=pointer]:
+              - /url: /kanban%3Ffilter%3Dblocked
+          - generic [ref=f34e140]:
+            - generic [ref=f34e141]:
+              - generic [ref=f34e142]: Critical
+              - generic [ref=f34e143]: "%"
+            - generic [ref=f34e144]: "1"
+            - link "View →" [ref=f34e145] [cursor=pointer]:
+              - /url: /kanban%3Ffilter%3Dcritical
+          - generic [ref=f34e146]:
+            - generic [ref=f34e147]:
+              - generic [ref=f34e148]: At Risk
+              - generic [ref=f34e149]: "%"
+            - generic [ref=f34e150]: "0"
+            - link "View →" [ref=f34e151] [cursor=pointer]:
+              - /url: /kanban%3Ffilter%3DatRisk
+          - generic [ref=f34e152]:
+            - generic [ref=f34e153]:
+              - generic [ref=f34e154]: Completed
+              - generic [ref=f34e155]: +12%
+            - generic [ref=f34e156]: "8"
+            - link "View →" [ref=f34e157] [cursor=pointer]:
+              - /url: /kanban%3Ffilter%3Dcompleted
+          - generic [ref=f34e158]:
+            - generic [ref=f34e159]:
+              - generic [ref=f34e160]: AI Reviews pending
+              - generic [ref=f34e161]: "%"
+            - generic [ref=f34e162]: "2"
+            - link "View →" [ref=f34e163] [cursor=pointer]:
+              - /url: /ai-queue
+          - generic [ref=f34e164]:
+            - generic [ref=f34e165]:
+              - generic [ref=f34e166]: Document Reviews
+              - generic [ref=f34e167]: "%"
+            - generic [ref=f34e168]: "1"
+            - link "View →" [ref=f34e169] [cursor=pointer]:
+              - /url: /documents
+        - generic [ref=f34e170]:
+          - generic [ref=f34e171]:
+            - heading "Subtree summary" [level=2] [ref=f34e172]
+            - generic [ref=f34e173]: Total 3 projects
+          - generic [ref=f34e174]: Overdue 2 • Blocked 1
+        - generic [ref=f34e175]:
+          - generic [ref=f34e176]:
+            - heading "Recent activity" [level=2] [ref=f34e177]
+            - generic [ref=f34e178]: Last 7 days
+          - generic [ref=f34e179]:
+            - generic [ref=f34e180]:
+              - generic [ref=f34e182]:
+                - generic [ref=f34e183]: Sprint 14 — Planning
+                - generic [ref=f34e184]: Updated 2h ago • by Alex
+              - generic [ref=f34e185]: Active
+            - generic [ref=f34e186]:
+              - generic [ref=f34e188]:
+                - generic [ref=f34e189]: Onboarding docs
+                - generic [ref=f34e190]: Comment added • by Mia
+              - generic [ref=f34e191]: Review

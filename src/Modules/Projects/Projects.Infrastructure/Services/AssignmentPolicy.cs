@@ -50,7 +50,7 @@ public sealed class ProjectMembershipService : IProjectMembership
 
     public async Task<bool> IsMemberAsync(Guid userId, Guid projectId, CancellationToken ct) =>
         await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.AnyAsync(
-            _db.Projects.Where(p => p.Id.Value == projectId).SelectMany(p => p.Members).Where(m => m.UserId == userId), ct);
+            _db.Projects.Where(p => p.Id == new Projects.Domain.Ids.ProjectId(projectId)).SelectMany(p => p.Members).Where(m => m.UserId == userId), ct);
 
     public async Task<IReadOnlySet<Guid>> GetProjectIdsForUserAsync(Guid userId, CancellationToken ct)
     {

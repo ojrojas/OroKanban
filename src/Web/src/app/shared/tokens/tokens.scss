@@ -12,6 +12,7 @@
   --red-bg: #FCE8E8;
   --red-text: #C0392B;
   --black: #111111;
+  --on-black: #FFFFFF;
   --radius-card: 24px;
   --radius-pill: 14px;
   --radius-button: 999px;
@@ -27,17 +28,23 @@
   --nav-width: 250px;
 }
 
-/* Dark theme — minimal inversion, keeps Tier logic */
+/* Dark theme — minimal inversion, keeps Tier logic (WCAG AA) */
 :root[data-theme='dark'] {
-  --bg: #141414;
+  --bg: #131313;
   --card-bg: #1E1E1E;
-  --flat-bg: #262626;
-  --border: #2E2E2E;
+  --flat-bg: #252525;
+  --border: #2B2B2B;
   --text-primary: #F2F2F2;
-  --text-secondary: #A9A9A9;
-  --text-muted: #777777;
-  --shadow-card: 0 8px 24px rgba(0,0,0,.35);
-  --shadow-hover: 0 12px 32px rgba(0,0,0,.45);
+  --text-secondary: #B8B8B8;
+  --text-muted: #8A8A8A;
+  --green-bg: #133B1E;
+  --green-text: #6EE08A;
+  --red-bg: #3A1A1A;
+  --red-text: #FF7A7A;
+  --black: #F2F2F2;
+  --on-black: #131313;
+  --shadow-card: 0 8px 24px rgba(0,0,0,.45);
+  --shadow-hover: 0 12px 32px rgba(0,0,0,.55);
 }
 
 /* Elevation helpers */

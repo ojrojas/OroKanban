@@ -18,7 +18,7 @@ public sealed class OrganizationUnitConfiguration : IEntityTypeConfiguration<Org
             v => v != null ? new OrganizationUnitId(v.Value) : null);
         builder.Property(x => x.TenantId).IsRequired();
         builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
-        builder.Property(x => x.RowVersion).IsRowVersion();
+        builder.Property(x => x.RowVersion).IsConcurrencyToken().HasDefaultValue(new byte[0]);
 
         // HierarchyPath — persist as single string column via ValueConverter (joined by "/")
         var converter = new ValueConverter<HierarchyPath, string>(

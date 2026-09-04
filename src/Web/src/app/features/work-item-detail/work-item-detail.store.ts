@@ -1,9 +1,12 @@
 import { computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { pipe, switchMap } from 'rxjs';
+import { tapResponse } from '@ngrx/operators';
 import { setError, setFulfilled, setPending, withRequestStatus } from '../../shared/state/with-request-status';
 
-export interface WorkItemDetail { id: string; title: string; progress: number; subtasks: { id: string; done: boolean }[]; metrics: any[]; }
+export interface WorkItemDetail { id: string; title: string; description?: string | null; status?: string; priority?: string; criticality?: string; dueDate?: string | null; progress: number; version?: number; updatedAt?: string; deliverables?: string[]; tags?: string[]; observations?: string | null; subtasks: { id: string; done: boolean }[]; metrics: any[]; [k:string]: any; }
 
 export const WorkItemDetailStore = signalStore(
   withState<{ item: WorkItemDetail | null }>({ item: null }),
@@ -20,15 +23,19 @@ export const WorkItemDetailStore = signalStore(
   withMethods((store) => {
     const http = inject(HttpClient);
     return {
-      async load(id: string) {
-        patchState(store, setPending());
-        try {
-          const data = await http.get<WorkItemDetail>(`/api/work-items/${id}/detail`).toPromise() as WorkItemDetail;
-          patchState(store, { item: data }, setFulfilled());
-        } catch (e: any) {
-          patchState(store, setError(e?.message ?? 'load failed'));
-        }
-      }
+      load: rxMethod<string>(
+        pipe(
+          switchMap((id) => {
+            patchState(store, setPending());
+            return http.get<WorkItemDetail>(`/api/work-items/${id}/detail`).pipe(
+              tapResponse({
+                next: (data) => patchState(store, { item: data }, setFulfilled()),
+                error: (e: any) => patchState(store, setError(e?.error?.detail ?? e?.message ?? 'load failed'))
+              })
+            );
+          })
+        )
+      )
     };
   })
 );

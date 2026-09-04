@@ -25,10 +25,16 @@ public sealed class CreateProjectHandler(ProjectsDbContext db) : ICommandHandler
 {
     public async Task<Result<CreateProjectResponse>> HandleAsync(CreateProjectCommand cmd, CancellationToken ct)
     {
-        // Resolve enumerations by name
-        var status = ProjectStatus.FromName(cmd.Status);
-        var priority = ProjectPriority.FromName(cmd.Priority);
-        var criticality = Criticality.FromName(cmd.Criticality);
+        // Resolve enumerations by name — return validation ProblemDetails instead of 500
+        ProjectStatus status;
+        ProjectPriority priority;
+        Criticality criticality;
+        try { status = ProjectStatus.FromName(cmd.Status); }
+        catch (ArgumentOutOfRangeException) { return Result.Failure<CreateProjectResponse>(Error.Validation("ProjectStatus.Invalid", $"Status '{cmd.Status}' is invalid. Allowed: {string.Join(", ", ProjectStatus.GetAll().Select(s => s.Name))}")); }
+        try { priority = ProjectPriority.FromName(cmd.Priority); }
+        catch (ArgumentOutOfRangeException) { return Result.Failure<CreateProjectResponse>(Error.Validation("ProjectPriority.Invalid", $"Priority '{cmd.Priority}' is invalid.")); }
+        try { criticality = Criticality.FromName(cmd.Criticality); }
+        catch (ArgumentOutOfRangeException) { return Result.Failure<CreateProjectResponse>(Error.Validation("Criticality.Invalid", $"Criticality '{cmd.Criticality}' is invalid.")); }
 
         var project = Project.Create(cmd.TenantId, cmd.Name, cmd.OwnerId, cmd.ManagerId, status.Id, priority.Id, criticality.Id, null, cmd.DueDate, cmd.Description);
         // auto add owner as member? keep explicit but also ensure at least manager is member via add

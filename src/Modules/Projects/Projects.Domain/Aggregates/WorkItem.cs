@@ -29,8 +29,13 @@ public sealed class WorkItem : AggregateRoot<WorkItemId>
     public decimal EstimatedHours { get; private set; }
     public decimal ActualHours { get; private set; }
     public int ProgressPercent { get; private set; }
+    public DateTime? StartedAt { get; private set; }
+    public int ReopenedCount { get; private set; }
     public string? TagsJson { get; private set; } // stored as json or via owned? keep string for now, owned via EF owned?
     public IReadOnlyList<string> Tags => string.IsNullOrEmpty(TagsJson) ? [] : System.Text.Json.JsonSerializer.Deserialize<List<string>>(TagsJson)!;
+    public string? DeliverablesJson { get; private set; }
+    public IReadOnlyList<string> Deliverables => string.IsNullOrEmpty(DeliverablesJson) ? [] : System.Text.Json.JsonSerializer.Deserialize<List<string>>(DeliverablesJson)!;
+    public string? Observations { get; private set; }
 
     public int Version { get; private set; }
     public byte[] RowVersion { get; private set; } = [];
@@ -80,15 +85,38 @@ public sealed class WorkItem : AggregateRoot<WorkItemId>
         return new WorkItem(WorkItemId.New(), tenantId, projectId, parentId, title.Trim(), description, typeId, priorityId, criticalityId, ownerId, responsibleId, reviewerId, dueDate, estimatedHours, tags, progress);
     }
 
-    public void ChangeStatus(int targetStatusId, IWorkItemTransitionPolicy policy, Guid actorId)
+    public void ChangeStatus(int targetStatusId, IWorkItemTransitionPolicy policy, Guid actorId, DateTime? nowOverride = null)
     {
         CheckRule(new TransitionIsAllowedRule(StatusId, targetStatusId, policy));
         var from = StatusId;
+        var wasReopen = StatusId == Enumerations.WorkItemStatus.Completed.Id && targetStatusId != Enumerations.WorkItemStatus.Completed.Id;
         StatusId = targetStatusId;
         Version++;
-        UpdatedAt = DateTime.UtcNow;
+        var now = nowOverride ?? DateTime.UtcNow;
+        UpdatedAt = now;
+        // Reloj API: acumula ActualHours al salir de InProgress, reinicia al entrar
+        if (from == Enumerations.WorkItemStatus.InProgress.Id && targetStatusId != Enumerations.WorkItemStatus.InProgress.Id)
+        {
+            if (StartedAt.HasValue)
+            {
+                var elapsed = now - StartedAt.Value;
+                if (elapsed.TotalHours > 0) ActualHours = Math.Round(ActualHours + (decimal)elapsed.TotalHours, 2, MidpointRounding.AwayFromZero);
+                StartedAt = null;
+            }
+        }
+        if (from != Enumerations.WorkItemStatus.InProgress.Id && targetStatusId == Enumerations.WorkItemStatus.InProgress.Id)
+        {
+            StartedAt = now;
+        }
+        if (wasReopen) ReopenedCount++;
         if (targetStatusId == Enumerations.WorkItemStatus.Completed.Id)
-            CompletedAt = DateTime.UtcNow;
+        {
+            CompletedAt = now;
+            // Si estaba en InProgress, ya se acumuló arriba; si venía de InReview y nunca estuvo en InProgress con StartedAt, no hay acumulación
+            StartedAt = null;
+        }
+        if (wasReopen)
+            RaiseDomainEvent(new WorkItemReopenedDomainEvent(Id.Value, ProjectId, from, targetStatusId, actorId));
         RaiseDomainEvent(new WorkItemStatusChangedDomainEvent(Id.Value, ProjectId, from, targetStatusId, actorId));
         if (targetStatusId == Enumerations.WorkItemStatus.Completed.Id)
             RaiseDomainEvent(new WorkItemCompletedDomainEvent(Id.Value, ProjectId));
@@ -125,6 +153,39 @@ public sealed class WorkItem : AggregateRoot<WorkItemId>
         ProgressPercent = percent;
         Version++;
         UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void Update(string title, string? description, int priorityId, int criticalityId, DateTime? dueDate, IReadOnlyList<string> tags, IReadOnlyList<string> deliverables, string? observations, int progress, decimal estimatedHours, decimal? actualHoursOverride = null)
+    {
+        CheckRule(new TitleRequiredRule(title));
+        Title = title.Trim();
+        Description = description;
+        PriorityId = priorityId;
+        CriticalityId = criticalityId;
+        DueDate = dueDate?.ToUniversalTime();
+        TagsJson = tags.Count == 0 ? null : System.Text.Json.JsonSerializer.Serialize(tags);
+        DeliverablesJson = deliverables.Count == 0 ? null : System.Text.Json.JsonSerializer.Serialize(deliverables);
+        Observations = observations;
+        _ = ProgressValue.FromPercent(progress);
+        ProgressPercent = progress;
+        _ = Effort.FromHours(estimatedHours);
+        EstimatedHours = estimatedHours;
+        if (actualHoursOverride.HasValue)
+        {
+            _ = Effort.FromHours(actualHoursOverride.Value);
+            ActualHours = actualHoursOverride.Value;
+        }
+        Version++;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void RecordTime(decimal actualHours, Guid actorId)
+    {
+        _ = Effort.FromHours(actualHours);
+        ActualHours = actualHours;
+        Version++;
+        UpdatedAt = DateTime.UtcNow;
+        RaiseDomainEvent(new WorkItemActualTimeRecordedDomainEvent(Id.Value, ProjectId, actualHours, actorId));
     }
 
     public bool IsOverdue(DateTime now) => DueDate.HasValue && DueDate.Value < now && StatusId != Enumerations.WorkItemStatus.Completed.Id;

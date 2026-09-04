@@ -61,7 +61,7 @@ import { ActivatedRoute } from '@angular/router';
     .search-bar { display:flex; gap:10px; padding:10px 16px; border-radius:18px; background:var(--flat-bg); border:1px solid var(--border); align-items:center; }
     .search-bar input { flex:1; border:none; outline:none; background:transparent; font-size:13px; }
     .pill { padding:6px 12px; border-radius:999px; font-size:12px; background:var(--flat-bg); border:1px solid var(--border); cursor:pointer; }
-    .pill.active { background: var(--black); color:#fff; }
+    .pill.active { background: var(--black); color:var(--on-black); }
     .badge { background:var(--flat-bg); border:1px solid var(--border); padding:4px 8px; border-radius:999px; font-size:11px; }
     .row { display:flex; gap:12px; padding:12px 24px; border-top:1px solid var(--border); align-items:center; }
     .thumb { width:36px; height:36px; border-radius:12px; background:var(--border); }

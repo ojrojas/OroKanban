@@ -222,7 +222,6 @@ ensure_role "Auditor" "Read-only audit access"
 ensure_role "DocumentManager" "Manages documents"
 ensure_role "ProjectManager" "Manages projects"
 ensure_role "AIReviewer" "Reviews AI-generated content"
-ensure_role "Administrator" "Full administrator (is_master_admin seed)"
 fi
 
 # ---------------------------------------------------------------------------

@@ -16,7 +16,7 @@ public sealed class ManagementRelationshipConfiguration : IEntityTypeConfigurati
         builder.Property(x => x.SubordinateId).IsRequired();
         builder.Property(x => x.Type).IsRequired().HasMaxLength(50);
         builder.Property(x => x.OrganizationUnitId).HasConversion(id => id != null ? id.Value : (Guid?)null, v => v != null ? new Domain.ValueObjects.OrganizationUnitId(v.Value) : null);
-        builder.Property(x => x.RowVersion).IsRowVersion();
+        builder.Property(x => x.RowVersion).IsConcurrencyToken().HasDefaultValue(new byte[0]);
         builder.HasIndex(x => new { x.TenantId, x.ManagerId });
         builder.HasIndex(x => new { x.TenantId, x.SubordinateId });
         // Filtered unique index for single active per subordinate/unit — handled via migration SQL

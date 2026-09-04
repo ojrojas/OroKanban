@@ -1,0 +1,52 @@
+- generic [ref=f2e7]:
+  - complementary [ref=f2e8]:
+    - generic [ref=f2e9]:
+      - generic [ref=f2e10]: OK
+      - generic [ref=f2e11]: OroKanban
+    - navigation [ref=f2e12]:
+      - link "Dashboard" [ref=f2e13] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f2e20] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f2e24] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f2e29] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Planning" [ref=f2e34] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f2e38] [cursor=pointer]:
+        - /url: /documents
+    - generic [ref=f2e43]:
+      - button "Dark mode" [ref=f2e44] [cursor=pointer]
+      - button "Settings" [ref=f2e47] [cursor=pointer]
+      - button "Logout" [ref=f2e51] [cursor=pointer]
+  - generic [ref=f2e56]:
+    - banner [ref=f2e57]:
+      - textbox "Search" [ref=f2e63]:
+        - /placeholder: Search anything...
+      - generic [ref=f2e64]:
+        - button "Create" [ref=f2e65] [cursor=pointer]
+        - button "Dark" [ref=f2e66] [cursor=pointer]
+        - button "Notifications" [ref=f2e70] [cursor=pointer]
+        - img "avatar" [ref=f2e74] [cursor=pointer]
+    - main [ref=f2e75]:
+      - generic [ref=f2e276]:
+        - navigation "Breadcrumb" [ref=f2e278]:
+          - link "Home" [ref=f2e279] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f2e280]: /
+          - link "Projects" [ref=f2e281] [cursor=pointer]:
+            - /url: /projects
+          - generic [ref=f2e282]: /
+          - generic [ref=f2e283]: Detail
+        - generic [ref=f2e284]:
+          - generic [ref=f2e285]:
+            - heading "Project Detail" [level=1] [ref=f2e286]
+            - paragraph [ref=f2e287]: Members, timeline and history
+          - generic [ref=f2e288]:
+            - button "← Back to list" [ref=f2e289] [cursor=pointer]
+            - button "Edit" [ref=f2e290] [cursor=pointer]
+            - button "Archive" [ref=f2e291] [cursor=pointer]
+        - generic [ref=f2e292]:
+          - generic [ref=f2e293]: load failed
+          - button "Retry" [ref=f2e294] [cursor=pointer]

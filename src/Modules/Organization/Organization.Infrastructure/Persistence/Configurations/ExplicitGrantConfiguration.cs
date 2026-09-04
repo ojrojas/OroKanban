@@ -17,7 +17,7 @@ public sealed class ExplicitGrantConfiguration : IEntityTypeConfiguration<Explic
         builder.Property(x => x.ResourceType).IsRequired().HasMaxLength(200);
         builder.Property(x => x.ResourceId).IsRequired();
         builder.Property(x => x.Permission).IsRequired().HasMaxLength(200);
-        builder.Property(x => x.RowVersion).IsRowVersion();
+        builder.Property(x => x.RowVersion).IsConcurrencyToken().HasDefaultValue(new byte[0]);
         builder.HasIndex(x => new { x.TenantId, x.GranteeUserId });
         builder.HasIndex(x => new { x.TenantId, x.ResourceType, x.ResourceId });
         builder.ToTable("explicit_grants", "organization");

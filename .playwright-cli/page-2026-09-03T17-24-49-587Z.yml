@@ -1,0 +1,63 @@
+- generic [ref=f27e4]:
+  - complementary [ref=f27e5]:
+    - generic [ref=f27e6]:
+      - generic [ref=f27e7]: OK
+      - generic [ref=f27e8]: OroKanban
+    - navigation [ref=f27e9]:
+      - link "Dashboard" [ref=f27e10] [cursor=pointer]:
+        - /url: /dashboard
+      - link "Projects" [ref=f27e17] [cursor=pointer]:
+        - /url: /projects
+      - link "Kanban" [ref=f27e21] [cursor=pointer]:
+        - /url: /kanban
+      - link "My Tasks" [ref=f27e26] [cursor=pointer]:
+        - /url: /my-tasks
+      - link "Team Tasks" [ref=f27e31] [cursor=pointer]:
+        - /url: /team-tasks
+      - link "Planning" [ref=f27e38] [cursor=pointer]:
+        - /url: /planning
+      - link "Documents" [ref=f27e42] [cursor=pointer]:
+        - /url: /documents
+      - link "Organization" [ref=f27e47] [cursor=pointer]:
+        - /url: /organization
+      - link "AI Queue" [ref=f27e52] [cursor=pointer]:
+        - /url: /ai-queue
+      - link "Audit" [ref=f27e59] [cursor=pointer]:
+        - /url: /audit
+      - link "Administration" [ref=f27e64] [cursor=pointer]:
+        - /url: /admin
+    - generic [ref=f27e69]:
+      - button "Dark mode" [ref=f27e70] [cursor=pointer]
+      - button "Settings" [ref=f27e73] [cursor=pointer]
+      - button "Logout" [ref=f27e77] [cursor=pointer]
+  - generic [ref=f27e82]:
+    - banner [ref=f27e83]:
+      - textbox "Search" [ref=f27e89]:
+        - /placeholder: Search anything...
+      - generic [ref=f27e90]:
+        - button "Create" [ref=f27e91] [cursor=pointer]
+        - button "Dark" [ref=f27e92] [cursor=pointer]
+        - button "Notifications" [ref=f27e96] [cursor=pointer]
+        - img "avatar" [ref=f27e100] [cursor=pointer]
+    - main [ref=f27e101]:
+      - generic [ref=f27e102]:
+        - navigation "Breadcrumb" [ref=f27e104]:
+          - link "Home" [ref=f27e105] [cursor=pointer]:
+            - /url: /dashboard
+          - generic [ref=f27e106]: /
+          - generic [ref=f27e107]: Team Tasks
+        - generic [ref=f27e108]:
+          - generic [ref=f27e109]:
+            - heading "Team Tasks" [level=1] [ref=f27e110]
+            - paragraph [ref=f27e111]: Subtree tasks for your team
+          - button "+ New Task" [ref=f27e112] [cursor=pointer]
+        - generic [ref=f27e113]:
+          - generic [ref=f27e114]:
+            - button "All" [ref=f27e115] [cursor=pointer]
+            - button "Blocked" [ref=f27e116] [cursor=pointer]
+            - button "Overdue" [ref=f27e117] [cursor=pointer]
+          - combobox [ref=f27e118]:
+            - option "10"
+            - option "15" [selected]
+            - option "25"
+            - option "50"
